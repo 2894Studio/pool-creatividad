@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio de Creatividad — Técnicas de ideación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/hero.css">
+  <link rel="stylesheet" href="styles/phases.css">
+  <link rel="stylesheet" href="styles/references.css">
+</head>
+<body>
+  <img class="companies-badge" src="assets/header/logos_companies.png" alt="Plataformas: Netflix, Prime Video, YouTube, Vimeo" style="width: 180px; height: auto; max-width: 180px;" />
+
+  <header class="hero">
+    <div class="hero__motif" aria-hidden="true">
+      <span class="hero__circle hero__circle--1"></span>
+      <span class="hero__circle hero__circle--2"></span>
+      <span class="hero__circle hero__circle--3"></span>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Laboratorio de creatividad</p>
+      <h1 class="hero__headline">PIENSA DISTINTO. <span class="hero__headline-accent">CREA SIN BLOQUEOS.</span></h1>
+      <p class="hero__subline">Técnicas de ideación organizadas por fase del proceso creativo, con referencias que inspiran. Para cuando necesites arrancar, destrabarte o cerrar una idea.</p>
+      <a class="hero__cta" href="#fases">Explorar técnicas</a>
+    </div>
+  </header>
+
+  <script>
+    const logoBadge = document.querySelector('.companies-badge');
+    const updateLogoBadgeState = () => {
+      if (!logoBadge) return;
+      const scrolledPastHero = window.scrollY > window.innerHeight;
+      logoBadge.classList.toggle('is-scrolled', scrolledPastHero);
+    };
+
+    updateLogoBadgeState();
+    window.addEventListener('scroll', updateLogoBadgeState, { passive: true });
+  </script>
+
+  <main>
+    <section id="fases" class="phases" aria-labelledby="fases-title">
+      <div class="phases__inner">
+        <h2 id="fases-title">Las 4 fases del pensamiento creativo</h2>
+        <p class="phases__intro">Basado en "El arte del pensamiento" de Graham Wallas. Elige la fase en la que estás y prueba una técnica.</p>
+      </div>
+      <div id="phase-split" class="phase-split" role="tablist" aria-label="Fases creativas"></div>
+      <div class="phases__inner">
+        <div id="phase-detail" role="tabpanel"></div>
+      </div>
+    </section>
+
+    <section id="referencias" class="references" aria-labelledby="references-title">
+      <h2 id="references-title">Referencias que inspiran</h2>
+      <p class="phases__intro">Historias reales sobre proceso creativo, disciplina y oficio.</p>
+      <div class="carousel" role="region" aria-label="Carrusel de referencias">
+        <button id="carousel-prev" class="carousel__arrow" aria-label="Referencia anterior" hidden>‹</button>
+        <div id="carousel-track" class="carousel__track" tabindex="0"></div>
+        <button id="carousel-next" class="carousel__arrow" aria-label="Referencia siguiente">›</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Hecho para inspirar al equipo. Intelligent tools. Human imagination.</p>
+  </footer>
+
+  <script src="data/techniques.js"></script>
+  <script src="data/references.js"></script>
+  <script src="scripts/phases.js"></script>
+  <script src="scripts/carousel.js?v=5"></script>
+</body>
+</html>

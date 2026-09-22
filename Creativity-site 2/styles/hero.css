@@ -1,0 +1,92 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(620px, 78vh, 820px);
+  display: flex;
+  align-items: center;
+  background: var(--color-cloud-white);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.hero__motif { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+.hero__circle { position: absolute; border-radius: 50%; filter: blur(2px); will-change: transform; }
+
+.hero__circle--1 {
+  width: clamp(240px, 32vw, 420px); height: clamp(240px, 32vw, 420px);
+  background: radial-gradient(circle at 30% 30%, var(--color-sky-blue), transparent 70%);
+  top: 60px; right: 60px; opacity: 0.5;
+  animation: float-drift-1 16s ease-in-out infinite;
+}
+
+.hero__circle--2 {
+  width: clamp(180px, 22vw, 280px); height: clamp(180px, 22vw, 280px);
+  background: radial-gradient(circle at 60% 40%, var(--color-deep-cobalt), transparent 70%);
+  bottom: 70px; right: 18%; opacity: 0.35;
+  animation: float-drift-2 13s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+.hero__circle--3 {
+  width: clamp(220px, 30vw, 380px); height: clamp(220px, 30vw, 380px);
+  background: radial-gradient(circle at 60% 40%, var(--color-sky-blue), transparent 70%);
+  top: 18%; left: -140px; opacity: 0.5;
+  animation: float-drift-3 19s ease-in-out infinite;
+  animation-delay: -7s;
+}
+
+/* gentle multi-directional drift, distinct per circle so the motif reads as floating in space */
+@keyframes float-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-30px, 40px) scale(1.05); }
+}
+
+@keyframes float-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(25px, -35px) scale(0.95); }
+}
+
+@keyframes float-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, 25px) scale(1.08); }
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: var(--fw-medium);
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-sm);
+}
+
+.hero__headline { font-size: clamp(2.2rem, 5vw, 3.75rem); margin-bottom: var(--space-md); }
+.hero__headline span { color: var(--color-accent); }
+.hero__headline-accent { white-space: nowrap; }
+
+.hero__subline { font-size: 1.1rem; max-width: 52ch; margin-bottom: var(--space-lg); }
+
+.hero__cta {
+  display: inline-block;
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: var(--fw-medium);
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.hero__cta:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+
+@media (max-width: 640px) {
+  .hero__content { padding: 0 var(--space-sm); }
+}

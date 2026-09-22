@@ -1,0 +1,40 @@
+/* AZ brand tokens (colors, type, spacing) — see 2894-branding-guide.md */
+:root {
+  --color-cloud-white: #F7F8FA;
+  --color-sky-blue: #7DB7FF;
+  --color-deep-cobalt: #0A46FF;
+  --color-soft-gray: #E6E8EC;
+  --color-ink-black: #0B0B0D;
+
+  --color-bg: var(--color-cloud-white);
+  --color-surface: #FFFFFF;
+  --color-surface-alt: var(--color-soft-gray);
+  --color-text: var(--color-ink-black);
+  --color-text-muted: #55585F;
+  --color-accent: var(--color-deep-cobalt);
+  --color-accent-soft: var(--color-sky-blue);
+
+  --font-family: 'DM Sans', system-ui, sans-serif;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+  --space-2xl: 96px;
+
+  --shadow-card: 0 8px 24px rgba(11, 11, 13, 0.08);
+  --shadow-card-hover: 0 16px 32px rgba(10, 70, 255, 0.16);
+
+  --motion-fast: 200ms ease;
+  --motion-slow: 500ms ease;
+}
