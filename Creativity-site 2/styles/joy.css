@@ -1,0 +1,238 @@
+/* ==========================================================================
+   joy.css — interacciones "de laboratorio": cinta, notas pegadas, cursor,
+   burbujas físicas, foco de luz. Todo respeta prefers-reduced-motion.
+   ========================================================================== */
+
+.svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---------- etiqueta que sigue al cursor ---------- */
+.cursor-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.01em;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.6;
+  transition: opacity 160ms ease, scale 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 16px rgba(10, 70, 255, 0.25);
+}
+.cursor-label.is-on { opacity: 1; scale: 1; }
+@media (hover: none) { .cursor-label { display: none; } }
+
+/* ---------- burbujas del hero: físicas + gooey ---------- */
+.hero__motif.is-physics { pointer-events: none; }
+.hero__motif.is-physics .hero__circle {
+  animation: none;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.hero__motif.is-physics .hero__circle.is-grabbed { cursor: grabbing; }
+.hero__motif.is-goo { filter: url('#goo'); }
+
+/* elementos magnéticos: el transform lo lleva GSAP, la sombra el CSS */
+[data-magnetic] { will-change: transform; }
+
+/* ---------- paneles de fase: barra activa ---------- */
+.phase-split-panel__bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: var(--color-deep-cobalt);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.7, 0, 0.25, 1);
+}
+.phase-split-panel--active .phase-split-panel__bar { transform: scaleX(1); }
+/* al moverse a la derecha, la barra nueva crece desde la izquierda y la vieja se recoge hacia la derecha; al revés en el otro sentido */
+[data-dir="right"] .phase-split-panel--active .phase-split-panel__bar,
+[data-dir="left"] .phase-split-panel:not(.phase-split-panel--active) .phase-split-panel__bar { transform-origin: left center; }
+[data-dir="left"] .phase-split-panel--active .phase-split-panel__bar,
+[data-dir="right"] .phase-split-panel:not(.phase-split-panel--active) .phase-split-panel__bar { transform-origin: right center; }
+
+/* ---------- escenario de técnicas: dado + una carta + "ver todas" ---------- */
+.technique-stage__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-bottom: var(--space-lg);
+}
+
+.phase-card__shuffle { margin-bottom: 0; }
+.phase-card__shuffle .dice { display: inline-block; margin-right: 6px; transform-origin: 50% 55%; }
+.phase-card__shuffle[disabled] { cursor: default; color: inherit; opacity: 1; }
+
+.technique-stage__toggle {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  font-weight: var(--fw-medium);
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.technique-stage__toggle:hover { text-decoration-thickness: 2px; }
+.technique-stage__toggle .arrow { display: inline-block; margin-left: 4px; transition: transform var(--motion-fast); }
+.technique-stage__toggle[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+
+/* la ranura donde cae la técnica elegida */
+.technique-slot { max-width: 560px; padding-top: 14px; }
+.technique-slot[hidden] { display: none; }
+
+.technique-slot__empty {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-lg) var(--space-md);
+  border: 2px dashed rgba(10, 70, 255, 0.28);
+  border-radius: var(--radius-md);
+  background: rgba(125, 183, 255, 0.08);
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  transition: background var(--motion-fast), border-color var(--motion-fast);
+}
+.technique-slot__empty:hover { background: rgba(125, 183, 255, 0.16); border-color: rgba(10, 70, 255, 0.5); }
+.technique-slot__empty strong { color: var(--color-text); font-size: 1.15rem; }
+.technique-slot__empty .dice { font-size: 1.8rem; }
+
+/* el rodillo de la tragaperras */
+.technique-reel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: inset 0 18px 18px -12px rgba(0, 0, 0, 0.35), inset 0 -18px 18px -12px rgba(0, 0, 0, 0.35);
+}
+.technique-reel__name {
+  display: block;
+  padding: 0 var(--space-md);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: var(--fw-bold);
+  text-align: center;
+}
+.technique-reel::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---------- técnicas como notas pegadas con cinta ---------- */
+.technique-list {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+  gap: 36px 24px;
+  padding-top: 14px;
+}
+.technique-list[hidden] { display: none; }
+
+.technique-card {
+  position: relative;
+  padding-top: 26px;
+  background: var(--color-surface);
+  border: 1px solid rgba(11, 11, 13, 0.06);
+  box-shadow: 0 2px 6px rgba(11, 11, 13, 0.06), 0 10px 22px rgba(11, 11, 13, 0.05);
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 340ms ease;
+  will-change: transform;
+}
+.technique-card:hover,
+.technique-card:focus-within {
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+  z-index: 1;
+}
+
+.technique-card--featured { padding: 30px var(--space-lg) var(--space-md); }
+.technique-card--featured h4 { font-size: 1.35rem; }
+
+/* etiqueta "tu técnica" en la vista de todas */
+.technique-card--picked { border-color: rgba(10, 70, 255, 0.35); }
+.technique-card__badge {
+  position: absolute;
+  top: -11px;
+  right: 16px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+}
+
+/* la cinta: tira recortada y plana, pequeña, a caballo sobre el borde superior */
+.technique-card::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: var(--tape-x, 18%);
+  width: 58px;
+  height: 30px;
+  background: url('../assets/tape-1.png') center / 100% 100% no-repeat;
+  transform: rotate(var(--tape-rot, -4deg));
+  opacity: 0.95;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(11, 11, 13, 0.18));
+}
+.technique-card--tape-2::before {
+  background-image: url('../assets/tape-2.png');
+  width: 62px;
+  height: 23px;
+  top: -9px;
+}
+.technique-card--featured::before { width: 72px; height: 37px; top: -15px; }
+.technique-card--featured.technique-card--tape-2::before { width: 78px; height: 29px; top: -12px; }
+
+/* al caer la carta, la cinta se "estampa" un instante después */
+.technique-card.is-slapped::before { animation: tape-slap 420ms cubic-bezier(0.2, 1.4, 0.4, 1) 260ms both; }
+@keyframes tape-slap {
+  from { opacity: 0; transform: rotate(calc(var(--tape-rot, -4deg) - 14deg)) scale(1.7) translateY(-14px); }
+  to { opacity: 0.95; transform: rotate(var(--tape-rot, -4deg)) scale(1); }
+}
+
+/* ---------- carrusel arrastrable ---------- */
+/* la pista siempre ocupa todo el espacio entre las flechas, sin depender del ancho de su contenido */
+.carousel__track { flex: 1 1 0%; min-width: 0; }
+.carousel__track.is-drag {
+  overflow: hidden;
+  scroll-snap-type: none;
+  cursor: grab;
+}
+.carousel__track.is-drag.is-dragging { cursor: grabbing; }
+.carousel__track.is-drag.is-dragging .ref-card { pointer-events: none; }
+.carousel__strip { display: flex; gap: var(--space-md); width: max-content; will-change: transform; }
+.carousel__track.is-drag .ref-card { scroll-snap-align: none; }
+
+/* ---------- reduced motion: sin física, sin cinta que se mueva, sin foco ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero__motif.is-goo { filter: none; }
+  .technique-card { transform: none; }
+  .technique-card:hover, .technique-card:focus-within { transform: none; }
+}
