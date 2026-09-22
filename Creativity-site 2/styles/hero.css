@@ -85,7 +85,7 @@
   transition: transform var(--motion-fast), box-shadow var(--motion-fast);
 }
 
-.hero__cta:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+.hero__cta:hover { box-shadow: var(--shadow-card-hover); }
 
 @media (max-width: 640px) {
   .hero__content { padding: 0 var(--space-sm); }
