@@ -1,6 +1,6 @@
 /* ==========================================================================
-   joy.css — interacciones "de laboratorio": cinta, notas pegadas, cursor,
-   burbujas físicas, foco de luz. Todo respeta prefers-reduced-motion.
+   joy.css — piezas de juego compartidas: cursor, dado 3D, notas con cinta,
+   rodillo, destellos, reto final. Todo respeta prefers-reduced-motion.
    ========================================================================== */
 
 .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
@@ -28,53 +28,54 @@
 .cursor-label.is-on { opacity: 1; scale: 1; }
 @media (hover: none) { .cursor-label { display: none; } }
 
-/* ---------- burbujas del hero: físicas + gooey ---------- */
-.hero__motif.is-physics { pointer-events: none; }
-.hero__motif.is-physics .hero__circle {
-  animation: none;
-  pointer-events: auto;
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.hero__motif.is-physics .hero__circle.is-grabbed { cursor: grabbing; }
-.hero__motif.is-goo { filter: url('#goo'); }
-
-/* elementos magnéticos: el transform lo lleva GSAP, la sombra el CSS */
+/* elementos magnéticos: el transform lo lleva GSAP */
 [data-magnetic] { will-change: transform; }
 
-/* ---------- paneles de fase: barra activa ---------- */
-.phase-split-panel__bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 5px;
-  background: var(--color-deep-cobalt);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 420ms cubic-bezier(0.7, 0, 0.25, 1);
+/* ---------- dado 3D ---------- */
+.dice3d {
+  --size: 22px;
+  --pip: calc(var(--size) * 0.18);
+  display: inline-block;
+  width: var(--size);
+  height: var(--size);
+  perspective: calc(var(--size) * 8);
+  flex: none;
 }
-.phase-split-panel--active .phase-split-panel__bar { transform: scaleX(1); }
-/* al moverse a la derecha, la barra nueva crece desde la izquierda y la vieja se recoge hacia la derecha; al revés en el otro sentido */
-[data-dir="right"] .phase-split-panel--active .phase-split-panel__bar,
-[data-dir="left"] .phase-split-panel:not(.phase-split-panel--active) .phase-split-panel__bar { transform-origin: left center; }
-[data-dir="left"] .phase-split-panel--active .phase-split-panel__bar,
-[data-dir="right"] .phase-split-panel:not(.phase-split-panel--active) .phase-split-panel__bar { transform-origin: right center; }
+.dice3d__tilt, .dice3d__cube { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; }
+.dice3d__tilt { transform: rotateX(-22deg) rotateY(28deg); }
+.dice3d__face {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border-radius: 22%;
+  box-shadow: inset 0 0 0 1px rgba(11, 11, 13, 0.12), inset 0 calc(var(--size) * -0.06) 0 rgba(11, 11, 13, 0.08);
+  backface-visibility: hidden;
+}
+.dice3d .pip {
+  position: absolute;
+  width: var(--pip);
+  height: var(--pip);
+  margin: calc(var(--pip) / -2) 0 0 calc(var(--pip) / -2);
+  border-radius: 50%;
+  background: var(--color-deep-cobalt);
+}
+.pip--c { left: 50%; top: 50%; }
+.pip--tl { left: 27%; top: 27%; }
+.pip--tr { left: 73%; top: 27%; }
+.pip--ml { left: 27%; top: 50%; }
+.pip--mr { left: 73%; top: 50%; }
+.pip--bl { left: 27%; top: 73%; }
+.pip--br { left: 73%; top: 73%; }
 
-/* ---------- escenario de técnicas: dado + una carta + "ver todas" ---------- */
+/* ---------- escenario de técnicas: dado + una nota + "ver todas" ---------- */
 .technique-stage__controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px 12px;
+  gap: 10px 14px;
   margin-bottom: var(--space-lg);
 }
-
-.phase-card__shuffle { margin-bottom: 0; }
-.phase-card__shuffle .dice { display: inline-block; margin-right: 6px; transform-origin: 50% 55%; }
-.phase-card__shuffle[disabled] { cursor: default; color: inherit; opacity: 1; }
+.phase-card__shuffle[disabled] { cursor: default; opacity: 1; }
 
 .technique-stage__toggle {
   appearance: none;
@@ -82,7 +83,7 @@
   border: none;
   padding: 10px 4px;
   font-weight: var(--fw-medium);
-  color: var(--color-accent);
+  color: var(--scene-accent, var(--color-accent));
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
@@ -112,20 +113,40 @@
 }
 .technique-slot__empty:hover { background: rgba(125, 183, 255, 0.16); border-color: rgba(10, 70, 255, 0.5); }
 .technique-slot__empty strong { color: var(--color-text); font-size: 1.15rem; }
-.technique-slot__empty .dice { font-size: 1.8rem; }
+.technique-slot__empty .dice3d { margin-bottom: 8px; transition: rotate 400ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.technique-slot__empty:hover .dice3d { rotate: 14deg; }
 
 /* el rodillo de la tragaperras */
 .technique-reel {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  height: 150px;
+  min-height: 150px;
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--color-accent);
   color: #fff;
   box-shadow: inset 0 18px 18px -12px rgba(0, 0, 0, 0.35), inset 0 -18px 18px -12px rgba(0, 0, 0, 0.35);
+}
+.technique-reel__row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  overflow: hidden;
+}
+.technique-reel--multi .technique-reel__row { height: 96px; }
+.technique-reel--multi .technique-reel__row + .technique-reel__row { border-top: 1px solid rgba(255, 255, 255, 0.2); }
+.technique-reel__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: var(--fw-bold);
+  opacity: 0.65;
+  margin-bottom: 4px;
 }
 .technique-reel__name {
   display: block;
@@ -134,19 +155,11 @@
   font-weight: var(--fw-bold);
   text-align: center;
 }
-.technique-reel::after {
-  content: '';
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  top: 50%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.18);
-}
+.technique-reel__row.is-stopped .technique-reel__name { color: #fff; }
 
 /* ---------- técnicas como notas pegadas con cinta ---------- */
 .technique-list {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 36px 24px;
   padding-top: 14px;
 }
@@ -159,7 +172,7 @@
   border: 1px solid rgba(11, 11, 13, 0.06);
   box-shadow: 0 2px 6px rgba(11, 11, 13, 0.06), 0 10px 22px rgba(11, 11, 13, 0.05);
   transform: rotate(var(--tilt, 0deg));
-  transition: transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 340ms ease;
+  transition: transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 340ms ease, filter 0s;
   will-change: transform;
 }
 .technique-card:hover,
@@ -187,7 +200,7 @@
   border-radius: var(--radius-pill);
 }
 
-/* la cinta: tira recortada y plana, pequeña, a caballo sobre el borde superior */
+/* la cinta: tira recortada y plana, a caballo sobre el borde superior */
 .technique-card::before {
   content: '';
   position: absolute;
@@ -217,8 +230,74 @@
   to { opacity: 0.95; transform: rotate(var(--tape-rot, -4deg)) scale(1); }
 }
 
+/* ---------- reto final ---------- */
+.reto { max-width: 760px; text-align: center; }
+.reto__title { font-size: clamp(2.2rem, 5vw, 3.75rem); }
+.reto__title span { color: var(--color-accent); white-space: nowrap; }
+.reto__intro { font-size: 1.1rem; max-width: 46ch; margin: 0 auto var(--space-lg); }
+.reto__stage .technique-stage__controls { justify-content: center; }
+.reto__stage .phase-card__shuffle { font-size: 1.05rem; font-weight: var(--fw-bold); padding: 14px 28px 14px 20px; background: var(--color-accent); color: #fff; border-radius: var(--radius-md); }
+.reto__stage .phase-card__shuffle:hover { background: var(--color-accent); box-shadow: var(--shadow-card-hover); }
+.reto__slot { margin: 0 auto; text-align: left; }
+.reto__slot .technique-slot__empty { text-align: center; }
+.reto-note__tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 6px;
+}
+.reto-note__challenge {
+  font-size: 1.2rem;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent) !important;
+  margin: 4px 0 12px;
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.reto-note__challenge + .technique-card__desc { margin-top: 12px; }
+.reto-note__go {
+  display: block;
+  margin-top: 12px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+}
+.reto-note__go:hover { text-decoration: underline; }
+.reto__foot { margin-top: var(--space-lg); }
+.reto__credit { margin-top: var(--space-md); font-size: 0.85rem; opacity: 0.6; }
+
+/* ---------- destellos al hacer clic ---------- */
+.sparkle-layer { position: fixed; inset: 0; z-index: 250; pointer-events: none; }
+.sparkle {
+  position: absolute;
+  width: 12px;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: var(--color-sky-blue);
+  transform-origin: 0 50%;
+}
+.sparkle:nth-child(2n) { background: var(--color-deep-cobalt); }
+
+/* ---------- ¡eureka! ---------- */
+.eureka-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 280;
+  display: grid;
+  place-items: center;
+  background: rgba(247, 248, 250, 0.92);
+  pointer-events: none;
+}
+.eureka-flash span { font-size: clamp(2.6rem, 8vw, 5rem); font-weight: var(--fw-bold); color: var(--color-accent); }
+
 /* ---------- carrusel arrastrable ---------- */
-/* la pista siempre ocupa todo el espacio entre las flechas, sin depender del ancho de su contenido */
 .carousel__track { flex: 1 1 0%; min-width: 0; }
 .carousel__track.is-drag {
   overflow: hidden;
@@ -230,9 +309,8 @@
 .carousel__strip { display: flex; gap: var(--space-md); width: max-content; will-change: transform; }
 .carousel__track.is-drag .ref-card { scroll-snap-align: none; }
 
-/* ---------- reduced motion: sin física, sin cinta que se mueva, sin foco ---------- */
+/* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .hero__motif.is-goo { filter: none; }
   .technique-card { transform: none; }
   .technique-card:hover, .technique-card:focus-within { transform: none; }
 }

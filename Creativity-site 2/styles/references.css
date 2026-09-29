@@ -1,17 +1,29 @@
-.references {
-  max-width: none;
-  margin: 0;
-  padding: var(--space-2xl) 0;
+.references__inner { max-width: none; }
+.references__head {
+  max-width: 1160px;
+  margin: 0 auto var(--space-md);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
 }
+.references__head h2 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
+.references__intro { max-width: 52ch; margin: 0; }
+.references .scene-foot { max-width: 1160px; margin-left: auto; margin-right: auto; }
 
-.references > h2,
-.references > .phases__intro {
-  max-width: 1040px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--space-lg);
-  padding-right: var(--space-lg);
+.surprise-btn {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px dashed rgba(10, 70, 255, 0.45);
+  color: var(--color-accent);
+  font-weight: var(--fw-medium);
+  font-size: 1rem;
+  padding: 13px 20px;
+  border-radius: var(--radius-md);
 }
+.surprise-btn:hover { background: #fff; border-style: solid; }
+.surprise-btn:disabled { cursor: default; opacity: 0.6; }
 
 .carousel { position: relative; display: flex; align-items: center; gap: var(--space-sm); }
 
@@ -20,14 +32,14 @@
   gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: var(--space-sm) 4px;
+  padding: var(--space-md) 4px;
   scrollbar-width: none;
 }
 .carousel__track::-webkit-scrollbar { display: none; }
 
 .ref-card {
   position: relative;
-  flex: 0 0 clamp(300px, 26vw, 420px);
+  flex: 0 0 clamp(220px, min(22vw, 36vh), 340px);
   aspect-ratio: 4 / 5;
   scroll-snap-align: start;
   border-radius: var(--radius-sm);
@@ -35,13 +47,14 @@
   background: var(--color-ink-black);
   box-shadow: var(--shadow-card);
   cursor: pointer;
-  transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+  transition: box-shadow var(--motion-fast), outline-color 300ms ease;
+  outline: 3px solid transparent;
+  outline-offset: 4px;
 }
-.ref-card:hover, .ref-card:focus {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: var(--shadow-card-hover);
-  z-index: 1;
-}
+.ref-card:hover, .ref-card:focus { box-shadow: var(--shadow-card-hover); z-index: 1; }
+.ref-card.is-picked { outline-color: var(--color-sky-blue); }
+/* sin JS de inclinación (táctil / movimiento reducido) mantenemos el salto clásico */
+.carousel__track.is-native .ref-card:hover { transform: translateY(-4px); }
 
 .ref-card__img {
   position: absolute;
@@ -52,6 +65,18 @@
   transition: transform var(--motion-slow), opacity var(--motion-fast);
 }
 .ref-card:hover .ref-card__img, .ref-card:focus .ref-card__img { transform: scale(1.08); opacity: 0.55; }
+
+.ref-card__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 55%);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.ref-card:hover .ref-card__glare { opacity: 1; }
 
 .ref-card__platform {
   position: absolute;
@@ -76,7 +101,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-md);
   color: #fff;
   background: linear-gradient(180deg, rgba(11, 11, 13, 0) 40%, rgba(11, 11, 13, 0.55) 70%, rgba(11, 11, 13, 0.92) 100%);
   transition: background var(--motion-fast);
@@ -85,8 +110,8 @@
   background: linear-gradient(180deg, rgba(11, 11, 13, 0.05) 0%, rgba(11, 11, 13, 0.6) 45%, rgba(11, 11, 13, 0.95) 100%);
 }
 
-.ref-card__category { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-sky-blue); font-weight: var(--fw-medium); }
-.ref-card__title { font-size: 1.35rem; margin: 6px 0 0; color: #fff; }
+.ref-card__category { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-sky-blue); font-weight: var(--fw-medium); }
+.ref-card__title { font-size: 1.25rem; margin: 6px 0 0; color: #fff; }
 
 .ref-card__desc, .ref-card__credit {
   color: rgba(255, 255, 255, 0.9);
@@ -121,11 +146,12 @@
   align-items: center;
   justify-content: center;
   color: var(--color-accent);
-  transition: background var(--motion-fast), color var(--motion-fast);
+  margin: 0 var(--space-xs);
 }
 .carousel__arrow:hover { background: var(--color-accent); color: #fff; }
 .carousel__arrow[hidden] { display: none; }
 
 @media (max-width: 640px) {
   .carousel__arrow { display: none; }
+  .ref-card { flex-basis: 72vw; }
 }

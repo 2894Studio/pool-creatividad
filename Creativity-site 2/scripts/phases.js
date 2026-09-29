@@ -1,468 +1,439 @@
+/* phases.js — cada fase de Wallas es una escena. El lenguaje visual es el del
+   inicio (fondo claro, círculos difuminados cobalto/cielo); la personalidad de
+   cada fase está en cómo se mueven: Preparación reúne, Incubación flota despacio,
+   Iluminación se enciende e Implementación encaja.
+   Dentro de cada escena: una rejilla con las técnicas (ilustradas con dot-art.js),
+   un dado que las recorre como una ruleta y la ficha de la técnica elegida. */
 (function () {
   const JOY = window.JOY || {};
   const motionOK = () => (JOY.motionOK ? JOY.motionOK() : false);
+  const rand = (min, max) => Math.random() * (max - min) + min;
+  const hasConfetti = () => typeof confetti === 'function' && !(JOY.reducedMotion && JOY.reducedMotion());
+  const BRAND = ['#0A46FF', '#7DB7FF', '#F7F8FA', '#0B0B0D'];
 
-  // confeti en colores de marca desde el centro de un elemento
-  function burstFrom(el) {
-    if (typeof confetti !== 'function') return;
+  function confettiFrom(el, opts) {
+    if (!hasConfetti()) return;
     const r = el.getBoundingClientRect();
-    confetti({
-      particleCount: 60,
-      spread: 75,
-      startVelocity: 30,
-      gravity: 1.1,
-      ticks: 130,
-      scalar: 0.9,
-      origin: { x: (r.left + r.width / 2) / window.innerWidth, y: (r.top + 20) / window.innerHeight },
-      colors: ['#0A46FF', '#7DB7FF', '#F7F8FA', '#0B0B0D'],
-      disableForReducedMotion: true,
-      zIndex: 60,
+    confetti(Object.assign({
+      particleCount: 50, spread: 70, startVelocity: 28, gravity: 1.1, ticks: 130, scalar: 0.9,
+      colors: BRAND, disableForReducedMotion: true, zIndex: 60,
+    }, opts, { origin: { x: (r.left + r.width / 2) / window.innerWidth, y: (r.top + 20) / window.innerHeight } }));
+  }
+
+  // los mismos círculos difuminados del inicio; [x%, y%] es su centro
+  function softCircles(ambient, specs) {
+    return specs.map(([x, y, size, tone]) => {
+      const c = document.createElement('span');
+      c.className = 'soft-circle soft-circle--' + (tone || 'sky');
+      c.style.left = x + '%';
+      c.style.top = y + '%';
+      c.style.width = c.style.height = size;
+      ambient.appendChild(c);
+      return c;
     });
   }
 
-  const rand = (min, max) => Math.random() * (max - min) + min;
+  // paralaje suave: los círculos se apartan un poco del cursor
+  function parallax(scene, circles, amount) {
+    if (!motionOK() || !(JOY.finePointer && JOY.finePointer())) return;
+    const movers = circles.map((c, i) => ({
+      x: gsap.quickTo(c, 'x', { duration: 1.2, ease: 'power3.out' }),
+      y: gsap.quickTo(c, 'y', { duration: 1.2, ease: 'power3.out' }),
+      d: 0.6 + i * 0.35,
+    }));
+    scene.addEventListener('pointermove', (e) => {
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      movers.forEach((m) => { m.x(-nx * amount * m.d); m.y(-ny * amount * 0.7 * m.d); });
+    });
+  }
 
-  // una nota con cinta: tilt, posición y giro de la cinta aleatorios
-  function makeCard(t, idx, tag, featured) {
-    const card = document.createElement(tag);
-    card.className = 'technique-card technique-card--tape-' + ((idx % 2) + 1) + (featured ? ' technique-card--featured' : '');
-    card.style.setProperty('--tilt', rand(featured ? -1.2 : -1.8, featured ? 1.2 : 1.8).toFixed(2) + 'deg');
-    card.style.setProperty('--tape-x', Math.round(rand(14, 62)) + '%');
-    card.style.setProperty('--tape-rot', rand(-7, 7).toFixed(1) + 'deg');
+  /* =========================================================================
+     Personalidades
+     ========================================================================= */
 
-    const sourceMarkup = t.link
-      ? '<a class="technique-card__source-link" href="' + t.link + '" target="_blank" rel="noreferrer noopener">' + t.source + '</a>'
-      : '<span class="technique-card__source">' + t.source + '</span>';
+  /* ---------- 01 Preparación: los círculos llegan dispersos y se reúnen ---------- */
+  const preparacion = {
+    build(scene, ambient) {
+      this.circles = softCircles(ambient, [
+        [88, 20, 'clamp(220px, 30vw, 400px)', 'sky'],
+        [6, 80, 'clamp(180px, 22vw, 300px)', 'cobalt'],
+        [66, 92, 'clamp(120px, 14vw, 200px)', 'sky'],
+      ]);
+      parallax(scene, this.circles, 30);
+    },
+    enter(scene, head) {
+      gsap.fromTo(this.circles,
+        { x: () => rand(-1, 1) * window.innerWidth * 0.35, y: () => rand(-1, 1) * window.innerHeight * 0.3, scale: 0.6, opacity: 0 },
+        { x: 0, y: 0, scale: 1, opacity: 1, duration: 1.6, ease: 'power3.out', stagger: 0.12 });
+      // las palabras también llegan de sitios distintos y se juntan
+      gsap.fromTo(head,
+        { x: () => rand(-50, 50), y: () => rand(-24, 24), opacity: 0 },
+        { x: 0, y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.08, delay: 0.1, clearProps: 'transform,opacity' });
+    },
+  };
 
-    card.innerHTML =
-      '<div class="technique-card__header"><h4>' + t.name + '</h4>' +
-      sourceMarkup + '</div>' +
-      '<p class="technique-card__desc">' + t.description + '</p>' +
-      '<p class="technique-card__exercise"><strong>Ejercicio:</strong> ' + t.exercise + '</p>' +
-      '<span class="technique-card__duration">⏱ ' + t.duration + '</span>';
-    return card;
+  /* ---------- 02 Incubación: todo flota, más lento y más calmado ---------- */
+  const incubacion = {
+    reelSpeed: 1.45,
+    build(scene, ambient) {
+      this.circles = softCircles(ambient, [
+        [84, 28, 'clamp(260px, 34vw, 460px)', 'sky'],
+        [12, 74, 'clamp(200px, 26vw, 340px)', 'sky'],
+      ]);
+      if (!motionOK()) return;
+      // deriva lenta y continua, como una idea que reposa
+      this.loops = this.circles.map((c, i) => gsap.to(c, {
+        y: i ? -40 : 36, x: i ? 24 : -20, scale: i ? 1.06 : 0.95,
+        duration: 9 + i * 3, ease: 'sine.inOut', yoyo: true, repeat: -1, paused: true,
+      }));
+    },
+    enter(scene, head) {
+      if (this.loops) this.loops.forEach((t) => t.play());
+      gsap.fromTo(this.circles, { opacity: 0 }, { opacity: 1, duration: 2.4, ease: 'power1.out', stagger: 0.4 });
+      gsap.fromTo(head,
+        { opacity: 0, y: 16, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power2.out', stagger: 0.22, delay: 0.3, clearProps: 'all' });
+    },
+    leave() {
+      setTimeout(() => { if (this.loops) this.loops.forEach((t) => t.pause()); }, 900);
+    },
+    reveal(els) {
+      gsap.fromTo(els,
+        { opacity: 0, y: -12, filter: 'blur(6px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.2, ease: 'power2.out', stagger: 0.12, clearProps: 'transform,opacity,filter' });
+    },
+    confetti(card) {
+      confettiFrom(card, {
+        shapes: ['circle'], colors: ['#7DB7FF', '#F7F8FA', '#0A46FF'], particleCount: 30, spread: 110,
+        startVelocity: 14, gravity: 0.3, ticks: 260, scalar: 0.8,
+      });
+    },
+  };
+
+  /* ---------- 03 Iluminación: un círculo se enciende y sigue al cursor como una lámpara ---------- */
+  const iluminacion = {
+    build(scene, ambient) {
+      this.circles = softCircles(ambient, [
+        [20, 28, 'clamp(280px, 36vw, 500px)', 'lamp'],
+        [95, 56, 'clamp(160px, 18vw, 260px)', 'cobalt'],
+      ]);
+      this.lamp = this.circles[0];
+      if (!motionOK() || !(JOY.finePointer && JOY.finePointer())) return;
+      const lx = gsap.quickTo(this.lamp, 'x', { duration: 1, ease: 'power3.out' });
+      const ly = gsap.quickTo(this.lamp, 'y', { duration: 1, ease: 'power3.out' });
+      scene.addEventListener('pointermove', (e) => {
+        const r = this.lamp.getBoundingClientRect();
+        const cx = r.left + r.width / 2 - (gsap.getProperty(this.lamp, 'x') || 0);
+        const cy = r.top + r.height / 2 - (gsap.getProperty(this.lamp, 'y') || 0);
+        lx((e.clientX - cx) * 0.3);
+        ly((e.clientY - cy) * 0.3);
+      });
+    },
+    enter(scene, head) {
+      // parpadeo breve y se enciende
+      gsap.timeline()
+        .set(this.lamp, { opacity: 0.08, scale: 0.9 })
+        .to(this.lamp, { opacity: 0.45, duration: 0.06 }, 0.3)
+        .to(this.lamp, { opacity: 0.1, duration: 0.06 }, 0.42)
+        .to(this.lamp, { opacity: 0.55, duration: 0.06 }, 0.56)
+        .to(this.lamp, { opacity: 0.2, duration: 0.05 }, 0.64)
+        .add(() => JOY.sfx('spark'), 0.8)
+        .to(this.lamp, { opacity: 0.65, scale: 1, duration: 0.9, ease: 'expo.out' }, 0.8);
+      gsap.fromTo(this.circles[1], { opacity: 0 }, { opacity: 1, duration: 1, delay: 0.9 });
+      gsap.fromTo(head,
+        { y: 14, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: 'back.out(1.8)', stagger: 0.06, delay: 0.75, clearProps: 'transform,opacity' });
+    },
+    onLand() {
+      gsap.fromTo(this.lamp, { scale: 1.18 }, { scale: 1, duration: 1, ease: 'elastic.out(1, 0.4)' });
+    },
+    reveal(els) {
+      gsap.fromTo(els,
+        { opacity: 0, scale: 0.94 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(2)', stagger: 0.07, clearProps: 'transform,opacity' });
+    },
+    confetti(card) {
+      confettiFrom(card, { shapes: ['circle'], particleCount: 60, spread: 90, startVelocity: 34 });
+    },
+  };
+
+  /* ---------- 04 Implementación: círculos iguales que encajan en fila ---------- */
+  const implementacion = {
+    build(scene, ambient) {
+      const size = 'clamp(110px, 11vw, 170px)';
+      this.circles = softCircles(ambient, [
+        [74, 14, size, 'sky'],
+        [84, 14, size, 'sky'],
+        [94, 14, size, 'cobalt'],
+      ]);
+    },
+    enter(scene, head) {
+      gsap.fromTo(this.circles,
+        { y: () => rand(-120, -40), x: () => rand(-60, 60), opacity: 0 },
+        { y: 0, x: 0, opacity: 1, duration: 0.6, ease: 'steps(6)', stagger: 0.12, delay: 0.2 });
+      gsap.delayedCall(0.9, () => JOY.sfx('clack'));
+      gsap.fromTo(head,
+        { x: -30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.45, ease: 'steps(5)', stagger: 0.1, delay: 0.2, clearProps: 'transform,opacity' });
+    },
+    reveal(els) {
+      gsap.fromTo(els, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'steps(6)', stagger: 0.08, clearProps: 'transform,opacity' });
+      gsap.delayedCall(0.45, () => JOY.sfx('clack'));
+    },
+    confetti(card) {
+      confettiFrom(card, { shapes: ['square'], particleCount: 40, spread: 50, startVelocity: 26, gravity: 1.5, flat: true });
+    },
+  };
+
+  const PERSONALITY = { preparacion, incubacion, iluminacion, implementacion };
+
+  /* =========================================================================
+     Escena de una fase: cabecera, rejilla de 5 técnicas y ficha de detalle.
+     El dado recorre las tarjetas como una ruleta y se para en una.
+     ========================================================================= */
+  const pad = (n) => String(n).padStart(2, '0');
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function buildPhaseScene(phase, scene, i, all) {
+    const P = PERSONALITY[phase.id] || {};
+    const n = phase.techniques.length;
+    const nextPhase = all[i + 1];
+    const speed = P.reelSpeed || 1;
+    const seedBase = (i + 1) * 97;
+    let current = -1;
+    let rolling = false;
+
+    const steps = all.map((_, k) => '<i class="' + (k < i ? 'is-done' : k === i ? 'is-current' : '') + '"></i>').join('');
+
+    scene.innerHTML =
+      '<div class="phase-ambient" aria-hidden="true"><div class="phase-grid"></div></div>' +
+      '<div class="scene__inner phase">' +
+      '<header class="phase__head">' +
+      '<div class="phase__lead">' +
+      '<p class="phase__eyebrow"><span class="phase__steps" aria-hidden="true">' + steps + '</span>' +
+      'Fase ' + phase.index + ' <span class="phase__of">/ ' + pad(all.length) + '</span></p>' +
+      '<h2 class="phase__title" data-scene-title tabindex="-1">' + phase.name + '.</h2>' +
+      '</div>' +
+      '<div class="phase__intro">' +
+      '<p class="phase__desc">' + phase.description + '</p>' +
+      '<div class="phase__controls"></div>' +
+      '</div>' +
+      '</header>' +
+      '<ol class="tech-grid" aria-label="Técnicas de ' + phase.name + '"></ol>' +
+      '<div class="tech-detail" aria-live="polite">' +
+      '<p class="tech-detail__hint">Tira el dado o elige una técnica para ver su ejercicio.</p>' +
+      '</div>' +
+      '<footer class="phase__foot">' +
+      '<span class="phase__foot-label">' +
+      (nextPhase ? 'Siguiente · ' + nextPhase.index + ' ' + nextPhase.name : 'Siguiente · Referencias') +
+      '</span>' +
+      '<button class="pill-btn" type="button" data-journey-next>' +
+      (nextPhase ? 'Siguiente fase' : 'Ver referencias') +
+      ' <span aria-hidden="true">→</span></button>' +
+      '</footer>' +
+      '</div>';
+
+    const ambient = scene.querySelector('.phase-ambient');
+    const head = scene.querySelector('.phase__head');
+    const controls = scene.querySelector('.phase__controls');
+    const grid = scene.querySelector('.tech-grid');
+    const detail = scene.querySelector('.tech-detail');
+
+    /* ---------- tarjetas ---------- */
+    const tiles = phase.techniques.map((t, idx) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'tech-tile';
+      b.setAttribute('aria-pressed', 'false');
+      b.setAttribute('data-cursor', 'Ver técnica');
+      b.innerHTML =
+        '<span class="tech-tile__art" aria-hidden="true"><canvas></canvas></span>' +
+        '<span class="tech-tile__num">' + pad(idx + 1) + '</span>' +
+        '<span class="tech-tile__name">' + esc(t.name) + '</span>' +
+        '<span class="tech-tile__meta">' + esc(t.duration) + '</span>';
+      li.appendChild(b);
+      grid.appendChild(li);
+      const tile = { el: b, art: null };
+      b.addEventListener('pointerenter', () => { if (idx !== current && tile.art) tile.art.accent(true); });
+      b.addEventListener('pointerleave', () => { if (idx !== current && tile.art) tile.art.accent(false); });
+      b.addEventListener('click', () => { if (!rolling) select(idx, false); });
+      return tile;
+    });
+
+    // los dibujos se crean al entrar en la fase (o en un rato libre tras la carga), no al arrancar
+    function ensureArts() {
+      if (tiles[0] && tiles[0].art) return;
+      tiles.forEach((tile, idx) => {
+        tile.art = JOY.dotArt(tile.el.querySelector('canvas'), {
+          motif: phase.id, art: phase.techniques[idx].art, seed: seedBase + idx, start: motionOK() ? 0 : 1,
+        });
+      });
+    }
+
+    /* ---------- ficha de detalle ---------- */
+    let detailArt = null;
+    function renderDetail(idx, fromDice) {
+      const t = phase.techniques[idx];
+      if (detailArt) { detailArt.destroy(); detailArt = null; }
+      const source = t.link
+        ? '<a class="tech-stat__value tech-stat__link" href="' + t.link + '" target="_blank" rel="noreferrer noopener">' + esc(t.source) + ' <span aria-hidden="true">↗</span></a>'
+        : '<span class="tech-stat__value">' + esc(t.source) + '</span>';
+      detail.innerHTML =
+        '<figure class="tech-detail__art">' +
+        '<span class="tech-detail__count">' + pad(idx + 1) + ' / ' + pad(n) + '</span>' +
+        '<canvas role="img" aria-label="' + esc(t.artCaption || t.name) + '"></canvas>' +
+        (t.artCaption ? '<figcaption class="tech-detail__caption">' + esc(t.artCaption) + '</figcaption>' : '') +
+        '</figure>' +
+        '<div class="tech-detail__body">' +
+        '<p class="tech-detail__kicker">' + (fromDice ? '<span class="tech-detail__badge">Te tocó</span>' : '') + 'Técnica ' + pad(idx + 1) + ' de ' + pad(n) + '</p>' +
+        '<h3 class="tech-detail__name">' + esc(t.name) + '</h3>' +
+        '<p class="tech-detail__desc">' + esc(t.description) + '</p>' +
+        '<div class="tech-stats">' +
+        '<div class="tech-stat tech-stat--wide"><span class="tech-stat__label">Ejercicio</span><p class="tech-stat__value">' + esc(t.exercise) + '</p></div>' +
+        '<div class="tech-stat"><span class="tech-stat__label">Duración</span><span class="tech-stat__value tech-stat__value--big">' + esc(t.duration) + '</span></div>' +
+        '<div class="tech-stat"><span class="tech-stat__label">Fuente</span>' + source + '</div>' +
+        '</div>' +
+        '</div>';
+      const art = (detailArt = JOY.dotArt(detail.querySelector('canvas'), { motif: phase.id, art: t.art, seed: seedBase + idx, start: 0, interactive: true }));
+      art.accent(true);
+      art.play({ duration: phase.id === 'incubacion' ? 2 : 1.3 });
+      if (motionOK()) {
+        const els = [detail.querySelector('.tech-detail__art')].concat(Array.from(detail.querySelector('.tech-detail__body').children));
+        if (P.reveal) P.reveal(els);
+        else gsap.fromTo(els, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.07, clearProps: 'transform,opacity' });
+      }
+    }
+
+    function select(idx, fromDice) {
+      ensureArts();
+      if (current >= 0 && current !== idx) tiles[current].art.accent(false);
+      current = idx;
+      tiles.forEach((t, k) => {
+        t.el.classList.remove('is-scanning');
+        t.el.classList.toggle('is-picked', k === idx);
+        t.el.setAttribute('aria-pressed', k === idx ? 'true' : 'false');
+      });
+      tiles[idx].art.accent(true);
+      detail.classList.add('has-technique');
+      renderDetail(idx, fromDice);
+      // que la ficha quede a la vista si está por debajo del pliegue
+      const r = detail.getBoundingClientRect();
+      if (r.bottom > window.innerHeight - 80) {
+        scene.scrollBy({ top: Math.min(r.top - 90, r.bottom - window.innerHeight + 100), behavior: motionOK() ? 'smooth' : 'auto' });
+      }
+      if (fromDice) {
+        JOY.buzz([8, 40, 14]);
+        if (P.onLand) P.onLand();
+        if (motionOK()) {
+          gsap.delayedCall(0.2, () => {
+            JOY.sfx('ding');
+            if (P.confetti) P.confetti(tiles[idx].el); else confettiFrom(tiles[idx].el);
+          });
+        }
+      }
+    }
+
+    /* ---------- el dado: una ruleta sobre las tarjetas ---------- */
+    const diceBtn = document.createElement('button');
+    diceBtn.type = 'button';
+    diceBtn.className = 'dice-btn';
+    diceBtn.setAttribute('data-magnetic', '0.25');
+    diceBtn.setAttribute('data-cursor', '¡Tira!');
+    const dice = JOY.makeDice ? JOY.makeDice(22) : null;
+    if (dice) diceBtn.appendChild(dice);
+    const diceLabel = document.createElement('span');
+    diceLabel.textContent = 'Tirar el dado';
+    diceBtn.appendChild(diceLabel);
+    controls.appendChild(diceBtn);
+
+    function roll() {
+      if (rolling) return;
+      let p = Math.floor(Math.random() * n);
+      if (n > 1 && p === current) p = (p + 1 + Math.floor(Math.random() * (n - 1))) % n;
+      JOY.sfx('rattle');
+      JOY.buzz(15);
+      if (dice && JOY.rollDice) JOY.rollDice(dice, 0.8 * speed);
+      diceLabel.textContent = 'Otra técnica';
+      if (!motionOK()) { select(p, true); return; }
+
+      rolling = true;
+      diceBtn.disabled = true;
+      grid.classList.add('is-rolling');
+      const delays = [60, 60, 65, 70, 80, 95, 115, 140, 175, 220, 280, 350].map((d) => d * speed);
+      // arrancamos de modo que la última casilla iluminada sea la elegida
+      let k = (((p - delays.length) % n) + n) % n;
+      let at = 0;
+      delays.forEach((d) => {
+        at += d;
+        gsap.delayedCall(at / 1000, () => {
+          k = (k + 1) % n;
+          tiles.forEach((t, j) => t.el.classList.toggle('is-scanning', j === k));
+          JOY.sfx('tick');
+        });
+      });
+      gsap.delayedCall((at + 240 * speed) / 1000, () => {
+        grid.classList.remove('is-rolling');
+        rolling = false;
+        diceBtn.disabled = false;
+        select(p, true);
+      });
+    }
+    diceBtn.addEventListener('click', roll);
+
+    if (P.build) P.build(scene, ambient, head);
+    if (JOY.initMagnetic) JOY.initMagnetic(scene);
+
+    if (window.JOURNEY && window.JOURNEY.register) {
+      const headKids = () => [head.querySelector('.phase__eyebrow'), head.querySelector('.phase__title'), head.querySelector('.phase__intro')];
+      window.JOURNEY.register(phase.id, {
+        enter() {
+          ensureArts();
+          if (!motionOK()) { tiles.forEach((t) => t.art.set(1)); return; }
+          if (P.enter) P.enter(scene, headKids());
+          const slow = phase.id === 'incubacion';
+          const d0 = slow ? 0.9 : 0.35;
+          gsap.fromTo(tiles.map((t) => t.el), { opacity: 0, y: 24 }, {
+            opacity: 1, y: 0, duration: slow ? 1.1 : 0.6,
+            ease: phase.id === 'implementacion' ? 'steps(4)' : 'power3.out', stagger: 0.07,
+            delay: d0, clearProps: 'transform,opacity',
+          });
+          tiles.forEach((t, k) => t.art.play({ delay: d0 + k * 0.07, duration: slow ? 2.2 : 1.4 }));
+          gsap.fromTo([detail, scene.querySelector('.phase__foot')], { opacity: 0 }, {
+            opacity: 1, duration: 0.6, delay: d0 + 0.4, clearProps: 'opacity',
+          });
+        },
+        leave() { if (P.leave) P.leave(scene); },
+      });
+    } else {
+      ensureArts();
+    }
+    return ensureArts;
+  }
+
+  // tras la carga, prepara los dibujos de cada fase de uno en uno en ratos libres
+  function warmArts(builders) {
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
+    const nextOne = () => {
+      const build = builders.shift();
+      if (!build) return;
+      build();
+      idle(nextOne, { timeout: 3000 });
+    };
+    const start = () => idle(nextOne, { timeout: 3000 });
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
   }
 
   function renderPhases() {
-    const panelsContainer = document.getElementById('phase-split');
-    const detailContainer = document.getElementById('phase-detail');
-    if (!panelsContainer || !detailContainer || !window.PHASES) return;
-
-    let pendingOut = null;
-
-    function buildDetail(phase) {
-      detailContainer.innerHTML = '';
-      const n = phase.techniques.length;
-      let lastPick = -1;
-      let rolling = false;
-      let showingAll = false;
-
-      const desc = document.createElement('p');
-      desc.className = 'phase-detail__desc';
-      desc.textContent = phase.description;
-      detailContainer.appendChild(desc);
-
-      const stage = document.createElement('div');
-      stage.className = 'technique-stage';
-      detailContainer.appendChild(stage);
-
-      const controls = document.createElement('div');
-      controls.className = 'technique-stage__controls';
-      stage.appendChild(controls);
-
-      const shuffleBtn = document.createElement('button');
-      shuffleBtn.type = 'button';
-      shuffleBtn.className = 'phase-card__shuffle';
-      shuffleBtn.setAttribute('data-magnetic', '0.25');
-      shuffleBtn.innerHTML = '<span class="dice" aria-hidden="true">🎲</span><span class="label">Tirar el dado</span>';
-      controls.appendChild(shuffleBtn);
-
-      const listId = 'technique-list-' + phase.id;
-      const toggleBtn = document.createElement('button');
-      toggleBtn.type = 'button';
-      toggleBtn.className = 'technique-stage__toggle';
-      toggleBtn.setAttribute('aria-expanded', 'false');
-      toggleBtn.setAttribute('aria-controls', listId);
-      controls.appendChild(toggleBtn);
-      const setToggleLabel = () => {
-        toggleBtn.innerHTML = showingAll
-          ? 'Volver a una técnica<span class="arrow" aria-hidden="true">↓</span>'
-          : 'Ver las ' + n + ' técnicas<span class="arrow" aria-hidden="true">↓</span>';
-      };
-      setToggleLabel();
-
-      const slot = document.createElement('div');
-      slot.className = 'technique-slot';
-      slot.setAttribute('aria-live', 'polite');
-      stage.appendChild(slot);
-
-      const empty = document.createElement('button');
-      empty.type = 'button';
-      empty.className = 'technique-slot__empty';
-      empty.innerHTML =
-        '<span class="dice" aria-hidden="true">🎲</span>' +
-        '<strong>¿Qué técnica te toca?</strong>' +
-        '<span>Tira el dado y prueba una de las ' + n + ' técnicas de esta fase.</span>';
-      slot.appendChild(empty);
-
-      const list = document.createElement('ul');
-      list.className = 'technique-list';
-      list.id = listId;
-      list.hidden = true;
-      phase.techniques.forEach((t, idx) => list.appendChild(makeCard(t, idx, 'li', false)));
-      stage.appendChild(list);
-
-      function markPicked() {
-        list.querySelectorAll('.technique-card').forEach((c, idx) => {
-          c.classList.toggle('technique-card--picked', idx === lastPick);
-          const old = c.querySelector('.technique-card__badge');
-          if (old) old.remove();
-          if (idx === lastPick) {
-            const b = document.createElement('span');
-            b.className = 'technique-card__badge';
-            b.textContent = 'Tu técnica';
-            c.appendChild(b);
-          }
-        });
-      }
-
-      function setShowAll(on) {
-        showingAll = on;
-        toggleBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
-        setToggleLabel();
-        slot.hidden = on;
-        list.hidden = !on;
-        if (on) {
-          markPicked();
-          if (motionOK()) {
-            const cards = list.querySelectorAll('.technique-card');
-            gsap.fromTo(
-              cards,
-              { opacity: 0, y: 30, rotation: () => gsap.utils.random(-7, 7) },
-              {
-                opacity: 1, y: 0,
-                rotation: (_, el) => parseFloat(el.style.getPropertyValue('--tilt')) || 0,
-                duration: 0.55, ease: 'back.out(1.5)', stagger: 0.055, clearProps: 'transform,opacity',
-              }
-            );
-          }
-        } else if (motionOK()) {
-          gsap.from(slot, { opacity: 0, y: 14, duration: 0.35, ease: 'power2.out', clearProps: 'all' });
-        }
-      }
-
-      function land(pickIdx) {
-        const card = makeCard(phase.techniques[pickIdx], pickIdx, 'article', true);
-        slot.innerHTML = '';
-        slot.appendChild(card);
-        slot.style.minHeight = '';
-        if (!motionOK()) return;
-        card.classList.add('is-slapped');
-        const tilt = parseFloat(card.style.getPropertyValue('--tilt')) || 0;
-        gsap.fromTo(
-          card,
-          { opacity: 0, y: -40, scale: 0.9, rotation: gsap.utils.random(-8, 8) },
-          { opacity: 1, y: 0, scale: 1, rotation: tilt, duration: 0.6, ease: 'back.out(2)', clearProps: 'transform,opacity' }
-        );
-        gsap.delayedCall(0.3, () => burstFrom(card));
-      }
-
-      function roll() {
-        if (rolling) return;
-        let pick = Math.floor(Math.random() * n);
-        if (n > 1 && pick === lastPick) pick = (pick + 1 + Math.floor(Math.random() * (n - 1))) % n;
-        lastPick = pick;
-        shuffleBtn.querySelector('.label').textContent = 'Otra técnica';
-        if (showingAll) setShowAll(false);
-
-        if (!motionOK()) { land(pick); return; }
-
-        // tragaperras: el dado gira y los nombres pasan por el rodillo cada vez más despacio
-        rolling = true;
-        shuffleBtn.disabled = true;
-        const dice = shuffleBtn.querySelector('.dice');
-        gsap.fromTo(dice, { rotation: 0 }, { rotation: 360, duration: 0.75, ease: 'back.out(1.6)' });
-        gsap.fromTo(dice, { y: 0 }, { y: -8, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' });
-
-        slot.style.minHeight = slot.offsetHeight + 'px';
-        slot.innerHTML = '<div class="technique-reel" aria-hidden="true"><span class="technique-reel__name"></span></div>';
-        const nameEl = slot.querySelector('.technique-reel__name');
-        gsap.from(slot.firstChild, { scaleY: 0.85, opacity: 0, duration: 0.2, ease: 'power2.out' });
-
-        const names = phase.techniques.map((t) => t.name);
-        const delays = [55, 55, 60, 65, 75, 90, 110, 135, 170, 215];
-        // arrancamos de modo que el último nombre del rodillo sea justo el elegido
-        let i = (pick - delays.length) % n;
-        if (i < 0) i += n;
-        let elapsed = 0;
-        delays.forEach((d) => {
-          elapsed += d;
-          gsap.delayedCall(elapsed / 1000, () => {
-            i = (i + 1) % n;
-            nameEl.textContent = names[i];
-            gsap.fromTo(nameEl, { yPercent: -120, opacity: 0.35 }, { yPercent: 0, opacity: 1, duration: d / 1000, ease: 'power2.out' });
-          });
-        });
-        gsap.delayedCall((elapsed + 260) / 1000, () => {
-          land(pick);
-          rolling = false;
-          shuffleBtn.disabled = false;
-        });
-      }
-
-      shuffleBtn.addEventListener('click', roll);
-      empty.addEventListener('click', roll);
-      toggleBtn.addEventListener('click', () => setShowAll(!showingAll));
-
-      if (JOY.initMagnetic) JOY.initMagnetic(detailContainer);
-
-      if (motionOK()) {
-        gsap.from([desc, controls, slot], { opacity: 0, y: 12, duration: 0.4, ease: 'power2.out', stagger: 0.06, clearProps: 'all' });
-      }
-    }
-
-    function renderDetail(phase) {
-      if (pendingOut) { pendingOut.kill(); pendingOut = null; }
-      const old = detailContainer.children;
-      if (!motionOK() || !old.length) { buildDetail(phase); return; }
-      // lo anterior se despega y cae antes de que entre la nueva fase
-      pendingOut = gsap.to(old, {
-        opacity: 0, y: 20, duration: 0.22, ease: 'power2.in', stagger: 0.03,
-        onComplete: () => { pendingOut = null; buildDetail(phase); },
-      });
-    }
-
-    const panels = [];
-    window.PHASES.forEach((phase, i) => {
-      const panel = document.createElement('button');
-      panel.type = 'button';
-      panel.className = 'phase-split-panel';
-      panel.id = 'phase-tab-' + phase.id;
-      panel.setAttribute('role', 'tab');
-      panel.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-      panel.setAttribute('aria-controls', 'phase-detail');
-      panel.setAttribute('tabindex', i === 0 ? '0' : '-1');
-      panel.setAttribute('data-cursor', 'Elegir →');
-      panel.innerHTML =
-        '<span class="phase-split-panel__base" aria-hidden="true"><span class="phase-split-panel__img"></span></span>' +
-        '<span class="phase-split-panel__tint" aria-hidden="true"></span>' +
-        '<span class="phase-split-panel__reveal" aria-hidden="true"><span class="phase-split-panel__img"></span></span>' +
-        '<span class="phase-split-panel__overlay" aria-hidden="true"></span>' +
-        '<span class="phase-split-panel__bar" aria-hidden="true"></span>' +
-        '<span class="phase-split-panel__label">' +
-        '<span class="phase-split-panel__title">' +
-        '<span class="phase-split-panel__index">' + phase.index + '</span>' +
-        '<span class="phase-split-panel__name">' + phase.name + '.</span>' +
-        '</span>' +
-        '<span class="phase-split-panel__hint">' + phase.description + '</span>' +
-        '</span>';
-      panel.addEventListener('click', (e) => selectPhase(i, e));
-      panelsContainer.appendChild(panel);
-      panels.push(panel);
+    if (!window.PHASES || !JOY.dotArt) return;
+    const builders = [];
+    window.PHASES.forEach((phase, i, all) => {
+      const scene = document.getElementById(phase.id);
+      if (scene) builders.push(buildPhaseScene(phase, scene, i, all));
     });
-
-    const fx = initPanelFX(panelsContainer, panels);
-    let current = 0;
-
-    // flechas del teclado para recorrer las fases (patrón de tabs)
-    panelsContainer.addEventListener('keydown', (e) => {
-      const keys = { ArrowRight: 1, ArrowLeft: -1, Home: -Infinity, End: Infinity };
-      if (!(e.key in keys)) return;
-      e.preventDefault();
-      let next = current + keys[e.key];
-      if (next === -Infinity) next = 0;
-      if (next === Infinity) next = panels.length - 1;
-      next = (next + panels.length) % panels.length;
-      panels[next].focus();
-      selectPhase(next);
-    });
-
-    function selectPhase(i, evt) {
-      const changed = i !== current;
-      panelsContainer.dataset.dir = i >= current ? 'right' : 'left';
-      current = i;
-      panels.forEach((p, idx) => {
-        p.classList.toggle('phase-split-panel--active', idx === i);
-        p.setAttribute('aria-selected', idx === i ? 'true' : 'false');
-        p.setAttribute('tabindex', idx === i ? '0' : '-1');
-      });
-      fx.setActive(i, evt);
-      if (changed || !detailContainer.children.length) renderDetail(window.PHASES[i]);
-    }
-
-    selectPhase(0);
-  }
-
-  /* ---------------------------------------------------------------------------
-     Paneles de fase como "cuarto oscuro":
-     - en reposo cada foto está en duotono cobalto (una idea sin revelar)
-     - el cursor es una lámpara: dentro de su círculo aparece la foto real, y el
-       círculo cruza de un panel a otro sin cortes porque todos comparten el centro
-     - los anchos siguen al cursor de forma continua (ojo de pez), sin saltos
-     - elegir una fase la "ilumina": el círculo crece desde el clic hasta llenarla
-     ------------------------------------------------------------------------- */
-  function initPanelFX(container, panels) {
-    const hasGsap = typeof gsap !== 'undefined';
-    const motion = motionOK();
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const wide = window.matchMedia('(min-width: 801px)');
-    const lensOn = () => motion && fine.matches;
-    const fisheyeOn = () => motion && fine.matches && wide.matches;
-
-    const state = panels.map((panel) => ({
-      panel,
-      reveal: panel.querySelector('.phase-split-panel__reveal'),
-      imgs: panel.querySelectorAll('.phase-split-panel__img'),
-      mx: 0, my: 0, lens: 0, lit: 0, px: 0, py: 0, grow: 1,
-    }));
-    let active = 0;
-
-    // sin GSAP: el panel activo simplemente se muestra a color
-    if (!hasGsap) {
-      return {
-        setActive(i) {
-          active = i;
-          state.forEach((s, idx) => s.reveal.style.setProperty('--r', idx === i ? '4000px' : '0px'));
-        },
-      };
-    }
-
-    state.forEach((s) => {
-      s.mxTo = gsap.quickTo(s, 'mx', { duration: 0.3, ease: 'power3.out' });
-      s.myTo = gsap.quickTo(s, 'my', { duration: 0.3, ease: 'power3.out' });
-      s.lensTo = gsap.quickTo(s, 'lens', { duration: 0.55, ease: 'power3.out' });
-      s.pxTo = gsap.quickTo(s, 'px', { duration: 0.8, ease: 'power3.out' });
-      s.pyTo = gsap.quickTo(s, 'py', { duration: 0.8, ease: 'power3.out' });
-      s.growTo = gsap.quickTo(s, 'grow', { duration: 0.7, ease: 'power3.out' });
-      s.mx = s.panel.offsetWidth / 2;
-      s.my = s.panel.offsetHeight * 0.62;
-    });
-    if (fisheyeOn()) container.classList.add('is-fisheye');
-
-    // cada frame: pasar el estado a variables CSS y estilos
-    gsap.ticker.add(() => {
-      const fisheye = container.classList.contains('is-fisheye');
-      state.forEach((s) => {
-        const w = s.panel.offsetWidth, h = s.panel.offsetHeight;
-        // radio que cubre todo el panel desde el centro actual del círculo
-        const far = Math.max(
-          Math.hypot(s.mx, s.my), Math.hypot(w - s.mx, s.my),
-          Math.hypot(s.mx, h - s.my), Math.hypot(w - s.mx, h - s.my)
-        );
-        const full = far / 0.55 + 40;
-        const r = Math.max(s.lens, s.lit * full);
-        s.reveal.style.setProperty('--mx', s.mx.toFixed(1) + 'px');
-        s.reveal.style.setProperty('--my', s.my.toFixed(1) + 'px');
-        s.reveal.style.setProperty('--r', r.toFixed(1) + 'px');
-        const t = 'translate3d(' + s.px.toFixed(2) + 'px,' + s.py.toFixed(2) + 'px,0)';
-        s.imgs[0].style.transform = t;
-        s.imgs[1].style.transform = t;
-        s.panel.style.flexGrow = fisheye ? s.grow.toFixed(4) : '';
-      });
-    });
-
-    const restWidths = () => state.forEach((s, idx) => s.growTo(idx === active ? 1.3 : 1));
-    restWidths();
-
-    let lastX = 0, lastY = 0, speed = 0;
-    container.addEventListener('pointermove', (e) => {
-      if (e.pointerType === 'touch') return;
-      if (!lensOn()) return;
-      container.classList.add('is-hovering');
-      const v = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-      lastX = e.clientX; lastY = e.clientY;
-      speed += (Math.min(v, 60) - speed) * 0.25;
-      const lensR = 150 + speed * 1.6; // cuanto más rápido, más grande la lámpara
-
-      const box = container.getBoundingClientRect();
-      const x = e.clientX - box.left;
-      const W = box.width, n = state.length;
-      const hovered = e.target.closest ? e.target.closest('.phase-split-panel') : null;
-
-      state.forEach((s, idx) => {
-        const r = s.panel.getBoundingClientRect();
-        // todos los paneles comparten el mismo centro: el círculo cruza los bordes sin cortes
-        s.mxTo(e.clientX - r.left);
-        s.myTo(e.clientY - r.top);
-        s.lensTo(lensR);
-        const isHovered = s.panel === hovered;
-        s.panel.classList.toggle('is-near', isHovered);
-        s.pxTo(isHovered ? ((e.clientX - r.left) / r.width - 0.5) * -22 : 0);
-        s.pyTo(isHovered ? ((e.clientY - r.top) / r.height - 0.5) * -14 : 0);
-        if (fisheyeOn()) {
-          // centros fijos (reparto igual) para que el ancho no se retroalimente
-          const cx = (idx + 0.5) * W / n;
-          const d = (x - cx) / (W * 0.2);
-          s.growTo(1 + 0.9 * Math.exp(-d * d) + (idx === active ? 0.1 : 0));
-        }
-      });
-    });
-
-    container.addEventListener('pointerleave', () => {
-      container.classList.remove('is-hovering');
-      speed = 0;
-      state.forEach((s) => {
-        s.panel.classList.remove('is-near');
-        s.lensTo(0);
-        s.pxTo(0);
-        s.pyTo(0);
-      });
-      restWidths();
-    });
-
-    const onMQ = () => {
-      container.classList.toggle('is-fisheye', fisheyeOn());
-      restWidths();
-    };
-    if (wide.addEventListener) wide.addEventListener('change', onMQ);
-
-    // entrada: los paneles se revelan de abajo arriba y luego "se enciende" el activo
-    let entered = !(motion && typeof ScrollTrigger !== 'undefined');
-    if (!entered) {
-      gsap.registerPlugin(ScrollTrigger);
-      const titles = container.querySelectorAll('.phase-split-panel__title');
-      gsap.set(panels, { clipPath: 'inset(100% 0% 0% 0%)' });
-      gsap.set(titles, { yPercent: 120, opacity: 0 });
-      ScrollTrigger.create({
-        trigger: container,
-        start: 'top 78%',
-        once: true,
-        onEnter: () => {
-          gsap.timeline({ onComplete: () => { entered = true; } })
-            .to(panels, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'power4.inOut', stagger: 0.1, clearProps: 'clipPath' })
-            .to(titles, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out', stagger: 0.08, clearProps: 'all' }, '-=0.55')
-            .add(() => light(active, null), '-=0.2');
-        },
-      });
-    }
-
-    function light(i, evt) {
-      const s = state[i];
-      if (evt && evt.clientX) {
-        const r = s.panel.getBoundingClientRect();
-        s.mx = evt.clientX - r.left;
-        s.my = evt.clientY - r.top;
-      } else if (!container.classList.contains('is-hovering')) {
-        s.mx = s.panel.offsetWidth / 2;
-        s.my = s.panel.offsetHeight * 0.62;
-      }
-      gsap.fromTo(s, { lit: 0 }, { lit: 1, duration: 1.15, ease: 'expo.out', overwrite: 'auto' });
-    }
-
-    return {
-      setActive(i, evt) {
-        const prev = active;
-        active = i;
-        if (!motion) {
-          state.forEach((s, idx) => { s.lit = idx === i ? 1 : 0; });
-          return;
-        }
-        if (prev !== i) gsap.to(state[prev], { lit: 0, duration: 0.7, ease: 'power3.inOut', overwrite: 'auto' });
-        if (!entered) return; // la animación de entrada encenderá el activo
-        if (prev !== i || state[i].lit < 1) light(i, evt);
-        if (!container.classList.contains('is-hovering')) restWidths();
-      },
-    };
+    warmArts(builders);
   }
 
   document.addEventListener('DOMContentLoaded', renderPhases);

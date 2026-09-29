@@ -1,0 +1,219 @@
+/* ==========================================================================
+   journey.css — el sitio como recorrido de escenas a pantalla completa.
+   Sin .is-live (sin JS) las escenas se apilan como una página normal.
+   ========================================================================== */
+
+/* ---------- escenas: base (apiladas) ---------- */
+.scene {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 104px var(--space-lg) 128px;
+  background: var(--scene-bg, var(--color-bg));
+  color: var(--scene-ink, var(--color-text));
+  display: flex;
+  flex-direction: column;
+}
+/* margin:auto centra verticalmente sin cortar el contenido cuando es más alto que la pantalla */
+.scene__inner { position: relative; z-index: 2; width: 100%; margin: auto; }
+.scene [data-scene-title]:focus { outline: none; }
+.scene [data-scene-title]:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 6px; border-radius: 4px; }
+
+.scene-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  font-weight: var(--fw-medium);
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+.scene-eyebrow__of { opacity: 0.55; font-weight: var(--fw-medium); }
+
+.scene-foot { margin-top: var(--space-lg); display: flex; justify-content: flex-end; }
+
+.next-btn {
+  appearance: none;
+  border: 1.5px solid rgba(10, 70, 255, 0.35);
+  background: transparent;
+  color: var(--color-accent);
+  font-weight: var(--fw-medium);
+  font-size: 1rem;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+}
+.next-btn span { display: inline-block; transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.next-btn:hover span { transform: translateX(4px); }
+.next-btn:hover { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+
+.link-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  font-weight: var(--fw-medium);
+  font-size: 1rem;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- modo recorrido ---------- */
+html.journey-live, html.journey-live body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.journey.is-live { position: fixed; inset: 0; overflow: hidden; }
+.journey.is-live .scene {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  visibility: hidden;
+  z-index: 0;
+  scrollbar-width: thin;
+}
+.journey.is-live .scene.is-active { visibility: visible; z-index: 2; }
+/* el inicio no se desplaza: las burbujas y los bloques que caen no deben crear scroll */
+.journey.is-live .scene--inicio { overflow: hidden; }
+.journey.is-live .scene.is-leaving { visibility: visible; z-index: 1; }
+
+/* ---------- todas las escenas comparten el fondo claro del inicio ---------- */
+.scene { --scene-bg: var(--color-cloud-white); --scene-bg-solid: var(--color-cloud-white); }
+.scene p { color: var(--color-text-muted); }
+
+/* ---------- botón de sonido ---------- */
+.sound-toggle {
+  position: fixed;
+  top: 26px;
+  right: 22px;
+  z-index: 95;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(11, 11, 13, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 14px rgba(11, 11, 13, 0.08);
+}
+.sound-toggle[hidden] { display: none; }
+.sound-toggle { color: var(--color-accent); }
+.sound-toggle svg { width: 18px; height: 18px; }
+.sound-toggle[aria-pressed="true"] { background: var(--color-accent); color: #fff; }
+
+/* ---------- camino de fases (navegación inferior) ---------- */
+.journey-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(11, 11, 13, 0.08);
+  box-shadow: 0 10px 30px rgba(11, 11, 13, 0.12);
+  color: var(--color-ink-black);
+  max-width: calc(100vw - 24px);
+}
+.journey-nav[hidden] { display: none; }
+.journey-nav__path {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+}
+.journey-nav__arrow {
+  appearance: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-accent);
+  font-size: 1.4rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  transition: background var(--motion-fast), opacity var(--motion-fast);
+}
+.journey-nav__arrow:hover:not(:disabled) { background: rgba(10, 70, 255, 0.1); }
+.journey-nav__arrow:disabled { opacity: 0.25; cursor: default; }
+
+.journey-dot {
+  appearance: none;
+  border: none;
+  background: transparent;
+  height: 36px;
+  min-width: 26px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: inherit;
+  position: relative;
+  transition: background 360ms cubic-bezier(0.2, 0.8, 0.2, 1), padding 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.journey-dot::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid rgba(11, 11, 13, 0.3);
+  background: transparent;
+  transition: all 260ms ease;
+}
+.journey-dot.is-visited::before { background: var(--color-accent-soft); border-color: var(--color-accent-soft); }
+.journey-dot:hover::before { border-color: var(--color-accent); transform: scale(1.3); }
+.journey-dot__icon { display: none !important; }
+.journey-dot__label {
+  display: none;
+  font-size: 0.82rem;
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+.journey-dot.is-current {
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0 14px;
+}
+.journey-dot.is-current::before { display: none; }
+.journey-dot.is-current .journey-dot__icon,
+.journey-dot.is-current .journey-dot__label { display: inline; }
+
+/* etiqueta flotante al pasar sobre un punto */
+.journey-dot:not(.is-current):hover .journey-dot__label {
+  display: block;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-ink-black);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .scene { padding: 84px var(--space-sm) 108px; }
+  .journey-nav { bottom: 12px; padding: 4px; }
+  .journey-nav__arrow { width: 32px; height: 32px; }
+  .journey-dot { min-width: 20px; height: 32px; }
+  .journey-dot.is-current { padding: 0 10px; }
+  .sound-toggle { top: 14px; right: 12px; width: 38px; height: 38px; }
+  .scene-foot { justify-content: stretch; }
+  .scene-foot .next-btn { width: 100%; }
+}

@@ -1,164 +1,381 @@
-.phases { max-width: none; padding: var(--space-2xl) 0; margin: 0; }
-.phases__inner { max-width: 1040px; margin: 0 auto; padding: 0 var(--space-lg); }
-.phases__intro { max-width: 60ch; margin-bottom: var(--space-lg); }
+/* ==========================================================================
+   phases.css — escenas de las 4 fases. Rejilla de 5 columnas con guías finas,
+   tarjetas blancas con ilustraciones de trama de puntos y una ficha de detalle
+   con "stat tiles". Tipografía DM Sans, apretada y ligera en los titulares.
+   ========================================================================== */
 
-/* full-bleed row of 4 clickable phase panels, edge to edge regardless of viewport width */
-.phase-split {
+.phase {
+  --cols: 5;
+  --gap: 16px;
+  --line: rgba(11, 11, 13, 0.06);
+  max-width: 1160px;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+.phase > * { grid-column: 1 / -1; }
+
+/* ---------- cabecera: titular a la izquierda, texto y dado a la derecha ---------- */
+.phase__head {
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: end;
+  row-gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+.phase__lead { grid-column: 1 / 4; }
+.phase__intro { grid-column: 4 / -1; padding-bottom: 10px; }
+
+.phase__eyebrow {
   display: flex;
-  width: 100%;
-  min-height: clamp(380px, 58vh, 620px);
-  margin: var(--space-lg) 0;
-  background: var(--color-ink-black);
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 var(--space-md);
+  font-size: 0.8rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-black) !important;
 }
+.phase__of { color: var(--color-text-muted); opacity: 0.7; }
+.phase__steps { display: inline-flex; gap: 5px; }
+.phase__steps i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(11, 11, 13, 0.3);
+}
+.phase__steps i.is-done { background: rgba(11, 11, 13, 0.3); border-color: transparent; }
+.phase__steps i.is-current { background: var(--color-accent); border-color: var(--color-accent); }
 
-.phase-split-panel {
-  appearance: none;
+.phase__title {
+  margin: 0;
+  font-size: clamp(2.8rem, 6.4vw, 5rem);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+.phase__desc { font-size: 0.98rem; line-height: 1.55; margin-bottom: var(--space-md); max-width: 36ch; }
+.phase__controls { display: flex; align-items: center; gap: 12px; }
+
+/* el dado: botón principal, píldora negra */
+.dice-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px 10px 12px;
   border: none;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  cursor: pointer;
-  padding: 0;
+  border-radius: var(--radius-pill);
   background: var(--color-ink-black);
-  transition: flex-grow var(--motion-slow) ease;
-  /* foto de cada fase: la usan tanto la capa en duotono como la capa a color */
-  --img: linear-gradient(160deg, #10131a, #12294f);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: var(--fw-medium);
+  box-shadow: 0 6px 18px rgba(11, 11, 13, 0.18);
 }
-.phase-split-panel:last-child { border-right: none; }
-/* sin JS: expansión simple con CSS. Con JS, .is-fisheye toma el control del ancho */
-.phase-split:not(.is-fisheye) .phase-split-panel:hover,
-.phase-split:not(.is-fisheye) .phase-split-panel:focus-visible { flex-grow: 1.5; }
-.phase-split.is-fisheye .phase-split-panel { transition: none; }
+.dice-btn:hover { background: var(--color-accent); box-shadow: 0 8px 22px rgba(10, 70, 255, 0.3); }
+.dice-btn[disabled] { cursor: default; }
 
-.phase-split-panel:nth-child(1) { --img: url('../assets/preparacion.jpg'), linear-gradient(160deg, #10131a, #12294f); }
-.phase-split-panel:nth-child(2) { --img: url('../assets/incubacion.jpg'), linear-gradient(160deg, #0c0e13, #101538); }
-.phase-split-panel:nth-child(3) { --img: url('../assets/iluminacion.jpg'), linear-gradient(160deg, #14161c, #2a2d36); }
-.phase-split-panel:nth-child(4) { --img: url('../assets/implementacion.jpg'), linear-gradient(160deg, #0d1016, #1b2230); }
-
-/* capas de imagen: el contenedor no se transforma (para que la máscara quede fija) y la imagen interior hace parallax */
-.phase-split-panel__base,
-.phase-split-panel__reveal { position: absolute; inset: 0; overflow: hidden; }
-.phase-split-panel__img {
-  position: absolute;
-  inset: -8%;
-  background-image: var(--img);
-  background-size: cover;
-  background-position: center;
-  will-change: transform;
+/* ---------- rejilla de técnicas ---------- */
+.tech-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: var(--gap);
 }
+.tech-grid > li { display: flex; min-width: 0; }
 
-/* reposo: blanco y negro teñido de cobalto, como una idea todavía sin revelar */
-.phase-split-panel__base .phase-split-panel__img { filter: grayscale(1) contrast(1.15) brightness(0.72); }
-.phase-split-panel__tint {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(170deg, var(--color-deep-cobalt), #06208a);
-  mix-blend-mode: color;
-  opacity: 0.92;
-}
-
-/* la "lámpara": la foto real aparece dentro de un círculo que sigue al cursor */
-.phase-split-panel__reveal {
-  --r: 0px;
-  -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #000 calc(var(--r) * 0.55), transparent var(--r));
-  mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #000 calc(var(--r) * 0.55), transparent var(--r));
-}
-
-.phase-split-panel__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(11, 11, 13, 0) 40%, rgba(11, 11, 13, 0.88) 100%);
-  pointer-events: none;
-}
-
-.phase-split-panel__label {
-  position: absolute;
-  left: var(--space-md);
-  bottom: var(--space-md);
-  right: var(--space-md);
+.tech-tile {
+  appearance: none;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
-  color: #fff;
   text-align: left;
-  pointer-events: none;
+  padding: 10px 10px 16px;
+  border: 1px solid rgba(11, 11, 13, 0.06);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-ink-black);
+  transition: translate 340ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 340ms ease, border-color 200ms ease;
 }
-.phase-split-panel__title { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
-.phase-split-panel__index { font-size: 0.9rem; font-weight: var(--fw-bold); color: var(--color-sky-blue); font-variant-numeric: tabular-nums; }
-.phase-split-panel__name { font-size: clamp(1.2rem, 2.4vw, 1.7rem); font-weight: var(--fw-bold); }
-
-/* línea de contexto: aparece en el panel bajo el cursor, o en el activo si no hay cursor */
-.phase-split-panel__hint {
-  max-width: 34ch;
-  font-size: 0.88rem;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.82);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(8px);
-  max-height: 0;
-  transition: opacity 260ms ease, transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1), max-height 360ms ease;
+.tech-tile:hover { translate: 0 -4px; box-shadow: 0 14px 30px rgba(11, 11, 13, 0.07); }
+.tech-tile__art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 0.86;
+  margin-bottom: 14px;
+  border-radius: 10px;
 }
-.phase-split-panel.is-near .phase-split-panel__hint,
-.phase-split:not(.is-hovering) .phase-split-panel--active .phase-split-panel__hint {
-  opacity: 1;
-  transform: none;
-  max-height: 5em;
-}
-
-.phase-detail__desc { max-width: 65ch; }
-
-.phase-card__shuffle {
-  background: var(--color-surface-alt);
-  border: none;
-  border-radius: var(--radius-pill);
-  padding: 10px 20px;
+.tech-tile__art canvas { display: block; width: 100%; height: 100%; }
+.tech-tile__num,
+.tech-tile__name,
+.tech-tile__meta { padding: 0 6px; }
+.tech-tile__num {
+  font-size: 0.72rem;
   font-weight: var(--fw-medium);
-  margin-bottom: var(--space-sm);
-  transition: background var(--motion-fast);
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
 }
-.phase-card__shuffle:hover { background: var(--color-accent-soft); }
+.tech-tile__name {
+  font-size: 0.98rem;
+  font-weight: var(--fw-medium);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.tech-tile__meta {
+  margin-top: auto;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-decoration-color: rgba(11, 11, 13, 0.25);
+  text-underline-offset: 3px;
+}
 
-.phase-card__result {
+/* elegida y "ruleta" del dado */
+.tech-tile.is-picked { border-color: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent), 0 14px 30px rgba(10, 70, 255, 0.12); }
+.tech-tile.is-picked .tech-tile__num,
+.tech-tile.is-picked .tech-tile__meta { color: var(--color-accent); text-decoration-color: currentColor; }
+.tech-grid.is-rolling .tech-tile { transition-duration: 90ms; }
+.tech-grid.is-rolling .tech-tile:not(.is-scanning) { opacity: 0.55; }
+.tech-tile.is-scanning { translate: 0 -6px; border-color: var(--color-ink-black); box-shadow: 0 0 0 1px var(--color-ink-black), 0 14px 30px rgba(11, 11, 13, 0.1); }
+
+/* ---------- ficha de la técnica ---------- */
+.tech-detail {
+  display: grid;
+  grid-template-columns: subgrid;
+  margin-top: var(--space-lg);
+}
+.tech-detail__hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+.tech-detail__art {
+  grid-column: 1 / 3;
+  position: relative;
+  align-self: start;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid rgba(11, 11, 13, 0.06);
+  padding: 44px 8% 22px;
+}
+.tech-detail__art canvas { display: block; width: 100%; aspect-ratio: 1; }
+.tech-detail__count {
+  position: absolute;
+  left: 20px;
+  top: 16px;
+  font-size: 0.75rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.tech-detail__caption {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(11, 11, 13, 0.06);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.tech-detail__body { grid-column: 3 / -1; padding: 8px 0 0 calc(var(--gap) * 1.5); }
+.tech-detail__kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.tech-detail__badge {
   background: var(--color-accent);
   color: #fff;
-  border-radius: var(--radius-md);
-  padding: var(--space-sm) var(--space-md);
-  margin-bottom: var(--space-md);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.04em;
 }
-.phase-card__result[hidden] { display: none; }
+.tech-detail__name {
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-weight: var(--fw-medium);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin-bottom: var(--space-sm);
+}
+.tech-detail__desc { font-size: 1.02rem; max-width: 52ch; margin-bottom: var(--space-md); }
 
+.tech-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tech-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  padding: 16px 18px 18px;
+  border-radius: 14px;
+  background: var(--color-surface);
+  border: 1px solid rgba(11, 11, 13, 0.06);
+}
+.tech-stat--wide { grid-column: 1 / -1; }
+.tech-stat__label { font-size: 0.8rem; color: var(--color-text-muted); }
+.tech-stat__value {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+  color: var(--color-ink-black) !important;
+  overflow-wrap: break-word;
+}
+.tech-stat__value--big { font-size: 1.9rem; font-weight: var(--fw-regular); letter-spacing: -0.03em; line-height: 1; }
+.tech-stat__link { text-decoration: none; }
+.tech-stat__link:hover { color: var(--color-accent) !important; }
+
+/* ---------- pie: siguiente fase ---------- */
+.phase__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--line);
+}
+.phase__foot-label {
+  font-size: 0.8rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(11, 11, 13, 0.14);
+  background: var(--color-surface);
+  color: var(--color-ink-black);
+  font-size: 0.95rem;
+  font-weight: var(--fw-medium);
+}
+.pill-btn span { display: inline-block; transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.pill-btn:hover { background: var(--color-ink-black); border-color: var(--color-ink-black); color: #fff; }
+.pill-btn:hover span { transform: translateX(4px); }
+
+/* ---------- capa decorativa: guías de columna + círculos del inicio ---------- */
+.phase-ambient { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.journey.is-live .phase-ambient { position: fixed; }
+/* los círculos del inicio quedan más tenues para no competir con la rejilla */
+.scene--phase .phase-ambient { opacity: 0.55; }
+
+/* una línea en el centro de cada hueco, alineada con la rejilla de .phase */
+.phase-grid {
+  --gap: 16px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: calc(min(1160px, 100% - 2 * var(--space-lg)) + var(--gap));
+  translate: -50% 0;
+  background: linear-gradient(to right, rgba(11, 11, 13, 0.1) 1px, transparent 1px) 0 0 / 20% 100%;
+  border-right: 1px solid rgba(11, 11, 13, 0.1);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+
+.soft-circle {
+  position: absolute;
+  border-radius: 50%;
+  translate: -50% -50%;
+  filter: blur(2px);
+  will-change: transform;
+}
+.soft-circle--sky { background: radial-gradient(circle at 30% 30%, var(--color-sky-blue), transparent 70%); opacity: 0.5; }
+.soft-circle--cobalt { background: radial-gradient(circle at 60% 40%, var(--color-deep-cobalt), transparent 70%); opacity: 0.35; }
+/* la "lámpara" de Iluminación: un círculo cielo con un núcleo más claro */
+.soft-circle--lamp { background: radial-gradient(circle at 50% 50%, #FFFFFF 0%, var(--color-sky-blue) 30%, transparent 70%); opacity: 0.65; }
+
+/* ---------- notas de técnica (las usa el reto final) ---------- */
 .technique-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-sm); }
-
 .technique-card {
   min-width: 0;
+  color: var(--color-ink-black);
   border: 1px solid var(--color-soft-gray);
   border-radius: var(--radius-md);
   padding: var(--space-sm) var(--space-md);
 }
-
+.technique-card p { color: var(--color-text-muted); }
 .technique-card__header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm); flex-wrap: wrap; }
 .technique-card__header h4 { margin: 0; min-width: 0; }
-.technique-card__source { font-size: 0.8rem; color: var(--color-text-muted); }
+.technique-card__source, .technique-card__source-link { font-size: 0.8rem; color: var(--color-text-muted); }
+.technique-card__source-link:hover { color: var(--color-accent); }
 .technique-card__desc, .technique-card__exercise { overflow-wrap: break-word; }
 .technique-card__exercise { font-size: 0.95rem; }
 .technique-card__duration { font-size: 0.8rem; color: var(--color-accent); font-weight: var(--fw-medium); }
 
-@media (max-width: 800px) {
-  .phase-split { flex-direction: column; min-height: 0; }
-  .phase-split-panel { flex: none; min-height: 200px; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-  .phase-split-panel:last-child { border-bottom: none; }
-  .phase-split:not(.is-fisheye) .phase-split-panel:hover,
-  .phase-split:not(.is-fisheye) .phase-split-panel:focus-visible { flex-grow: 0; }
-  .phase-split-panel__hint { max-width: 46ch; }
+.phase-card__shuffle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 10px 20px 10px 14px;
+  font-weight: var(--fw-medium);
+  font-size: 1rem;
+}
+.phase-card__shuffle:hover { background: var(--color-accent-soft); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .phase { --cols: 6; }
+  .phase-grid { display: none; }
+  .phase__head { grid-template-columns: minmax(0, 1fr); }
+  .phase__lead, .phase__intro { grid-column: 1 / -1; }
+  .phase__desc { max-width: 52ch; }
+  .tech-grid > li { grid-column: span 2; }
+  .tech-grid > li:nth-child(4) { grid-column: 2 / span 2; }
+  .tech-detail__art { grid-column: 1 / 3; }
+  .tech-detail__body { grid-column: 3 / -1; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .phase-split-panel, .phase-split-panel__hint { transition: none; }
+@media (max-width: 640px) {
+  .phase { --cols: 1; --gap: 10px; }
+  .phase__head { margin-bottom: var(--space-lg); }
+  .tech-grid > li,
+  .tech-grid > li:nth-child(4) { grid-column: 1 / -1; }
+  .tech-tile {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    grid-template-areas: "art num meta" "art name name";
+    align-items: center;
+    column-gap: 12px;
+    padding: 8px 14px 8px 8px;
+  }
+  .tech-tile:hover { translate: none; }
+  .tech-tile__art { grid-area: art; width: 64px; margin: 0; aspect-ratio: 1; }
+  .tech-tile__num { grid-area: num; margin: 0; padding: 0; align-self: end; }
+  .tech-tile__name { grid-area: name; margin: 0; padding: 0; align-self: start; }
+  .tech-tile__meta { grid-area: meta; margin: 0; padding: 0; align-self: end; }
+  .tech-tile.is-scanning { translate: 4px 0; }
+  .tech-detail { margin-top: var(--space-md); }
+  .tech-detail__art { grid-column: 1 / -1; margin-bottom: var(--space-md); }
+  .tech-detail__art canvas { width: min(240px, 80%); align-self: center; }
+  .tech-detail__body { grid-column: 1 / -1; padding: 0; }
+  .tech-stats { grid-template-columns: 1fr; }
+  .phase__foot { flex-direction: column; align-items: stretch; text-align: center; }
+  .pill-btn { justify-content: center; }
 }

@@ -6,98 +6,116 @@
   <title>Laboratorio de Creatividad — Técnicas de ideación</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/tokens.css">
-  <link rel="stylesheet" href="styles/base.css">
-  <link rel="stylesheet" href="styles/hero.css">
-  <link rel="stylesheet" href="styles/phases.css?v=2">
-  <link rel="stylesheet" href="styles/references.css">
-  <link rel="stylesheet" href="styles/joy.css?v=5">
+  <link rel="stylesheet" href="styles/tokens.css?v=r12">
+  <link rel="stylesheet" href="styles/base.css?v=r12">
+  <link rel="stylesheet" href="styles/journey.css?v=r13">
+  <link rel="stylesheet" href="styles/hero.css?v=r24">
+  <link rel="stylesheet" href="styles/phases.css?v=r15">
+  <link rel="stylesheet" href="styles/references.css?v=r12">
+  <link rel="stylesheet" href="styles/joy.css?v=r12">
 </head>
-<body>
-  <!-- filtro "gooey": hace que las burbujas del hero se fundan cuando se tocan -->
-  <svg class="svg-defs" aria-hidden="true" focusable="false">
-    <defs>
-      <filter id="goo">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
-        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="goo" />
-        <feBlend in="SourceGraphic" in2="goo" />
-      </filter>
-    </defs>
-  </svg>
+<body data-scene="inicio" data-tone="light">
 
   <!-- etiqueta que sigue al cursor sobre elementos con data-cursor -->
   <div class="cursor-label" aria-hidden="true"></div>
 
-  <img class="companies-badge" src="assets/header/logos_companies.png" alt="Plataformas: Netflix, Prime Video, YouTube, Vimeo" style="width: 180px; height: auto; max-width: 180px;" />
+  <img class="companies-badge" src="assets/header/logos_companies.png" alt="Inditex · 2894" />
 
-  <header class="hero">
-    <div class="hero__motif" aria-hidden="true">
-      <span class="hero__circle hero__circle--1"></span>
-      <span class="hero__circle hero__circle--2"></span>
-      <span class="hero__circle hero__circle--3"></span>
-    </div>
-    <div class="hero__content">
-      <p class="hero__eyebrow">Laboratorio de creatividad</p>
-      <h1 class="hero__headline" data-split="hero">PIENSA DISTINTO. <span class="hero__headline-accent">CREA SIN BLOQUEOS.</span></h1>
-      <p class="hero__subline">Técnicas de ideación organizadas por fase del proceso creativo, con referencias que inspiran. Para cuando necesites arrancar, destrabarte o cerrar una idea.</p>
-      <a class="hero__cta" href="#fases" data-magnetic>Explorar técnicas</a>
-    </div>
-  </header>
+  <!-- cromo del recorrido: sonido y camino de fases (lo completa journey.js) -->
+  <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Activar sonido" hidden>
+    <span class="sound-toggle__icon" aria-hidden="true"></span>
+  </button>
+  <nav class="journey-nav" aria-label="Recorrido por las fases" hidden></nav>
+  <p id="journey-announce" class="visually-hidden" aria-live="polite"></p>
 
-  <script>
-    const logoBadge = document.querySelector('.companies-badge');
-    const updateLogoBadgeState = () => {
-      if (!logoBadge) return;
-      const scrolledPastHero = window.scrollY > window.innerHeight;
-      logoBadge.classList.toggle('is-scrolled', scrolledPastHero);
-    };
-
-    updateLogoBadgeState();
-    window.addEventListener('scroll', updateLogoBadgeState, { passive: true });
-  </script>
-
-  <main>
-    <section id="fases" class="phases" aria-labelledby="fases-title">
-      <div class="phases__inner">
-        <h2 id="fases-title" data-split="section">Las 4 fases del pensamiento creativo</h2>
-        <p class="phases__intro">Basado en "El arte del pensamiento" de Graham Wallas. Elige la fase en la que estás y prueba una técnica.</p>
+  <main id="journey" class="journey">
+    <!-- 0 · Inicio: gotas líquidas de fondo -->
+    <section id="inicio" class="scene scene--inicio hero" data-label="Inicio" data-tone="light" aria-labelledby="inicio-title">
+      <div class="hero__motif" aria-hidden="true">
+        <span class="hero__circle hero__circle--1"></span>
+        <span class="hero__circle hero__circle--2"></span>
+        <span class="hero__circle hero__circle--3"></span>
       </div>
-      <div id="phase-split" class="phase-split" role="tablist" aria-label="Fases creativas"></div>
-      <div class="phases__inner">
-        <div id="phase-detail" role="tabpanel"></div>
+      <div class="hero__content scene__inner">
+        <p class="hero__eyebrow">Laboratorio de creatividad</p>
+        <h1 id="inicio-title" class="hero__headline" data-split="hero" data-scene-title tabindex="-1">PIENSA DISTINTO. <span class="hero__headline-accent">CREA SIN BLOQUEOS.</span></h1>
+        <p class="hero__subline">Un recorrido por las 4 fases del pensamiento creativo de Graham Wallas. En cada una, tira el dado, prueba una técnica y sigue avanzando.</p>
+        <div class="hero__actions">
+          <button class="hero__cta" type="button" data-journey-next data-magnetic>Empezar el viaje <span aria-hidden="true">→</span></button>
+        </div>
       </div>
     </section>
 
-    <section id="referencias" class="references" aria-labelledby="references-title">
-      <h2 id="references-title" data-split="section">Referencias que inspiran</h2>
-      <p class="phases__intro">Historias reales sobre proceso creativo, disciplina y oficio.</p>
-      <div class="carousel" role="region" aria-label="Carrusel de referencias">
-        <button id="carousel-prev" class="carousel__arrow" aria-label="Referencia anterior" data-magnetic>‹</button>
-        <div id="carousel-track" class="carousel__track" tabindex="0">
-          <div id="carousel-strip" class="carousel__strip"></div>
+    <!-- 1–4 · Fases (las rellena phases.js desde data/techniques.js) -->
+    <section id="preparacion" class="scene scene--phase scene--preparacion" data-phase="preparacion" data-label="Preparación" data-tone="light" aria-label="Fase 1: Preparación"></section>
+    <section id="incubacion" class="scene scene--phase scene--incubacion" data-phase="incubacion" data-label="Incubación" data-tone="light" aria-label="Fase 2: Incubación"></section>
+    <section id="iluminacion" class="scene scene--phase scene--iluminacion" data-phase="iluminacion" data-label="Iluminación" data-tone="light" aria-label="Fase 3: Iluminación"></section>
+    <section id="implementacion" class="scene scene--phase scene--implementacion" data-phase="implementacion" data-label="Implementación" data-tone="light" aria-label="Fase 4: Implementación"></section>
+
+    <!-- 5 · Referencias: estantería arrastrable -->
+    <section id="referencias" class="scene scene--referencias references" data-label="Referencias" data-tone="light" aria-labelledby="references-title">
+      <div class="scene__inner references__inner">
+        <div class="references__head">
+          <div>
+            <p class="scene-eyebrow">Para seguir inspirándote</p>
+            <h2 id="references-title" data-split="section" data-scene-title tabindex="-1">Referencias que inspiran</h2>
+            <p class="references__intro">Historias reales sobre proceso creativo, disciplina y oficio. Arrastra la estantería o deja que elija por ti.</p>
+          </div>
+          <button id="carousel-surprise" class="surprise-btn" type="button" data-magnetic="0.25">Sorpréndeme</button>
         </div>
-        <button id="carousel-next" class="carousel__arrow" aria-label="Referencia siguiente" data-magnetic>›</button>
+        <div class="carousel" role="region" aria-label="Carrusel de referencias">
+          <button id="carousel-prev" class="carousel__arrow" type="button" aria-label="Referencia anterior" data-magnetic>‹</button>
+          <div id="carousel-track" class="carousel__track" tabindex="0" data-journey-ignore>
+            <div id="carousel-strip" class="carousel__strip"></div>
+          </div>
+          <button id="carousel-next" class="carousel__arrow" type="button" aria-label="Referencia siguiente" data-magnetic>›</button>
+        </div>
+        <div class="scene-foot">
+          <button class="next-btn" type="button" data-journey-next>Último paso: dame un reto <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · Final: reto aleatorio -->
+    <section id="reto" class="scene scene--reto" data-label="Reto" data-tone="light" aria-labelledby="reto-title">
+      <div class="phase-ambient" aria-hidden="true">
+        <span class="soft-circle soft-circle--sky" style="left: 88%; top: 26%; width: clamp(220px, 30vw, 400px); height: clamp(220px, 30vw, 400px);"></span>
+        <span class="soft-circle soft-circle--cobalt" style="left: 10%; top: 78%; width: clamp(180px, 22vw, 280px); height: clamp(180px, 22vw, 280px);"></span>
+      </div>
+      <div class="scene__inner reto">
+        <p class="scene-eyebrow">Fin del recorrido</p>
+        <h2 id="reto-title" class="reto__title" data-split="section" data-scene-title tabindex="-1">¿Te animas? <span>Dame un reto.</span></h2>
+        <p class="reto__intro">Una técnica al azar de cualquier fase, con una condición inesperada. Hazla hoy.</p>
+        <div id="reto-stage" class="reto__stage"></div>
+        <div class="reto__foot">
+          <button class="link-btn" type="button" data-journey-go="inicio"><span aria-hidden="true">↺</span> Volver a empezar</button>
+        </div>
+        <p class="reto__credit">Hecho para inspirar al equipo. Intelligent tools. Human imagination.</p>
       </div>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <p>Hecho para inspirar al equipo. Intelligent tools. Human imagination.</p>
-  </footer>
 
   <!-- librerías de motion (GSAP y todos sus plugins son gratuitos desde 3.13) -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/InertiaPlugin.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-  <script src="data/techniques.js"></script>
+  <script src="data/techniques.js?v=r22"></script>
   <script src="data/references.js"></script>
-  <script src="scripts/joy.js?v=3"></script>
-  <script src="scripts/phases.js?v=5"></script>
-  <script src="scripts/carousel.js?v=7"></script>
+  <script src="data/challenges.js"></script>
+  <script src="scripts/sound.js?v=r13"></script>
+  <script src="scripts/hover-text.js?v=r13"></script>
+  <script src="scripts/liquid.js?v=r25"></script>
+  <script src="scripts/joy.js?v=r27"></script>
+  <script src="scripts/journey.js?v=r13"></script>
+  <script src="scripts/picker.js?v=r12"></script>
+  <script src="scripts/dot-art.js?v=r29"></script>
+  <script src="scripts/phases.js?v=r28"></script>
+  <script src="scripts/carousel.js?v=r13"></script>
+  <script src="scripts/reto.js?v=r12"></script>
 </body>
 </html>
