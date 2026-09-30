@@ -189,10 +189,12 @@
   const PERSONALITY = { preparacion, incubacion, iluminacion, implementacion };
 
   /* =========================================================================
-     Escena de una fase: cabecera, rejilla de 5 técnicas y ficha de detalle.
+     Escena de una fase: cabecera, rejilla de técnicas y ficha de detalle.
+     La rejilla tiene tantas columnas como técnicas (hasta 6); con más, filas de 5.
      El dado recorre las tarjetas como una ruleta y se para en una.
      ========================================================================= */
   const pad = (n) => String(n).padStart(2, '0');
+  const OPENERS = {};
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   function buildPhaseScene(phase, scene, i, all) {
@@ -203,6 +205,7 @@
     const seedBase = (i + 1) * 97;
     let current = -1;
     let rolling = false;
+    scene.style.setProperty('--phase-cols', n <= 6 ? n : 5);
 
     const steps = all.map((_, k) => '<i class="' + (k < i ? 'is-done' : k === i ? 'is-current' : '') + '"></i>').join('');
 
@@ -294,6 +297,7 @@
         '<div class="tech-stat tech-stat--wide"><span class="tech-stat__label">Ejercicio</span><p class="tech-stat__value">' + esc(t.exercise) + '</p></div>' +
         '<div class="tech-stat"><span class="tech-stat__label">Duración</span><span class="tech-stat__value tech-stat__value--big">' + esc(t.duration) + '</span></div>' +
         '<div class="tech-stat"><span class="tech-stat__label">Fuente</span>' + source + '</div>' +
+        (t.insight ? '<div class="tech-stat tech-stat--wide tech-stat--insight"><span class="tech-stat__label">Por qué funciona</span><p class="tech-stat__value">' + esc(t.insight) + '</p></div>' : '') +
         '</div>' +
         '</div>';
       const art = (detailArt = JOY.dotArt(detail.querySelector('canvas'), { motif: phase.id, art: t.art, seed: seedBase + idx, start: 0, interactive: true }));
@@ -382,6 +386,11 @@
     }
     diceBtn.addEventListener('click', roll);
 
+    OPENERS[phase.id] = (art) => {
+      const idx = phase.techniques.findIndex((t) => t.art === art);
+      if (idx >= 0 && !rolling) select(idx, false);
+    };
+
     if (P.build) P.build(scene, ambient, head);
     if (JOY.initMagnetic) JOY.initMagnetic(scene);
 
@@ -435,6 +444,23 @@
     });
     warmArts(builders);
   }
+
+  // abre una técnica desde otra escena: va a su fase y muestra su ficha
+  JOY.openTechnique = (phaseId, art) => {
+    const open = OPENERS[phaseId];
+    if (!open) return;
+    const J = window.JOURNEY;
+    const here = J && J.current && J.current() === phaseId;
+    if (J && J.goTo && !here) J.goTo(phaseId);
+    setTimeout(() => open(art), here || !motionOK() ? 0 : 950);
+  };
+  // botones declarativos: data-open-technique="fase:arte"
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest ? e.target.closest('[data-open-technique]') : null;
+    if (!b) return;
+    const [phaseId, art] = b.dataset.openTechnique.split(':');
+    JOY.openTechnique(phaseId, art);
+  });
 
   document.addEventListener('DOMContentLoaded', renderPhases);
 })();

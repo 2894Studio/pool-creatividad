@@ -1,11 +1,12 @@
 /* ==========================================================================
-   phases.css — escenas de las 4 fases. Rejilla de 5 columnas con guías finas,
+   phases.css — escenas de las 4 fases. Rejilla de 5 columnas (o tantas como
+   técnicas, hasta 6; las lleva --phase-cols en la escena) con guías finas,
    tarjetas blancas con ilustraciones de trama de puntos y una ficha de detalle
    con "stat tiles". Tipografía DM Sans, apretada y ligera en los titulares.
    ========================================================================== */
 
 .phase {
-  --cols: 5;
+  --cols: var(--phase-cols, 5);
   --gap: 16px;
   --line: rgba(11, 11, 13, 0.06);
   max-width: 1160px;
@@ -239,6 +240,10 @@
 }
 .tech-stat__value--big { font-size: 1.9rem; font-weight: var(--fw-regular); letter-spacing: -0.03em; line-height: 1; }
 .tech-stat__link { text-decoration: none; }
+/* "por qué funciona": el contexto que respalda la técnica */
+.tech-stat--insight { background: rgba(125, 183, 255, 0.14); border-color: rgba(10, 70, 255, 0.12); gap: 10px; }
+.tech-stat--insight .tech-stat__label { color: var(--color-accent); font-weight: var(--fw-medium); }
+.tech-stat--insight .tech-stat__value { font-weight: var(--fw-regular); font-size: 0.95rem; line-height: 1.5; }
 .tech-stat__link:hover { color: var(--color-accent) !important; }
 
 /* ---------- pie: siguiente fase ---------- */
@@ -289,7 +294,7 @@
   left: 50%;
   width: calc(min(1160px, 100% - 2 * var(--space-lg)) + var(--gap));
   translate: -50% 0;
-  background: linear-gradient(to right, rgba(11, 11, 13, 0.1) 1px, transparent 1px) 0 0 / 20% 100%;
+  background: linear-gradient(to right, rgba(11, 11, 13, 0.1) 1px, transparent 1px) 0 0 / calc(100% / var(--phase-cols, 5)) 100%;
   border-right: 1px solid rgba(11, 11, 13, 0.1);
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
@@ -347,7 +352,9 @@
   .phase__lead, .phase__intro { grid-column: 1 / -1; }
   .phase__desc { max-width: 52ch; }
   .tech-grid > li { grid-column: span 2; }
-  .tech-grid > li:nth-child(4) { grid-column: 2 / span 2; }
+  /* filas de 3: la última, si queda incompleta, va centrada */
+  .tech-grid > li:nth-last-child(2):nth-child(3n + 1) { grid-column: 2 / span 2; }
+  .tech-grid > li:last-child:nth-child(3n + 1) { grid-column: 3 / span 2; }
   .tech-detail__art { grid-column: 1 / 3; }
   .tech-detail__body { grid-column: 3 / -1; }
 }
@@ -356,7 +363,8 @@
   .phase { --cols: 1; --gap: 10px; }
   .phase__head { margin-bottom: var(--space-lg); }
   .tech-grid > li,
-  .tech-grid > li:nth-child(4) { grid-column: 1 / -1; }
+  .tech-grid > li:nth-last-child(2):nth-child(3n + 1),
+  .tech-grid > li:last-child:nth-child(3n + 1) { grid-column: 1 / -1; }
   .tech-tile {
     display: grid;
     grid-template-columns: 64px minmax(0, 1fr) auto;

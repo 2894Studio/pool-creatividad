@@ -1,6 +1,6 @@
 # Laboratorio de Creatividad
 
-Sitio interno para compartir con el equipo: técnicas de ideación organizadas por las 4 fases del pensamiento creativo (Graham Wallas), más una selección de referencias inspiradoras.
+Sitio interno para compartir con el equipo: los fundamentos de la ideación, técnicas organizadas por las 4 fases del pensamiento creativo (Graham Wallas), una selección de referencias inspiradoras y retos para practicar.
 
 ## Cómo abrirlo
 
@@ -9,15 +9,16 @@ No requiere instalación ni servidor. Abre `index.html` directamente en el naveg
 ## Estructura
 
 ```
-index.html              # 7 escenas: inicio → 4 fases → referencias → reto
-data/techniques.js       # contenido de las 4 fases y sus técnicas (window.PHASES), con el pictograma y su pie
+index.html              # 8 escenas: inicio → ideación → 4 fases → referencias → reto
+data/techniques.js       # contenido de las 4 fases y sus técnicas (window.PHASES), con el pictograma, su pie y "por qué funciona"
 data/references.js       # contenido de la estantería de referencias (window.REFERENCES)
 data/challenges.js       # condiciones del reto final ("en 5 minutos", "sin usar palabras"…)
 styles/tokens.css         # paleta y tipografía de marca (DM Sans, cobalto, etc.)
 styles/base.css           # reset, botones "blanditos", selección
 styles/journey.css        # escenas a pantalla completa, camino de fases, tema por escena
 styles/hero.css           # inicio: gotas líquidas de fondo, bloques del titular
-styles/phases.css         # escenas de fase: rejilla de 5 columnas, tarjetas de técnica y ficha de detalle
+styles/phases.css         # escenas de fase: rejilla de columnas (una por técnica, hasta 6), tarjetas y ficha de detalle
+styles/ideacion.css       # escena de fundamentos: equilibrio, idea de calidad, gestión de ideas, buenas prácticas
 styles/references.css     # estantería de referencias (inclinación 3D, brillo)
 styles/joy.css            # piezas compartidas: dado 3D, notas con cinta, rodillo, reto, destellos
 scripts/sound.js          # sonidos sintetizados (Web Audio) y vibración en móvil
@@ -27,7 +28,8 @@ scripts/liquid.js         # gotas líquidas (metaballs) en WebGL para el fondo d
 scripts/dot-art.js        # pictogramas de trama de puntos, uno por técnica
 scripts/journey.js        # motor del recorrido: transiciones, rueda/gestos/teclado, #hash por escena
 scripts/picker.js         # dado → rodillo → nota con cinta (lo usa el reto final)
-scripts/phases.js         # construye las 4 escenas de fase: tarjetas, dado-ruleta y ficha de detalle
+scripts/phases.js         # construye las 4 escenas de fase: tarjetas, dado-ruleta y ficha de detalle; JOY.openTechnique()
+scripts/ideacion.js       # escena de fundamentos: deslizador formal/informal, círculos de calidad, pasos, listas marcables
 scripts/carousel.js       # estantería infinita arrastrable + "Sorpréndeme"
 scripts/reto.js           # escena final "Dame un reto"
 assets/tape-1.png, tape-2.png  # cinta azul que sujeta las notas
@@ -39,7 +41,7 @@ El sitio carga GSAP 3.13 (con Draggable, InertiaPlugin y SplitText) y canvas-con
 
 ### El recorrido
 El sitio no se "scrollea": se avanza escena a escena, como se avanza por las fases del proceso creativo.
-Inicio → 01 Preparación → 02 Incubación → 03 Iluminación → 04 Implementación → Referencias → Reto.
+Inicio → Ideación → 01 Preparación → 02 Incubación → 03 Iluminación → 04 Implementación → Referencias → Reto.
 
 - Se avanza con la rueda o el trackpad, deslizando en el móvil, con las flechas / AvPág / espacio / Inicio / Fin, con los botones "Siguiente fase" o con el camino de puntos de abajo.
 - Si una escena es más alta que la pantalla, primero se desplaza por dentro y después pasa a la siguiente.
@@ -55,8 +57,16 @@ Todas las escenas comparten el diseño del inicio: fondo claro, DM Sans, cobalto
 - "CREA SIN BLOQUEOS" aparece tapado por bloques que se agrietan y caen; haz clic para volver a romperlos.
 - El titular reacciona al puntero letra a letra (`scripts/hover-text.js`, portado del portfolio): las letras cercanas en la misma línea se estampan en stop-motion, se quedan inclinadas con un contorno fino que tiembla y vuelven cuando el puntero pasa. Cada letra toca una nota de piano (Si pentatónica) y un lecho grave suena mientras el puntero está encima. Todos los números están en `CONFIG`, al principio del archivo.
 
+### Ideación: "Idear no es hacer brainstorming"
+Los fundamentos antes de las fases (del material de clase *Ideación – Innovación*):
+- **El equilibrio:** un deslizador de formal a informal. La curva de calidad (trama de puntos) es alta en el centro; la creatividad sube y la viabilidad baja al moverlo. En la zona de equilibrio suena una campanita.
+- **La idea de calidad:** tres círculos (única, viable, encaja con el negocio) que se juntan al entrar; cada uno explica su parte al pasar por encima y el centro "Calidad" celebra la intersección.
+- **Dónde vive:** la fase *Develop* del Doble Diamante, y los +25 modelos de innovación que comparten la generación de ideas.
+- **Gestión de ideas:** planificación → generación → desarrollo y mejora → evaluación → selección; los pasos aparecen al llegar a la vista.
+- **Buenas prácticas:** "Para idear bien" se marca, "Evita" y "Por qué fallan las sesiones" se tachan; "Reglas de oro" en cobalto.
+
 ### Las 4 fases, cada una con su movimiento
-En todas: tira el dado (dado 3D → rodillo de tragaperras → nota con cinta y confeti) o "Ver las 5 técnicas".
+En todas: tira el dado para que la ruleta elija una técnica, o elige una tarjeta. Cada fase tiene entre 5 y 10 técnicas; la ficha incluye, cuando lo hay, un "Por qué funciona" (`insight` en `data/techniques.js`).
 - **Preparación:** los círculos y el texto llegan dispersos y se reúnen; se apartan suavemente del cursor.
 - **Incubación:** todo va más lento: los círculos derivan despacio, el texto aparece desenfocado, el rodillo gira más lento y las notas "respiran".
 - **Iluminación:** un círculo parpadea y se enciende detrás del título, y sigue al cursor como una lámpara.
@@ -67,6 +77,7 @@ Estantería arrastrable con inercia y bucle infinito. Las tarjetas se inclinan e
 
 ### Dame un reto
 El final: dos rodillos eligen una técnica de cualquier fase + una condición inesperada. "Ver su fase" lleva a la fase de esa técnica.
+Debajo, los retos de clase (sobredependencia de los adolescentes hacia la IA; Design Sprint parcial sobre Wallapop o Velada). Sus botones abren directamente la ficha de cada técnica (`data-open-technique="fase:arte"`).
 
 ### Detalles
 - Sonido (botón arriba a la derecha; encendido por defecto, si lo apagas se recuerda en este navegador). Un solo interruptor para todo, incluido el piano del titular. Todo sintetizado, sin archivos de audio; los navegadores lo desbloquean con el primer clic o tecla.

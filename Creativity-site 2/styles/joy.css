@@ -314,3 +314,33 @@
   .technique-card { transform: none; }
   .technique-card:hover, .technique-card:focus-within { transform: none; }
 }
+
+/* ---------- retos de clase (escena final) ---------- */
+.reto-class { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-xl); text-align: left; }
+.reto-brief {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 22px 22px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid rgba(11, 11, 13, 0.06);
+}
+.reto-brief__title { margin: 0 0 8px; font-size: 1.2rem; font-weight: var(--fw-medium); letter-spacing: -0.02em; line-height: 1.2; }
+.reto-brief__text { margin: 0 0 var(--space-sm); font-size: 0.95rem; line-height: 1.45; }
+.reto-brief__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.chip-btn {
+  appearance: none;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(10, 70, 255, 0.3);
+  background: rgba(125, 183, 255, 0.12);
+  color: var(--color-accent);
+  font-size: 0.88rem;
+  font-weight: var(--fw-medium);
+  transition: background var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast);
+}
+.chip-btn:hover { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.chip-btn--ghost { background: none; border-style: dashed; }
+@media (max-width: 640px) {
+  .reto-class { grid-template-columns: 1fr; margin-top: var(--space-lg); }
+}

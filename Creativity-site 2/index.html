@@ -12,9 +12,10 @@
   <link rel="stylesheet" href="styles/base.css?v=r12">
   <link rel="stylesheet" href="styles/journey.css?v=r13">
   <link rel="stylesheet" href="styles/hero.css?v=r24">
-  <link rel="stylesheet" href="styles/phases.css?v=r15">
+  <link rel="stylesheet" href="styles/phases.css?v=r16">
+  <link rel="stylesheet" href="styles/ideacion.css?v=r1">
   <link rel="stylesheet" href="styles/references.css?v=r12">
-  <link rel="stylesheet" href="styles/joy.css?v=r12">
+  <link rel="stylesheet" href="styles/joy.css?v=r13">
 </head>
 <body data-scene="inicio" data-tone="light">
 
@@ -41,10 +42,138 @@
       <div class="hero__content scene__inner">
         <p class="hero__eyebrow">Laboratorio de creatividad</p>
         <h1 id="inicio-title" class="hero__headline" data-split="hero" data-scene-title tabindex="-1">PIENSA DISTINTO. <span class="hero__headline-accent">CREA SIN BLOQUEOS.</span></h1>
-        <p class="hero__subline">Un recorrido por las 4 fases del pensamiento creativo de Graham Wallas. En cada una, tira el dado, prueba una técnica y sigue avanzando.</p>
+        <p class="hero__subline">Qué es idear bien y un recorrido por las 4 fases del pensamiento creativo de Graham Wallas. En cada una, tira el dado, prueba una técnica y sigue avanzando.</p>
         <div class="hero__actions">
           <button class="hero__cta" type="button" data-journey-next data-magnetic>Empezar el viaje <span aria-hidden="true">→</span></button>
         </div>
+      </div>
+    </section>
+
+    <!-- Antes de las fases · Fundamentos de la ideación (interacciones en ideacion.js) -->
+    <section id="ideacion" class="scene scene--ideacion" data-label="Ideación" data-tone="light" aria-labelledby="ideacion-title">
+      <div class="phase-ambient" aria-hidden="true">
+        <div class="phase-grid"></div>
+        <span class="soft-circle soft-circle--sky" style="left: 90%; top: 18%; width: clamp(220px, 30vw, 420px); height: clamp(220px, 30vw, 420px);"></span>
+        <span class="soft-circle soft-circle--cobalt" style="left: 4%; top: 86%; width: clamp(160px, 20vw, 280px); height: clamp(160px, 20vw, 280px);"></span>
+      </div>
+      <div class="scene__inner phase idea">
+        <header class="phase__head">
+          <div class="phase__lead">
+            <p class="phase__eyebrow">Antes de empezar <span class="phase__of">/ Fundamentos</span></p>
+            <h2 id="ideacion-title" class="phase__title idea__title" data-scene-title tabindex="-1">Idear no es hacer <span>brainstorming.</span></h2>
+          </div>
+          <div class="phase__intro">
+            <p class="phase__desc">La ideación es el proceso de generar, desarrollar, evaluar y comunicar ideas nuevas. Innovar no es lo mismo que idear, e idear no es lo mismo que hacer brainstorming: se trata de gestionar el flujo de ideas con criterios claros, iteración y el método adecuado para cada reto.</p>
+          </div>
+        </header>
+
+        <!-- el equilibrio formal / informal -->
+        <article class="idea-card idea-balance">
+          <p class="idea-card__kicker">El equilibrio</p>
+          <h3 class="idea-card__title">Ni demasiado formal, ni demasiado informal.</h3>
+          <!-- curva de calidad en trama de puntos: alta en el centro, baja en los extremos -->
+          <div class="idea-balance__chart" aria-hidden="true"><canvas></canvas></div>
+          <label class="idea-balance__slider">
+            <span class="visually-hidden">Cómo de formal es el proceso</span>
+            <input type="range" min="0" max="100" value="12" step="1" data-journey-ignore aria-valuetext="Muy formal" />
+          </label>
+          <div class="idea-balance__ends" aria-hidden="true"><span>Formal</span><span>Informal</span></div>
+          <div class="idea-balance__meters">
+            <div class="idea-meter"><span class="idea-meter__label">Creatividad</span><span class="idea-meter__bar"><i data-meter="creative"></i></span></div>
+            <div class="idea-meter"><span class="idea-meter__label">Viabilidad</span><span class="idea-meter__bar"><i data-meter="viable"></i></span></div>
+          </div>
+          <p class="idea-balance__verdict" aria-live="polite"><strong>Demasiado formal.</strong> Las ideas son viables, pero poco creativas.</p>
+        </article>
+
+        <!-- métrica de éxito: calidad = única ∩ viable ∩ encaja -->
+        <article class="idea-card idea-quality">
+          <p class="idea-card__kicker">Métrica de éxito</p>
+          <h3 class="idea-card__title">Una idea de calidad es las tres cosas a la vez.</h3>
+          <div class="idea-venn" role="group" aria-label="Las tres condiciones de una idea de calidad">
+            <button type="button" class="idea-venn__set idea-venn__set--1" data-venn="unique" data-cursor="Única"><span>Única</span></button>
+            <button type="button" class="idea-venn__set idea-venn__set--2" data-venn="viable" data-cursor="Viable"><span>Viable</span></button>
+            <button type="button" class="idea-venn__set idea-venn__set--3" data-venn="fit" data-cursor="Encaja"><span>Encaja con el negocio</span></button>
+            <button type="button" class="idea-venn__core" data-venn="core" data-cursor="Calidad">Calidad</button>
+          </div>
+          <p class="idea-venn__note" aria-live="polite">Solo en la intersección exacta de las tres hay una idea de calidad.</p>
+        </article>
+
+        <!-- dónde vive la ideación -->
+        <article class="idea-card idea-where">
+          <div class="idea-where__diamond">
+            <svg viewBox="0 0 240 90" role="img" aria-label="Doble Diamante: Descubrir, Definir, Desarrollar y Entregar. La ideación vive en Desarrollar.">
+              <path class="dd-line" d="M4 45 L60 6 L116 45 L60 84 Z"></path>
+              <path class="dd-line" d="M124 45 L180 6 L236 45 L180 84 Z"></path>
+              <path class="dd-fill" d="M124 45 L180 6 L180 84 Z"></path>
+              <text x="32" y="49">Descubrir</text><text x="88" y="49">Definir</text>
+              <text class="dd-key" x="156" y="49">Desarrollar</text><text x="208" y="49">Entregar</text>
+            </svg>
+          </div>
+          <p class="idea-where__text"><strong>Dónde vive.</strong> En la fase <em>Develop</em> (Desarrollar) del Doble Diamante: abrir muchas soluciones antes de cerrar en una.</p>
+        </article>
+        <article class="idea-card idea-models">
+          <div class="idea-models__stat"><span class="idea-models__num" data-count="25">25</span><span class="idea-models__plus">+</span></div>
+          <p class="idea-models__text">modelos de innovación en más de 60 años (Design Thinking, Creative Problem Solving…). <strong>Todos comparten una fase ineludible: la generación de ideas.</strong></p>
+        </article>
+
+        <!-- gestión de ideas: cinco pasos -->
+        <section class="idea-flow" aria-labelledby="idea-flow-title">
+          <div class="idea-flow__head">
+            <p class="idea-card__kicker">Gestión de ideas</p>
+            <h3 id="idea-flow-title" class="idea-card__title">Cinco pasos, no solo uno.</h3>
+          </div>
+          <ol class="idea-flow__steps">
+            <li class="idea-step"><span class="idea-step__num">01</span><span class="idea-step__name">Planificación</span><span class="idea-step__text">Define el reto, el equipo, los estímulos y los criterios de evaluación.</span></li>
+            <li class="idea-step is-key"><span class="idea-step__num">02</span><span class="idea-step__name">Generación</span><span class="idea-step__text">Muchas ideas y variadas: aquí entran las técnicas de este recorrido.</span></li>
+            <li class="idea-step"><span class="idea-step__num">03</span><span class="idea-step__name">Desarrollo y mejora</span><span class="idea-step__text">Construye sobre las ideas: combínalas, itéralas, dales forma.</span></li>
+            <li class="idea-step"><span class="idea-step__num">04</span><span class="idea-step__name">Evaluación</span><span class="idea-step__text">Contrasta cada idea con los criterios: ¿única, viable, encaja?</span></li>
+            <li class="idea-step"><span class="idea-step__num">05</span><span class="idea-step__name">Selección</span><span class="idea-step__text">Elige las que pasan a prototipo.</span></li>
+          </ol>
+        </section>
+
+        <!-- buenas prácticas: se pueden marcar -->
+        <section class="idea-rules" aria-label="Buenas prácticas">
+          <article class="idea-card idea-list idea-list--do">
+            <p class="idea-card__kicker">Para idear bien</p>
+            <ul>
+              <li><button type="button" aria-pressed="false">Trabaja de forma iterativa.</button></li>
+              <li><button type="button" aria-pressed="false">Diseña plantillas visuales para cada reto.</button></li>
+              <li><button type="button" aria-pressed="false">Busca calidad por encima de volumen.</button></li>
+              <li><button type="button" aria-pressed="false">Fija los criterios de evaluación desde el inicio.</button></li>
+              <li><button type="button" aria-pressed="false">Usa estímulos con fundamento: insights y datos reales.</button></li>
+              <li><button type="button" aria-pressed="false">Habla un vocabulario común.</button></li>
+            </ul>
+          </article>
+          <article class="idea-card idea-list idea-list--gold">
+            <p class="idea-card__kicker">Reglas de oro</p>
+            <ol>
+              <li>Construye siempre sobre las ideas de los demás.</li>
+              <li>Basa las soluciones en datos reales.</li>
+            </ol>
+          </article>
+          <article class="idea-card idea-list idea-list--avoid">
+            <p class="idea-card__kicker">Evita</p>
+            <ul>
+              <li><button type="button" aria-pressed="false">Enamorarte de tus propias ideas.</button></li>
+              <li><button type="button" aria-pressed="false">Quedarte en la primera idea que surge.</button></li>
+              <li><button type="button" aria-pressed="false">Criticar las aportaciones del resto.</button></li>
+            </ul>
+          </article>
+          <article class="idea-card idea-list idea-list--avoid">
+            <p class="idea-card__kicker">Por qué fallan las sesiones</p>
+            <ul>
+              <li><button type="button" aria-pressed="false">Prácticas demasiado informales.</button></li>
+              <li><button type="button" aria-pressed="false">Depender del brainstorming grupal clásico.</button></li>
+              <li><button type="button" aria-pressed="false">No tener criterios de evaluación.</button></li>
+              <li><button type="button" aria-pressed="false">No reconocer el rol del facilitador.</button></li>
+            </ul>
+          </article>
+        </section>
+
+        <footer class="phase__foot">
+          <span class="phase__foot-label">Siguiente · 01 Preparación</span>
+          <button class="pill-btn" type="button" data-journey-next>Empezar las fases <span aria-hidden="true">→</span></button>
+        </footer>
       </div>
     </section>
 
@@ -89,6 +218,32 @@
         <h2 id="reto-title" class="reto__title" data-split="section" data-scene-title tabindex="-1">¿Te animas? <span>Dame un reto.</span></h2>
         <p class="reto__intro">Una técnica al azar de cualquier fase, con una condición inesperada. Hazla hoy.</p>
         <div id="reto-stage" class="reto__stage"></div>
+
+        <!-- retos de clase: cada técnica abre su ficha en su fase -->
+        <div class="reto-class">
+          <article class="reto-brief">
+            <span class="reto-note__tag">Reto de clase</span>
+            <h3 class="reto-brief__title">La sobredependencia de los adolescentes hacia la inteligencia artificial.</h3>
+            <p class="reto-brief__text">Diseña, ejecuta y evalúa soluciones con una de estas técnicas:</p>
+            <div class="reto-brief__chips">
+              <button type="button" class="chip-btn" data-open-technique="iluminacion:nominal">Grupo Nominal</button>
+              <button type="button" class="chip-btn" data-open-technique="iluminacion:brainwriting">6-3-5</button>
+              <button type="button" class="chip-btn" data-open-technique="iluminacion:hats">Seis Sombreros</button>
+              <button type="button" class="chip-btn" data-open-technique="iluminacion:scamperVariations">SCAMPER</button>
+            </div>
+          </article>
+          <article class="reto-brief">
+            <span class="reto-note__tag">Práctica final</span>
+            <h3 class="reto-brief__title">Un Design Sprint parcial para mejorar una app que ya existe.</h3>
+            <p class="reto-brief__text">Por ejemplo: optimizar las negociaciones en Wallapop o mejorar el onboarding de Velada.</p>
+            <div class="reto-brief__chips">
+              <button type="button" class="chip-btn" data-open-technique="preparacion:lightningDemos">Lightning Demos</button>
+              <button type="button" class="chip-btn" data-open-technique="iluminacion:crazy8">Crazy 8s</button>
+              <button type="button" class="chip-btn" data-open-technique="implementacion:sprint">Prototipo rápido</button>
+              <button type="button" class="chip-btn chip-btn--ghost" data-journey-go="ideacion">Evalúa: ¿única, viable, encaja?</button>
+            </div>
+          </article>
+        </div>
         <div class="reto__foot">
           <button class="link-btn" type="button" data-journey-go="inicio"><span aria-hidden="true">↺</span> Volver a empezar</button>
         </div>
@@ -104,7 +259,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-  <script src="data/techniques.js?v=r22"></script>
+  <script src="data/techniques.js?v=r23"></script>
   <script src="data/references.js"></script>
   <script src="data/challenges.js"></script>
   <script src="scripts/sound.js?v=r13"></script>
@@ -113,8 +268,9 @@
   <script src="scripts/joy.js?v=r27"></script>
   <script src="scripts/journey.js?v=r13"></script>
   <script src="scripts/picker.js?v=r12"></script>
-  <script src="scripts/dot-art.js?v=r29"></script>
-  <script src="scripts/phases.js?v=r28"></script>
+  <script src="scripts/dot-art.js?v=r30"></script>
+  <script src="scripts/phases.js?v=r29"></script>
+  <script src="scripts/ideacion.js?v=r1"></script>
   <script src="scripts/carousel.js?v=r13"></script>
   <script src="scripts/reto.js?v=r12"></script>
 </body>

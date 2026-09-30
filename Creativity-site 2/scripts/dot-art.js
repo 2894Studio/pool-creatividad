@@ -207,6 +207,15 @@
       p.fill(0.08, 0.14, 0.5, 0.42, { s: 1.8, sp: 0.085, key: true });
     },
 
+    // tres productos que ya existen; de cada uno, solo la parte que brilla
+    lightningDemos(p) {
+      [[0.14, -0.2], [0.34, 0.1], [0.18, 0.24]].forEach(([hx, hy], k) => {
+        const x0 = -0.86 + k * 0.6;
+        p.rect(x0, -0.44, 0.52, 0.88, { s: 1.4, sp: 0.075 });
+        p.disc(x0 + hx + 0.02, hy, 0.07, Object.assign({ key: true }, DOT));
+      });
+    },
+
     // el problema en el centro, los 7 verbos alrededor: aplica dos
     scamperReframe(p) {
       p.disc(0, 0, 0.14, DOT);
@@ -225,6 +234,15 @@
       const fn = (t) => [-0.78 + 1.56 * t - 0.42 * Math.sin(TAU * t + PI), 0.22 - 0.46 * Math.cos(TAU * t + PI)];
       p.curve(fn, { s: 2, sp: 0.075 });
       p.disc(...fn(1), 0.12, Object.assign({ key: true }, DOT));
+    },
+
+    // un recorrido entre carteles, dejando una nota en cada uno
+    brainwalk(p) {
+      p.curve((t) => [-0.84 + 1.68 * t, 0.46 + 0.16 * Math.sin(TAU * t * 1.5)], { s: 2, sp: 0.075 });
+      [-0.56, 0, 0.56].forEach((x, i) => {
+        p.rect(x - 0.17, -0.7, 0.34, 0.46, { s: 1.4, sp: 0.075 });
+        p.fill(x - 0.06, -0.52, 0.12, 0.12, { s: 2.2, sp: 0.06, key: i === 2 });
+      });
     },
 
     // tu idea y tú, separados por distancia
@@ -305,6 +323,68 @@
       p.disc(0.48, -0.56, 0.09, k).disc(0.66, -0.56, 0.09, k);
       p.fill(0.44, -0.12, 0.24, 0.24, { key: true, s: 2, sp: 0.08 });
       p.disc(0.56, 0.56, 0.13, k);
+    },
+
+    // ideas escritas por separado, sin nombre, que se votan
+    nominal(p) {
+      const votes = [1, 0, 3, 1, 0];
+      [-0.72, -0.36, 0, 0.36, 0.72].forEach((x, i) => {
+        p.rect(x - 0.12, -0.66, 0.24, 0.3, { s: 1.4, sp: 0.06 });
+        for (let v = 0; v < votes[i]; v++) p.dot(x, 0.5 - v * 0.2, { s: 3.4, key: votes[i] === 3 });
+      });
+      p.line(-0.86, 0.68, 0.86, 0.68, LINE);
+    },
+
+    // un centro con ocho ideas alrededor; una de ellas abre otra flor
+    lotus(p) {
+      p.disc(0, 0, 0.13, Object.assign({ key: true }, DOT));
+      for (let gx = -1; gx <= 1; gx++) {
+        for (let gy = -1; gy <= 1; gy++) {
+          if (!gx && !gy) continue;
+          const bloom = gx === 1 && gy === -1;
+          p.dot(gx * 0.52, gy * 0.52, { s: bloom ? 4.4 : 3.4, key: bloom });
+          if (bloom) for (let k = 0; k < 8; k++) p.dot(0.52 + Math.cos((k / 8) * TAU) * 0.2, -0.52 + Math.sin((k / 8) * TAU) * 0.2, { s: 1.8, key: true });
+        }
+      }
+    },
+
+    // tu reto y tres cosas que no tienen nada que ver
+    randomStimuli(p) {
+      p.disc(0, 0.04, 0.12, Object.assign({ key: true }, DOT));
+      p.rect(-0.8, -0.72, 0.3, 0.3, { s: 1.8, sp: 0.07 });
+      p.ring(0.64, -0.56, 0.16, { s: 1.8, sp: 0.07 });
+      p.line(-0.16, 0.86, 0.16, 0.86, { s: 1.8, sp: 0.07 }).line(0.16, 0.86, 0, 0.58, { s: 1.8, sp: 0.07 }).line(0, 0.58, -0.16, 0.86, { s: 1.8, sp: 0.07 });
+      p.line(-0.46, -0.4, -0.18, -0.12, LINE).line(0.48, -0.42, 0.18, -0.1, LINE).line(0, 0.48, 0, 0.26, LINE);
+    },
+
+    // el objetivo arriba, los recursos abajo y un camino que los une
+    brainswarm(p) {
+      p.disc(0, -0.72, 0.11, Object.assign({ key: true }, DOT));
+      const subs = [[-0.42, -0.02], [0.42, -0.02]];
+      subs.forEach(([x, y], i) => {
+        p.dot(x, y, { s: 4, key: i === 1 });
+        p.line(x * 0.8, y - 0.14, x * 0.2, -0.6, Object.assign({}, LINE, { key: i === 1 }));
+      });
+      [-0.76, -0.38, 0, 0.38, 0.76].forEach((x, i) => {
+        p.dot(x, 0.74, { s: 3.4, key: i === 3 });
+        if (i !== 2) {
+          const [sx] = subs[x < 0 ? 0 : 1];
+          p.line(x + (sx - x) * 0.15, 0.62, x + (sx - x) * 0.85, 0.12, Object.assign({}, LINE, { key: i === 3 }));
+        }
+      });
+    },
+
+    // un folio doblado en ocho, una idea por recuadro
+    crazy8(p) {
+      p.rect(-0.86, -0.52, 1.72, 1.04, { s: 1.8, sp: 0.08 });
+      p.line(-0.86, 0, 0.86, 0, LINE);
+      [-0.43, 0, 0.43].forEach((x) => p.line(x, -0.52, x, 0.52, LINE));
+      [-0.645, -0.215, 0.215, 0.645].forEach((x, c) => {
+        [-0.26, 0.26].forEach((y, r) => {
+          if (c === 2 && r === 1) p.disc(x, y, 0.08, Object.assign({ key: true }, DOT));
+          else p.dot(x, y, { s: 2.8 });
+        });
+      });
     },
 
     // ideas terribles... y una aprovechable entre ellas

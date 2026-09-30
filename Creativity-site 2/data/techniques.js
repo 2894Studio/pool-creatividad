@@ -46,6 +46,17 @@ window.PHASES = [
         link: 'https://www.interaction-design.org/literature/topics/mood-board'
       },
       {
+        name: 'Lightning Demos',
+        art: 'lightningDemos',
+        artCaption: 'Tres productos que ya existen; de cada uno te quedas solo con la parte que brilla.',
+        source: 'Google Ventures, Design Sprint',
+        description: 'Cada persona trae productos o servicios que resuelven bien algo parecido a tu reto y enseña solo lo más llamativo y diferencial. El facilitador lo captura al vuelo con un dibujo, un titular y la fuente.',
+        exercise: 'Busca 3 productos (de tu sector o de otro) que resuelvan bien algo parecido a tu reto. De cada uno: un boceto rápido, un titular y de dónde sale.',
+        insight: 'Fomenta la polinización cruzada entre industrias: en lugar de reinventar la rueda, el equipo se apoya en patrones de interacción y diseño ya validados por el mercado y los adapta a su reto.',
+        duration: '20 min',
+        link: 'https://designsprintkit.withgoogle.com/methodology/phase3-sketch/lightning-demos'
+      },
+      {
         name: 'Reformulación con SCAMPER',
         art: 'scamperReframe',
         artCaption: 'El problema en el centro y los siete verbos de SCAMPER alrededor: aplica dos.',
@@ -72,6 +83,16 @@ window.PHASES = [
         exercise: 'Sal a caminar 15 minutos sin el móvil, pensando apenas en el problema, dejando que la mente vague.',
         duration: '15 min',
         link: 'https://www.nature.com/articles/s41598-020-64822-1'
+      },
+      {
+        name: 'Brainwalking',
+        art: 'brainwalk',
+        artCaption: 'Un recorrido entre carteles; en cada parada dejas una nota sobre las que dejaron otros.',
+        source: 'Ideación colaborativa en movimiento',
+        description: 'Los participantes caminan por un espacio con carteles o imágenes sobre el reto y van dejando ideas en notas adhesivas, construyendo sobre las que otros dejaron antes.',
+        exercise: 'Pega 4 carteles con el reto en distintos puntos de la sala. Recorredlos en silencio y dejad al menos una nota en cada uno, sumando a lo que ya hay.',
+        insight: 'El movimiento aumenta el flujo sanguíneo y la oxigenación del cerebro: rompe el letargo de las reuniones largas alrededor de una mesa y activa nuevas vías para resolver el problema.',
+        duration: '20 min'
       },
       {
         name: 'Regla de la distancia',
@@ -126,37 +147,95 @@ window.PHASES = [
         art: 'brainstorm',
         artCaption: 'Del problema brotan ideas en todas direcciones; aquí no se descarta ninguna.',
         source: 'Alex Osborn',
-        description: 'Generación grupal de ideas sin juzgar, priorizando cantidad sobre calidad en una primera ronda.',
+        description: 'Generación grupal de ideas originales en un ambiente relajado, sin juzgar y priorizando la cantidad en una primera ronda.',
+        insight: 'Combina habilidades, pero tiene trampas: quien no aporta (free-riding), el bloqueo por ir solo a por cantidad y el pensamiento de grupo, donde las voces más dominantes tapan ideas brillantes de perfiles más analíticos. Si pasa, prueba la Técnica de Grupo Nominal.',
         exercise: 'Dedica 10 minutos a anotar todas las ideas posibles para tu problema, sin descartar ninguna.',
         duration: '10 min',
         link: 'https://www.ideou.com/blogs/inspiration/brainstorming'
+      },
+      {
+        name: 'Técnica de Grupo Nominal',
+        art: 'nominal',
+        artCaption: 'Ideas escritas por separado que se juntan sin nombre y se votan.',
+        source: 'Delbecq y Van de Ven',
+        description: 'Brainstorming iterativo: cada persona genera ideas en silencio y por escrito, el facilitador las comparte de forma anónima y el grupo las vota para desarrollar las mejores.',
+        exercise: '5 minutos de ideas en silencio, una por papel. Mezcladlas, leedlas en voz alta sin decir de quién es cada una y votad las 3 que vais a desarrollar.',
+        insight: 'Separar la generación silenciosa de la discusión elimina el sesgo de autoridad y la presión social: las ideas se defienden por su propio peso, no por el carisma de quien las propone. Además, los perfiles introvertidos participan igual.',
+        duration: '30 min',
+        link: 'https://en.wikipedia.org/wiki/Nominal_group_technique'
       },
       {
         name: 'Brainwriting 6-3-5',
         art: 'brainwriting',
         artCaption: 'Seis personas, tres ideas cada una; en cinco minutos pasan la hoja a la siguiente.',
         source: 'Bernd Rohrbach',
-        description: '6 personas escriben 3 ideas cada una en 5 minutos y se las pasan a la siguiente para construir sobre ellas.',
+        description: '6 personas escriben 3 ideas cada 5 minutos durante 6 rondas, pasando la hoja a la siguiente para que construya sobre ellas.',
+        insight: 'Hasta 108 ideas en media hora (6 personas × 3 ideas × 6 rondas). El límite de tiempo evita los debates prematuros y las interrupciones, y obliga al cerebro a asociar conceptos.',
         exercise: 'Escribe 3 ideas en 5 minutos, luego toma las ideas de otra persona y suma una variación a cada una.',
-        duration: '25 min',
+        duration: '30 min',
         link: 'https://www.ideou.com/blogs/inspiration/brainwriting-6-3-5'
       },
       {
         name: 'Seis Sombreros para Pensar',
         art: 'hats',
         artCaption: 'Una idea vista desde seis perspectivas; empieza por tres: datos, emociones y riesgos.',
-        source: 'Edward de Bono',
-        description: 'Analizar una idea desde 6 perspectivas distintas (datos, emoción, riesgos, beneficios, creatividad, proceso).',
+        source: 'Edward de Bono, 1985',
+        description: 'Seis roles temporales para mirar una idea desde seis perspectivas: blanco (datos), rojo (emociones e intuición), negro (riesgos), amarillo (beneficios), verde (creatividad) y azul (control del proceso).',
+        insight: 'Despersonaliza el conflicto: a quien siempre es pesimista, el sombrero amarillo le obliga a defender la idea; a quien es muy idealista, el negro le obliga a aterrizar y buscar fallos de usabilidad o de negocio.',
         exercise: 'Toma una idea y evalúala desde 3 "sombreros": el de los datos, el de las emociones y el de los riesgos.',
         duration: '15 min',
         link: 'https://www.debonogroup.com/services/core-programmes/six-thinking-hats/'
+      },
+      {
+        name: 'Flor de loto',
+        art: 'lotus',
+        artCaption: 'Un centro y ocho ideas alrededor; cada una puede ser el centro de otra flor.',
+        source: 'Yasuo Matsumura',
+        description: 'Técnica japonesa de asociación libre: un concepto central genera 8 ideas a su alrededor en una cuadrícula de 3×3, y cada una de esas 8 se convierte en el centro de una nueva flor.',
+        exercise: 'Pon tu reto en el centro de una cuadrícula de 3×3 y rellena las 8 casillas. Elige 2 y haz con cada una su propia flor.',
+        insight: 'Su arquitectura visual tan clara encaja con los perfiles analíticos. Obliga a explorar la amplitud antes que la profundidad y evita obsesionarse con la primera idea viable. Funciona muy bien en un lienzo digital infinito.',
+        duration: '25 min',
+        link: 'https://www.sessionlab.com/methods/lotus-blossom'
+      },
+      {
+        name: 'Estímulos aleatorios',
+        art: 'randomStimuli',
+        artCaption: 'Tu reto y tres cosas que no tienen nada que ver; la chispa salta donde se cruzan.',
+        source: 'Michael Michalko, a partir de Edward de Bono',
+        description: 'Conectar el reto con objetos, palabras o imágenes que no tienen nada que ver entre sí para forzar ideas disruptivas. Por ejemplo: un globo, un libro y una lámpara para la campaña de una cafetería.',
+        exercise: 'Elige 3 objetos al azar de tu alrededor y saca de cada uno al menos una idea para tu reto. (También puedes juntar dos burbujas en el inicio.)',
+        insight: 'Es pensamiento lateral en estado puro: el cerebro está programado para buscar patrones conocidos, y un estímulo ajeno al sector rompe esos patrones y fuerza conexiones nuevas.',
+        duration: '15 min',
+        link: 'https://en.wikipedia.org/wiki/Lateral_thinking'
+      },
+      {
+        name: 'BrainSwarming',
+        art: 'brainswarm',
+        artCaption: 'El objetivo arriba, los recursos abajo; la idea es el camino que los une.',
+        source: 'Tony McCaffrey, psicólogo cognitivo',
+        description: 'Ideación en grupo y en silencio sobre un gráfico: el objetivo arriba, los recursos disponibles abajo, y todos van trazando caminos de solución que los unen.',
+        exercise: 'Escribe el objetivo arriba de una pizarra y 6 recursos que ya tenéis abajo (personas, herramientas, datos, APIs). En silencio, conectad recursos y sub-objetivos hasta que aparezca un camino completo.',
+        insight: 'McCaffrey se inspiró en cómo resuelven problemas las hormigas. Sin palabra hablada no hay persuasión verbal: quienes piensan desde los objetivos (top-down) y quienes piensan desde los recursos (bottom-up) se encuentran en el mismo mapa.',
+        duration: '20 min'
+      },
+      {
+        name: 'Crazy 8s',
+        art: 'crazy8',
+        artCaption: 'Un folio doblado en ocho; una idea por recuadro, a contrarreloj.',
+        source: 'Google Ventures, Design Sprint',
+        description: 'Se dobla un folio en 8 partes y se dibujan 8 ideas distintas en 5 a 8 minutos: entre 40 segundos y 1 minuto por recuadro. Si te bloqueas, itera sobre el boceto anterior.',
+        exercise: 'Dobla un A4 en 8, pon un temporizador de 8 minutos y llena cada recuadro con una idea distinta para tu reto.',
+        insight: 'Apaga al editor interno: con tan poco tiempo por recuadro no da tiempo a juzgar la viabilidad ni la estética, y salen conceptos crudos, intuitivos y muy creativos.',
+        duration: '8 min',
+        link: 'https://designsprintkit.withgoogle.com/methodology/phase3-sketch/crazy-8s'
       },
       {
         name: 'SCAMPER generativo',
         art: 'scamperVariations',
         artCaption: 'Una idea de partida y tres variaciones: combinar, adaptar y reordenar.',
         source: 'Bob Eberle, basado en Alex Osborn',
-        description: 'Usar los verbos de SCAMPER para crear variaciones nuevas a partir de una idea existente.',
+        description: 'Usar los verbos de SCAMPER para crear variaciones nuevas a partir de una idea existente. Ejemplo clásico: una taza de café que se vuelve apilable, o que se usa como maceta.',
+        insight: 'Es la herramienta por excelencia de la innovación incremental: en vez de buscar la disrupción partiendo de cero (lo que intimida a muchos equipos), sus verbos funcionan como palancas para mejorar productos o flujos que ya existen.',
         exercise: 'Toma tu mejor idea y genera 3 variaciones aplicando "Combinar", "Adaptar" y "Reordenar".',
         duration: '15 min',
         link: 'https://www.interaction-design.org/literature/article/scamper'
