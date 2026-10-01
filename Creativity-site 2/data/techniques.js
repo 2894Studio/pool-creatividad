@@ -87,7 +87,6 @@ window.PHASES = [
         source: 'Hábito documentado de Steve Jobs y muchos diseñadores',
         description: 'Caminar sin pantallas ayuda a que la mente divague y conecte ideas de forma no lineal.',
         exercise: 'Sal a caminar 15 minutos sin el móvil, pensando apenas en el problema, dejando que la mente vague.',
-        llmPrompt: 'Actúa como coach creativo. Mi problema es: {{idea}}. Antes de salir a caminar sin pantalla, dame 3 preguntas abiertas sobre este problema para llevarlas en la cabeza sin buscar la respuesta activamente, que me ayuden a que la mente conecte ideas durante el paseo.',
         duration: '15 min',
         link: 'https://www.nature.com/articles/s41598-020-64822-1'
       },
@@ -109,7 +108,6 @@ window.PHASES = [
         source: 'Práctica clásica de incubación creativa',
         description: 'Aléjate del problema al menos un día antes de evaluarlo o decidir; la distancia mejora el juicio.',
         exercise: 'Guarda tu boceto o idea y no lo mires hasta mañana. Anota qué cambia tu percepción al volver a verlo.',
-        llmPrompt: 'Actúa como coach creativo. Mi idea es: {{idea}}. Dame 4 preguntas que debería hacerme mañana, con la mente fresca y algo de distancia, para evaluarla con más objetividad, sin dejarme llevar por el entusiasmo o el cansancio de ahora.',
         duration: '1 día',
         link: 'https://www.psychologytoday.com/us/basics/incubation'
       },
@@ -120,7 +118,6 @@ window.PHASES = [
         source: 'Julia Cameron, "El camino del artista"',
         description: 'Escritura libre de tres páginas a mano nada más despertarte, sin editar ni corregir.',
         exercise: 'Escribe 3 páginas a mano sin parar ni corregir, nada más levantarte, dejando salir lo que aparezca.',
-        llmPrompt: 'Actúa como guía de escritura libre. Tengo en mente: {{idea}}. Dame 3 frases disparadoras para empezar a escribir sin parar ni corregir durante unos minutos, dejando que surjan asociaciones libres relacionadas con esta idea.',
         duration: '20 min',
         link: 'https://juliacameronlive.com/basic-tools/morning-pages/'
       },
@@ -131,7 +128,6 @@ window.PHASES = [
         source: 'Práctica habitual en estudios de diseño',
         description: 'Hacer algo completamente distinto (cocinar, dibujar, hacer deporte) libera la mente del foco directo.',
         exercise: 'Dedica 20 minutos a una actividad manual que no tenga nada que ver con tu problema.',
-        llmPrompt: 'Actúa como coach creativo. Mi problema es: {{idea}}. Sugiéreme 3 actividades manuales o físicas, sin relación directa con el problema, que podría hacer durante 20 minutos para liberar la mente antes de volver a él.',
         duration: '20 min',
         link: 'https://www.psychologytoday.com/us/blog/the-athletes-way/201709/how-changing-your-environment-can-improve-creativity'
       },
@@ -142,7 +138,6 @@ window.PHASES = [
         source: 'Investigación sobre incubación y sueño',
         description: 'El sueño consolida conexiones y suele producir asociaciones nuevas al despertar.',
         exercise: 'Anota tu problema antes de dormir y, al despertar, escribe lo primero que se te ocurra al respecto.',
-        llmPrompt: 'Actúa como guía de incubación creativa. Antes de dormir, quiero dejar planteado: {{idea}}. Redacta una nota breve (2-3 frases) formulando el problema como pregunta abierta, ideal para anotar antes de dormir y retomar al despertar.',
         duration: '1 noche',
         link: 'https://www.sleepfoundation.org/sleep-habits/creative-sleep'
       },

@@ -304,27 +304,40 @@
           '<span class="tech-prompt__label">Prompt para tu LLM</span>' +
           '<textarea class="tech-prompt__input" placeholder="Escribe aquí tu idea o problema..." rows="2"></textarea>' +
           '<div class="tech-prompt__row">' +
+          '<button type="button" class="pill-btn tech-prompt__generate">Generar prompt</button>' +
+          '</div>' +
+          '<div class="tech-prompt__output" hidden>' +
+          '<textarea class="tech-prompt__result" readonly rows="4"></textarea>' +
+          '<div class="tech-prompt__row">' +
           '<button type="button" class="pill-btn tech-prompt__copy">Copiar prompt</button>' +
           '<p class="tech-prompt__hint" aria-live="polite" hidden>Copiado ✓</p>' +
+          '</div>' +
           '</div>' +
           '</div>'
           : '') +
         '</div>';
       if (t.llmPrompt) {
         const input = detail.querySelector('.tech-prompt__input');
+        const generateBtn = detail.querySelector('.tech-prompt__generate');
+        const output = detail.querySelector('.tech-prompt__output');
+        const result = detail.querySelector('.tech-prompt__result');
         const copyBtn = detail.querySelector('.tech-prompt__copy');
         const hint = detail.querySelector('.tech-prompt__hint');
         let hintTimer = null;
-        copyBtn.addEventListener('click', () => {
+        generateBtn.addEventListener('click', () => {
           const idea = input.value.trim() || '[tu idea]';
-          const prompt = t.llmPrompt.replace('{{idea}}', idea);
+          result.value = t.llmPrompt.replace('{{idea}}', idea);
+          output.hidden = false;
+          hint.hidden = true;
+        });
+        copyBtn.addEventListener('click', () => {
           const showHint = () => {
             hint.hidden = false;
             clearTimeout(hintTimer);
             hintTimer = setTimeout(() => { hint.hidden = true; }, 1500);
           };
           if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(prompt).then(showHint, () => {});
+            navigator.clipboard.writeText(result.value).then(showHint, () => {});
           }
         });
       }
