@@ -47,7 +47,7 @@ window.PHASES = [
         exercise: 'Junta 10 referencias (imágenes, frases, productos) que te resuenen con el tema, sin filtrar todavía.',
         llmPrompt: 'Actúa como director creativo. El tema o idea es: {{idea}}. Sugiéreme 10 referencias dispares (productos, marcas, imágenes, frases, escenas de películas, lo que sea) que podrían inspirar una dirección creativa distinta para esto, sin filtrar todavía ni quedarte con una sola línea.',
         duration: '20 min',
-        link: 'https://www.interaction-design.org/literature/topics/mood-board'
+        link: 'https://ixdf.org/literature/topics/mood-boards'
       },
       {
         name: 'Lightning Demos',
@@ -70,7 +70,7 @@ window.PHASES = [
         exercise: 'Toma tu problema y aplica 2 verbos de SCAMPER (p. ej. Sustituir: cambia quién lo hace o con qué; Eliminar: quita el paso que más te cuesta) para reformularlo de una manera distinta.',
         llmPrompt: 'Actúa como facilitador de SCAMPER. Mi problema es: {{idea}}. Aplica los 7 verbos (Sustituir, Combinar, Adaptar, Modificar, Proponer otros usos, Eliminar, Reordenar) para reformular el problema desde 7 ángulos distintos, uno por verbo, en una frase cada uno.',
         duration: '15 min',
-        link: 'https://www.interaction-design.org/literature/article/scamper'
+        link: 'https://ixdf.org/literature/article/learn-how-to-use-the-best-ideation-methods-scamper'
       },
     ],
   },
@@ -88,7 +88,7 @@ window.PHASES = [
         description: 'Caminar sin pantallas ayuda a que la mente divague y conecte ideas de forma no lineal.',
         exercise: 'Sal a caminar 15 minutos sin el móvil, pensando apenas en el problema, dejando que la mente vague.',
         duration: '15 min',
-        link: 'https://www.nature.com/articles/s41598-020-64822-1'
+        link: 'https://ed.stanford.edu/news/study-finds-walking-boosts-creativity'
       },
       {
         name: 'Brainwalking',
@@ -109,7 +109,7 @@ window.PHASES = [
         description: 'Aléjate del problema al menos un día antes de evaluarlo o decidir; la distancia mejora el juicio.',
         exercise: 'Guarda tu boceto o idea y no lo mires hasta mañana. Anota qué cambia tu percepción al volver a verlo.',
         duration: '1 día',
-        link: 'https://www.psychologytoday.com/us/basics/incubation'
+        link: 'https://en.wikipedia.org/wiki/Incubation_(psychology)'
       },
       {
         name: 'Morning pages',
@@ -129,7 +129,7 @@ window.PHASES = [
         description: 'Hacer algo completamente distinto (cocinar, dibujar, hacer deporte) libera la mente del foco directo.',
         exercise: 'Dedica 20 minutos a una actividad manual que no tenga nada que ver con tu problema.',
         duration: '20 min',
-        link: 'https://www.psychologytoday.com/us/blog/the-athletes-way/201709/how-changing-your-environment-can-improve-creativity'
+        link: 'https://www.psychologytoday.com/us/blog/tracking-wonder/202210/harness-your-environment-to-boost-your-creativity'
       },
       {
         name: 'Dormir sobre el problema',
@@ -139,7 +139,7 @@ window.PHASES = [
         description: 'El sueño consolida conexiones y suele producir asociaciones nuevas al despertar.',
         exercise: 'Anota tu problema antes de dormir y, al despertar, escribe lo primero que se te ocurra al respecto.',
         duration: '1 noche',
-        link: 'https://www.sleepfoundation.org/sleep-habits/creative-sleep'
+        link: 'https://en.wikipedia.org/wiki/Sleep_and_creativity'
       },
     ],
   },
@@ -159,7 +159,7 @@ window.PHASES = [
         exercise: 'Dedica 10 minutos a anotar todas las ideas posibles para tu problema, sin descartar ninguna.',
         llmPrompt: 'Actúa como facilitador de brainstorming al estilo Alex Osborn. Mi problema es: {{idea}}. Genera 15 ideas distintas y variadas para resolverlo, sin juzgar ni descartar ninguna, priorizando cantidad y variedad sobre calidad en esta primera ronda.',
         duration: '10 min',
-        link: 'https://www.ideou.com/blogs/inspiration/brainstorming'
+        link: 'https://www.ideou.com/blogs/inspiration/7-simple-rules-of-brainstorming'
       },
       {
         name: 'Técnica de Grupo Nominal',
@@ -183,7 +183,7 @@ window.PHASES = [
         exercise: 'Escribe 3 ideas en 5 minutos, luego toma las ideas de otra persona y suma una variación a cada una.',
         llmPrompt: 'Actúa como facilitador de Brainwriting 6-3-5. Mi reto es: {{idea}}. Genera 3 ideas iniciales, y luego, como si pasaras la hoja a otra persona, genera una variación o evolución de cada una de esas 3 ideas.',
         duration: '30 min',
-        link: 'https://www.ideou.com/blogs/inspiration/brainwriting-6-3-5'
+        link: 'https://en.wikipedia.org/wiki/6-3-5_Brainwriting'
       },
       {
         name: 'Seis Sombreros para Pensar',
@@ -195,7 +195,7 @@ window.PHASES = [
         exercise: 'Toma una idea y evalúala desde 3 "sombreros": el de los datos, el de las emociones y el de los riesgos.',
         llmPrompt: 'Actúa como facilitador de los Seis Sombreros de Edward de Bono. Mi idea es: {{idea}}. Evalúala desde el sombrero blanco (datos objetivos), el rojo (emociones e intuición) y el negro (riesgos y problemas), con 2-3 puntos concretos en cada uno.',
         duration: '15 min',
-        link: 'https://www.debonogroup.com/services/core-programmes/six-thinking-hats/'
+        link: 'https://www.debonogroup.com/services/core-programs/six-thinking-hats/'
       },
       {
         name: 'Flor de loto',
@@ -254,7 +254,7 @@ window.PHASES = [
         exercise: 'Toma tu mejor idea y genera 3 variaciones aplicando "Combinar" (únela con otra idea o producto), "Adaptar" (cópiale algo a otro sector) y "Reordenar" (cambia el orden de sus pasos o quién hace qué).',
         llmPrompt: 'Actúa como facilitador de SCAMPER. Mi idea de partida es: {{idea}}. Genera 3 variaciones de esta idea aplicando "Combinar" (únela con otra idea o producto), "Adaptar" (tómale algo prestado a otro sector) y "Reordenar" (cambia el orden de sus pasos o quién hace qué), explicando cada variación en una frase.',
         duration: '15 min',
-        link: 'https://www.interaction-design.org/literature/article/scamper'
+        link: 'https://ixdf.org/literature/article/learn-how-to-use-the-best-ideation-methods-scamper'
       },
       {
         name: '"La peor idea posible"',
@@ -265,7 +265,7 @@ window.PHASES = [
         exercise: 'Anota 5 ideas terribles a propósito para tu problema; después revisa si alguna esconde algo aprovechable.',
         llmPrompt: 'Actúa como facilitador de "la peor idea posible". Mi problema es: {{idea}}. Genera 5 ideas deliberadamente malas, absurdas o exageradas para resolverlo, y después revisa si alguna esconde, invertida o suavizada, una idea aprovechable.',
         duration: '10 min',
-        link: 'https://www.designkit.org/methods/65'
+        link: 'https://ixdf.org/literature/article/learn-how-to-use-the-best-ideation-methods-worst-possible-idea'
       },
     ],
   },
@@ -295,7 +295,7 @@ window.PHASES = [
         exercise: 'Dibuja 4 a 6 viñetas simples que muestren cómo alguien usaría o viviría tu idea de principio a fin.',
         llmPrompt: 'Actúa como guionista de storyboard. Mi idea es: {{idea}}. Describe 5 viñetas (una frase cada una) que muestren a una persona real descubriendo, usando y terminando de vivir esta idea de principio a fin.',
         duration: '20 min',
-        link: 'https://www.nngroup.com/articles/storyboarding/'
+        link: 'https://www.nngroup.com/articles/storyboards-visualize-ideas/'
       },
       {
         name: 'MVP (producto mínimo viable)',
@@ -317,7 +317,7 @@ window.PHASES = [
         exercise: 'Comparte tu prototipo con un compañero y pídele 3 críticas concretas: qué no entiende, qué le falta, qué sobra.',
         llmPrompt: 'Actúa como facilitador de una sesión de crítica estilo Pixar Braintrust. Mi prototipo o idea es: {{idea}}. Dame 3 críticas concretas y constructivas centradas en el problema, no en mí: qué no se entiende, qué falta y qué sobra.',
         duration: '20 min',
-        link: 'https://www.pixar.com/our-story/braintrust'
+        link: 'https://hbr.org/2008/09/how-pixar-fosters-collective-creativity'
       },
       {
         name: 'Iteración con test de usuario',
