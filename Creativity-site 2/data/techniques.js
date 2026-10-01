@@ -12,6 +12,7 @@ window.PHASES = [
         source: 'Stanford d.school',
         description: 'Pon en el centro a la persona para la que estás diseñando y explora qué piensa, siente, ve, dice y hace.',
         exercise: 'Dibuja un mapa de empatía en 4 cuadrantes (piensa/siente, ve, dice/hace, oye) para tu usuario o interlocutor principal.',
+        llmPrompt: 'Actúa como facilitador de design thinking. Mi idea o problema es: {{idea}}. Ayúdame a construir un mapa de empatía de la persona principal implicada, con 4 cuadrantes: qué piensa y siente, qué ve, qué dice y hace, y qué oye. Para cada cuadrante dame 3-4 puntos concretos basados en lo que te conté.',
         duration: '15 min',
         link: 'https://www.nngroup.com/articles/empathy-mapping/'
       },
@@ -22,6 +23,7 @@ window.PHASES = [
         source: 'Toyota / IDEO',
         description: 'Pregunta "¿por qué?" cinco veces seguidas para llegar de un síntoma a la causa raíz de un problema.',
         exercise: 'Elige un problema que quieras resolver y pregúntate "¿por qué?" cinco veces, anotando cada respuesta.',
+        llmPrompt: 'Actúa como facilitador de la técnica de los 5 Porqués. Mi problema es: {{idea}}. Pregúntame "¿por qué?" y, a partir de mi primera respuesta, sigue encadenando hasta 5 niveles de "por qué", proponiendo en cada paso una respuesta plausible, hasta llegar a una posible causa raíz.',
         duration: '10 min',
         link: 'https://en.wikipedia.org/wiki/Five_whys'
       },
@@ -32,6 +34,7 @@ window.PHASES = [
         source: 'IDEO / d.school',
         description: 'Reformula el problema como una pregunta abierta que invite a explorar soluciones, no una sola respuesta.',
         exercise: 'Convierte tu problema en 3 preguntas que empiecen con "¿Cómo podríamos...?" y elige la que más te inspire.',
+        llmPrompt: 'Actúa como facilitador de IDEO. Mi problema es: {{idea}}. Reformúlalo como 3 preguntas distintas que empiecen con "¿Cómo podríamos...?", cada una abriendo un ángulo distinto del problema, y dime cuál recomiendas explorar primero y por qué.',
         duration: '10 min',
         link: 'https://designthinking.ideo.com/'
       },
@@ -42,6 +45,7 @@ window.PHASES = [
         source: 'Práctica habitual en agencias creativas',
         description: 'Recopila referencias visuales, textos y ejemplos dispares antes de definir una dirección.',
         exercise: 'Junta 10 referencias (imágenes, frases, productos) que te resuenen con el tema, sin filtrar todavía.',
+        llmPrompt: 'Actúa como director creativo. El tema o idea es: {{idea}}. Sugiéreme 10 referencias dispares (productos, marcas, imágenes, frases, escenas de películas, lo que sea) que podrían inspirar una dirección creativa distinta para esto, sin filtrar todavía ni quedarte con una sola línea.',
         duration: '20 min',
         link: 'https://www.interaction-design.org/literature/topics/mood-board'
       },
@@ -52,6 +56,7 @@ window.PHASES = [
         source: 'Google Ventures, Design Sprint',
         description: 'Cada persona trae productos o servicios que resuelven bien algo parecido a tu reto y enseña solo lo más llamativo y diferencial. El facilitador lo captura al vuelo con un dibujo, un titular y la fuente.',
         exercise: 'Busca 3 productos (de tu sector o de otro) que resuelvan bien algo parecido a tu reto. De cada uno: un boceto rápido, un titular y de dónde sale.',
+        llmPrompt: 'Actúa como facilitador de un Design Sprint. Mi reto es: {{idea}}. Dame 3 productos o servicios (de cualquier sector) que resuelvan bien algo parecido, y para cada uno: qué es lo más llamativo o diferencial de su solución, en una frase.',
         insight: 'Fomenta la polinización cruzada entre industrias: en lugar de reinventar la rueda, el equipo se apoya en patrones de interacción y diseño ya validados por el mercado y los adapta a su reto.',
         duration: '20 min',
         link: 'https://designsprintkit.withgoogle.com/methodology/phase3-sketch/lightning-demos'
@@ -61,8 +66,9 @@ window.PHASES = [
         art: 'scamperReframe',
         artCaption: 'El problema en el centro y los siete verbos de SCAMPER alrededor: aplica dos.',
         source: 'Bob Eberle, basado en Alex Osborn',
-        description: 'Usa los verbos de SCAMPER (Sustituir, Combinar, Adaptar, Modificar, Proponer otros usos, Eliminar, Reordenar) para mirar el problema desde otro ángulo.',
-        exercise: 'Toma tu problema y aplica 2 verbos de SCAMPER para reformularlo de una manera distinta.',
+        description: 'SCAMPER son 7 preguntas para mirar un problema desde otro ángulo, una letra por verbo: Sustituir (¿qué elemento, material o paso puedo cambiar por otro?), Combinar (¿qué dos partes o funciones puedo unir?), Adaptar (¿qué de otro contexto puedo tomar prestado?), Modificar (¿qué puedo exagerar, reducir o cambiar?), Proponer otros usos (¿para qué más serviría esto?), Eliminar (¿qué parte o restricción puedo quitar?), Reordenar (¿qué pasa si invierto el orden o la lógica?).',
+        exercise: 'Toma tu problema y aplica 2 verbos de SCAMPER (p. ej. Sustituir: cambia quién lo hace o con qué; Eliminar: quita el paso que más te cuesta) para reformularlo de una manera distinta.',
+        llmPrompt: 'Actúa como facilitador de SCAMPER. Mi problema es: {{idea}}. Aplica los 7 verbos (Sustituir, Combinar, Adaptar, Modificar, Proponer otros usos, Eliminar, Reordenar) para reformular el problema desde 7 ángulos distintos, uno por verbo, en una frase cada uno.',
         duration: '15 min',
         link: 'https://www.interaction-design.org/literature/article/scamper'
       },
@@ -81,6 +87,7 @@ window.PHASES = [
         source: 'Hábito documentado de Steve Jobs y muchos diseñadores',
         description: 'Caminar sin pantallas ayuda a que la mente divague y conecte ideas de forma no lineal.',
         exercise: 'Sal a caminar 15 minutos sin el móvil, pensando apenas en el problema, dejando que la mente vague.',
+        llmPrompt: 'Actúa como coach creativo. Mi problema es: {{idea}}. Antes de salir a caminar sin pantalla, dame 3 preguntas abiertas sobre este problema para llevarlas en la cabeza sin buscar la respuesta activamente, que me ayuden a que la mente conecte ideas durante el paseo.',
         duration: '15 min',
         link: 'https://www.nature.com/articles/s41598-020-64822-1'
       },
@@ -91,6 +98,7 @@ window.PHASES = [
         source: 'Ideación colaborativa en movimiento',
         description: 'Los participantes caminan por un espacio con carteles o imágenes sobre el reto y van dejando ideas en notas adhesivas, construyendo sobre las que otros dejaron antes.',
         exercise: 'Pega 4 carteles con el reto en distintos puntos de la sala. Recorredlos en silencio y dejad al menos una nota en cada uno, sumando a lo que ya hay.',
+        llmPrompt: 'Actúa como facilitador de Brainwalking. El reto es: {{idea}}. Genera 4 focos o ángulos distintos de este reto sobre los que un grupo podría ir dejando notas, y para cada uno dame una idea de ejemplo para arrancar.',
         insight: 'El movimiento aumenta el flujo sanguíneo y la oxigenación del cerebro: rompe el letargo de las reuniones largas alrededor de una mesa y activa nuevas vías para resolver el problema.',
         duration: '20 min'
       },
@@ -101,6 +109,7 @@ window.PHASES = [
         source: 'Práctica clásica de incubación creativa',
         description: 'Aléjate del problema al menos un día antes de evaluarlo o decidir; la distancia mejora el juicio.',
         exercise: 'Guarda tu boceto o idea y no lo mires hasta mañana. Anota qué cambia tu percepción al volver a verlo.',
+        llmPrompt: 'Actúa como coach creativo. Mi idea es: {{idea}}. Dame 4 preguntas que debería hacerme mañana, con la mente fresca y algo de distancia, para evaluarla con más objetividad, sin dejarme llevar por el entusiasmo o el cansancio de ahora.',
         duration: '1 día',
         link: 'https://www.psychologytoday.com/us/basics/incubation'
       },
@@ -111,6 +120,7 @@ window.PHASES = [
         source: 'Julia Cameron, "El camino del artista"',
         description: 'Escritura libre de tres páginas a mano nada más despertarte, sin editar ni corregir.',
         exercise: 'Escribe 3 páginas a mano sin parar ni corregir, nada más levantarte, dejando salir lo que aparezca.',
+        llmPrompt: 'Actúa como guía de escritura libre. Tengo en mente: {{idea}}. Dame 3 frases disparadoras para empezar a escribir sin parar ni corregir durante unos minutos, dejando que surjan asociaciones libres relacionadas con esta idea.',
         duration: '20 min',
         link: 'https://juliacameronlive.com/basic-tools/morning-pages/'
       },
@@ -121,6 +131,7 @@ window.PHASES = [
         source: 'Práctica habitual en estudios de diseño',
         description: 'Hacer algo completamente distinto (cocinar, dibujar, hacer deporte) libera la mente del foco directo.',
         exercise: 'Dedica 20 minutos a una actividad manual que no tenga nada que ver con tu problema.',
+        llmPrompt: 'Actúa como coach creativo. Mi problema es: {{idea}}. Sugiéreme 3 actividades manuales o físicas, sin relación directa con el problema, que podría hacer durante 20 minutos para liberar la mente antes de volver a él.',
         duration: '20 min',
         link: 'https://www.psychologytoday.com/us/blog/the-athletes-way/201709/how-changing-your-environment-can-improve-creativity'
       },
@@ -131,6 +142,7 @@ window.PHASES = [
         source: 'Investigación sobre incubación y sueño',
         description: 'El sueño consolida conexiones y suele producir asociaciones nuevas al despertar.',
         exercise: 'Anota tu problema antes de dormir y, al despertar, escribe lo primero que se te ocurra al respecto.',
+        llmPrompt: 'Actúa como guía de incubación creativa. Antes de dormir, quiero dejar planteado: {{idea}}. Redacta una nota breve (2-3 frases) formulando el problema como pregunta abierta, ideal para anotar antes de dormir y retomar al despertar.',
         duration: '1 noche',
         link: 'https://www.sleepfoundation.org/sleep-habits/creative-sleep'
       },
@@ -150,6 +162,7 @@ window.PHASES = [
         description: 'Generación grupal de ideas originales en un ambiente relajado, sin juzgar y priorizando la cantidad en una primera ronda.',
         insight: 'Combina habilidades, pero tiene trampas: quien no aporta (free-riding), el bloqueo por ir solo a por cantidad y el pensamiento de grupo, donde las voces más dominantes tapan ideas brillantes de perfiles más analíticos. Si pasa, prueba la Técnica de Grupo Nominal.',
         exercise: 'Dedica 10 minutos a anotar todas las ideas posibles para tu problema, sin descartar ninguna.',
+        llmPrompt: 'Actúa como facilitador de brainstorming al estilo Alex Osborn. Mi problema es: {{idea}}. Genera 15 ideas distintas y variadas para resolverlo, sin juzgar ni descartar ninguna, priorizando cantidad y variedad sobre calidad en esta primera ronda.',
         duration: '10 min',
         link: 'https://www.ideou.com/blogs/inspiration/brainstorming'
       },
@@ -160,6 +173,7 @@ window.PHASES = [
         source: 'Delbecq y Van de Ven',
         description: 'Brainstorming iterativo: cada persona genera ideas en silencio y por escrito, el facilitador las comparte de forma anónima y el grupo las vota para desarrollar las mejores.',
         exercise: '5 minutos de ideas en silencio, una por papel. Mezcladlas, leedlas en voz alta sin decir de quién es cada una y votad las 3 que vais a desarrollar.',
+        llmPrompt: 'Actúa como facilitador de la Técnica de Grupo Nominal. El reto es: {{idea}}. Genera 8 ideas distintas como si fueran propuestas anónimas de distintas personas, agrúpalas por similitud y dime cuáles 3 recomendarías votar para desarrollar, con el motivo.',
         insight: 'Separar la generación silenciosa de la discusión elimina el sesgo de autoridad y la presión social: las ideas se defienden por su propio peso, no por el carisma de quien las propone. Además, los perfiles introvertidos participan igual.',
         duration: '30 min',
         link: 'https://en.wikipedia.org/wiki/Nominal_group_technique'
@@ -172,6 +186,7 @@ window.PHASES = [
         description: '6 personas escriben 3 ideas cada 5 minutos durante 6 rondas, pasando la hoja a la siguiente para que construya sobre ellas.',
         insight: 'Hasta 108 ideas en media hora (6 personas × 3 ideas × 6 rondas). El límite de tiempo evita los debates prematuros y las interrupciones, y obliga al cerebro a asociar conceptos.',
         exercise: 'Escribe 3 ideas en 5 minutos, luego toma las ideas de otra persona y suma una variación a cada una.',
+        llmPrompt: 'Actúa como facilitador de Brainwriting 6-3-5. Mi reto es: {{idea}}. Genera 3 ideas iniciales, y luego, como si pasaras la hoja a otra persona, genera una variación o evolución de cada una de esas 3 ideas.',
         duration: '30 min',
         link: 'https://www.ideou.com/blogs/inspiration/brainwriting-6-3-5'
       },
@@ -183,6 +198,7 @@ window.PHASES = [
         description: 'Seis roles temporales para mirar una idea desde seis perspectivas: blanco (datos), rojo (emociones e intuición), negro (riesgos), amarillo (beneficios), verde (creatividad) y azul (control del proceso).',
         insight: 'Despersonaliza el conflicto: a quien siempre es pesimista, el sombrero amarillo le obliga a defender la idea; a quien es muy idealista, el negro le obliga a aterrizar y buscar fallos de usabilidad o de negocio.',
         exercise: 'Toma una idea y evalúala desde 3 "sombreros": el de los datos, el de las emociones y el de los riesgos.',
+        llmPrompt: 'Actúa como facilitador de los Seis Sombreros de Edward de Bono. Mi idea es: {{idea}}. Evalúala desde el sombrero blanco (datos objetivos), el rojo (emociones e intuición) y el negro (riesgos y problemas), con 2-3 puntos concretos en cada uno.',
         duration: '15 min',
         link: 'https://www.debonogroup.com/services/core-programmes/six-thinking-hats/'
       },
@@ -193,6 +209,7 @@ window.PHASES = [
         source: 'Yasuo Matsumura',
         description: 'Técnica japonesa de asociación libre: un concepto central genera 8 ideas a su alrededor en una cuadrícula de 3×3, y cada una de esas 8 se convierte en el centro de una nueva flor.',
         exercise: 'Pon tu reto en el centro de una cuadrícula de 3×3 y rellena las 8 casillas. Elige 2 y haz con cada una su propia flor.',
+        llmPrompt: 'Actúa como facilitador de la técnica Flor de loto. El concepto central es: {{idea}}. Genera 8 ideas o subtemas relacionados a su alrededor, y luego elige 2 de esas 8 ideas y desarrolla cada una con otras 8 ideas propias, como dos flores nuevas.',
         insight: 'Su arquitectura visual tan clara encaja con los perfiles analíticos. Obliga a explorar la amplitud antes que la profundidad y evita obsesionarse con la primera idea viable. Funciona muy bien en un lienzo digital infinito.',
         duration: '25 min',
         link: 'https://www.sessionlab.com/methods/lotus-blossom'
@@ -204,6 +221,7 @@ window.PHASES = [
         source: 'Michael Michalko, a partir de Edward de Bono',
         description: 'Conectar el reto con objetos, palabras o imágenes que no tienen nada que ver entre sí para forzar ideas disruptivas. Por ejemplo: un globo, un libro y una lámpara para la campaña de una cafetería.',
         exercise: 'Elige 3 objetos al azar de tu alrededor y saca de cada uno al menos una idea para tu reto. (También puedes juntar dos burbujas en el inicio.)',
+        llmPrompt: 'Actúa como facilitador de pensamiento lateral (Edward de Bono). Mi reto es: {{idea}}. Elige 3 objetos o palabras totalmente aleatorios y, para cada uno, fuerza una conexión que dé una idea nueva y poco obvia para mi reto.',
         insight: 'Es pensamiento lateral en estado puro: el cerebro está programado para buscar patrones conocidos, y un estímulo ajeno al sector rompe esos patrones y fuerza conexiones nuevas.',
         duration: '15 min',
         link: 'https://en.wikipedia.org/wiki/Lateral_thinking'
@@ -215,6 +233,7 @@ window.PHASES = [
         source: 'Tony McCaffrey, psicólogo cognitivo',
         description: 'Ideación en grupo y en silencio sobre un gráfico: el objetivo arriba, los recursos disponibles abajo, y todos van trazando caminos de solución que los unen.',
         exercise: 'Escribe el objetivo arriba de una pizarra y 6 recursos que ya tenéis abajo (personas, herramientas, datos, APIs). En silencio, conectad recursos y sub-objetivos hasta que aparezca un camino completo.',
+        llmPrompt: 'Actúa como facilitador de BrainSwarming. El objetivo es: {{idea}}. Dame 6 recursos plausibles (personas, herramientas, datos, aliados) que podrían ayudar a lograrlo, y luego traza 2-3 caminos distintos que conecten esos recursos con el objetivo.',
         insight: 'McCaffrey se inspiró en cómo resuelven problemas las hormigas. Sin palabra hablada no hay persuasión verbal: quienes piensan desde los objetivos (top-down) y quienes piensan desde los recursos (bottom-up) se encuentran en el mismo mapa.',
         duration: '20 min'
       },
@@ -225,6 +244,7 @@ window.PHASES = [
         source: 'Google Ventures, Design Sprint',
         description: 'Se dobla un folio en 8 partes y se dibujan 8 ideas distintas en 5 a 8 minutos: entre 40 segundos y 1 minuto por recuadro. Si te bloqueas, itera sobre el boceto anterior.',
         exercise: 'Dobla un A4 en 8, pon un temporizador de 8 minutos y llena cada recuadro con una idea distinta para tu reto.',
+        llmPrompt: 'Actúa como facilitador de Crazy 8s. Mi reto es: {{idea}}. Genera 8 ideas distintas y rápidas (una frase cada una, sin pulir ni juzgar), iterando sobre la anterior si te quedas sin ideas nuevas.',
         insight: 'Apaga al editor interno: con tan poco tiempo por recuadro no da tiempo a juzgar la viabilidad ni la estética, y salen conceptos crudos, intuitivos y muy creativos.',
         duration: '8 min',
         link: 'https://designsprintkit.withgoogle.com/methodology/phase3-sketch/crazy-8s'
@@ -234,9 +254,10 @@ window.PHASES = [
         art: 'scamperVariations',
         artCaption: 'Una idea de partida y tres variaciones: combinar, adaptar y reordenar.',
         source: 'Bob Eberle, basado en Alex Osborn',
-        description: 'Usar los verbos de SCAMPER para crear variaciones nuevas a partir de una idea existente. Ejemplo clásico: una taza de café que se vuelve apilable, o que se usa como maceta.',
+        description: 'Usa los 7 verbos de SCAMPER para crear variaciones nuevas a partir de una idea existente: Sustituir (cambia un elemento por otro), Combinar (une dos ideas o funciones), Adaptar (toma algo que funciona en otro contexto), Modificar (exagera o reduce un atributo), Proponer otros usos (dale una función distinta), Eliminar (quita una parte) y Reordenar (invierte el orden o la lógica). Ejemplo clásico: una taza de café que se vuelve apilable (Modificar), o que se usa como maceta al terminarse (Proponer otros usos).',
         insight: 'Es la herramienta por excelencia de la innovación incremental: en vez de buscar la disrupción partiendo de cero (lo que intimida a muchos equipos), sus verbos funcionan como palancas para mejorar productos o flujos que ya existen.',
-        exercise: 'Toma tu mejor idea y genera 3 variaciones aplicando "Combinar", "Adaptar" y "Reordenar".',
+        exercise: 'Toma tu mejor idea y genera 3 variaciones aplicando "Combinar" (únela con otra idea o producto), "Adaptar" (cópiale algo a otro sector) y "Reordenar" (cambia el orden de sus pasos o quién hace qué).',
+        llmPrompt: 'Actúa como facilitador de SCAMPER. Mi idea de partida es: {{idea}}. Genera 3 variaciones de esta idea aplicando "Combinar" (únela con otra idea o producto), "Adaptar" (tómale algo prestado a otro sector) y "Reordenar" (cambia el orden de sus pasos o quién hace qué), explicando cada variación en una frase.',
         duration: '15 min',
         link: 'https://www.interaction-design.org/literature/article/scamper'
       },
@@ -247,6 +268,7 @@ window.PHASES = [
         source: 'Técnica habitual en agencias creativas',
         description: 'Generar deliberadamente ideas malas o absurdas para bajar la autocrítica y destrabar ideas mejores.',
         exercise: 'Anota 5 ideas terribles a propósito para tu problema; después revisa si alguna esconde algo aprovechable.',
+        llmPrompt: 'Actúa como facilitador de "la peor idea posible". Mi problema es: {{idea}}. Genera 5 ideas deliberadamente malas, absurdas o exageradas para resolverlo, y después revisa si alguna esconde, invertida o suavizada, una idea aprovechable.',
         duration: '10 min',
         link: 'https://www.designkit.org/methods/65'
       },
@@ -265,6 +287,7 @@ window.PHASES = [
         source: 'Google Ventures',
         description: 'Construir un prototipo simple y testeable en poco tiempo, priorizando aprender rápido sobre pulir.',
         exercise: 'Haz un prototipo básico (papel, boceto o mockup) de tu idea en 30 minutos, sin pulir detalles.',
+        llmPrompt: 'Actúa como facilitador de Design Sprint (Google Ventures). Mi idea es: {{idea}}. Describe un prototipo mínimo y testeable que podría construir en 30 minutos (papel, boceto o mockup) para validar la parte más arriesgada de la idea, con pasos concretos.',
         duration: '30 min',
         link: 'https://www.gv.com/sprint/'
       },
@@ -275,6 +298,7 @@ window.PHASES = [
         source: 'Técnica clásica de estudios de animación (Disney/Pixar)',
         description: 'Contar la idea como una secuencia de viñetas para detectar huecos narrativos o de experiencia.',
         exercise: 'Dibuja 4 a 6 viñetas simples que muestren cómo alguien usaría o viviría tu idea de principio a fin.',
+        llmPrompt: 'Actúa como guionista de storyboard. Mi idea es: {{idea}}. Describe 5 viñetas (una frase cada una) que muestren a una persona real descubriendo, usando y terminando de vivir esta idea de principio a fin.',
         duration: '20 min',
         link: 'https://www.nngroup.com/articles/storyboarding/'
       },
@@ -285,6 +309,7 @@ window.PHASES = [
         source: 'Eric Ries, "The Lean Startup"',
         description: 'Definir la versión más simple de la idea que permita aprender algo real de la gente.',
         exercise: 'Escribe qué es lo mínimo que necesitas construir o mostrar para saber si tu idea funciona.',
+        llmPrompt: 'Actúa como coach de producto estilo Lean Startup. Mi idea es: {{idea}}. Dime cuál es la versión más mínima y simple que podría construir o mostrar para aprender algo real de la gente, y qué debería medir para saber si funciona.',
         duration: '15 min',
         link: 'https://www.startuplessonslearned.com/2009/08/minimum-viable-product-guide.html'
       },
@@ -295,6 +320,7 @@ window.PHASES = [
         source: 'Pixar Braintrust',
         description: 'Mostrar el trabajo en progreso a otros para recibir feedback honesto centrado en el problema, no en la persona.',
         exercise: 'Comparte tu prototipo con un compañero y pídele 3 críticas concretas: qué no entiende, qué le falta, qué sobra.',
+        llmPrompt: 'Actúa como facilitador de una sesión de crítica estilo Pixar Braintrust. Mi prototipo o idea es: {{idea}}. Dame 3 críticas concretas y constructivas centradas en el problema, no en mí: qué no se entiende, qué falta y qué sobra.',
         duration: '20 min',
         link: 'https://www.pixar.com/our-story/braintrust'
       },
@@ -305,6 +331,7 @@ window.PHASES = [
         source: 'Práctica estándar de investigación UX',
         description: 'Observar a alguien real usando tu idea revela problemas que uno mismo no puede ver.',
         exercise: 'Pide a una persona que use tu prototipo mientras piensa en voz alta y anota dónde se atasca.',
+        llmPrompt: 'Actúa como investigador UX. Mi prototipo o idea es: {{idea}}. Dime qué 3 cosas debería observar o preguntar mientras alguien lo prueba pensando en voz alta, y qué tipo de atascos serían señales de alerta.',
         duration: '20 min',
         link: 'https://www.nngroup.com/articles/usability-testing-101/'
       },

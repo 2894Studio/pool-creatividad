@@ -299,7 +299,35 @@
         '<div class="tech-stat"><span class="tech-stat__label">Fuente</span>' + source + '</div>' +
         (t.insight ? '<div class="tech-stat tech-stat--wide tech-stat--insight"><span class="tech-stat__label">Por qué funciona</span><p class="tech-stat__value">' + esc(t.insight) + '</p></div>' : '') +
         '</div>' +
+        (t.llmPrompt ?
+          '<div class="tech-prompt">' +
+          '<span class="tech-prompt__label">Prompt para tu LLM</span>' +
+          '<textarea class="tech-prompt__input" placeholder="Escribe aquí tu idea o problema..." rows="2"></textarea>' +
+          '<div class="tech-prompt__row">' +
+          '<button type="button" class="pill-btn tech-prompt__copy">Copiar prompt</button>' +
+          '<p class="tech-prompt__hint" aria-live="polite" hidden>Copiado ✓</p>' +
+          '</div>' +
+          '</div>'
+          : '') +
         '</div>';
+      if (t.llmPrompt) {
+        const input = detail.querySelector('.tech-prompt__input');
+        const copyBtn = detail.querySelector('.tech-prompt__copy');
+        const hint = detail.querySelector('.tech-prompt__hint');
+        let hintTimer = null;
+        copyBtn.addEventListener('click', () => {
+          const idea = input.value.trim() || '[tu idea]';
+          const prompt = t.llmPrompt.replace('{{idea}}', idea);
+          const showHint = () => {
+            hint.hidden = false;
+            clearTimeout(hintTimer);
+            hintTimer = setTimeout(() => { hint.hidden = true; }, 1500);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(prompt).then(showHint, () => {});
+          }
+        });
+      }
       const art = (detailArt = JOY.dotArt(detail.querySelector('canvas'), { motif: phase.id, art: t.art, seed: seedBase + idx, start: 0, interactive: true }));
       art.accent(true);
       art.play({ duration: phase.id === 'incubacion' ? 2 : 1.3 });
