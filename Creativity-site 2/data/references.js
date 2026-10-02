@@ -2,6 +2,16 @@
 /* platform: netflix | primevideo | youtube | vimeo — controla el badge de plataforma en la card */
 window.REFERENCES = [
   {
+    title: 'Virgil Abloh: "Insert Complicated Title Here"',
+    category: 'Conferencia · YouTube',
+    description: 'En su charla en Harvard GSD, Virgil Abloh comparte los "atajos" detrás de su lenguaje de diseño personal, de la arquitectura al streetwear.',
+    accent: 'gray',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Virgil_Abloh_Paris_Fashion_Week_Autumn_Winter_2019_(cropped).jpg/500px-Virgil_Abloh_Paris_Fashion_Week_Autumn_Winter_2019_(cropped).jpg',
+    credit: 'Foto: Myles Kalus Anak Jihem / Wikimedia Commons (CC BY-SA 4.0)',
+    platform: 'youtube',
+    sourceUrl: 'https://www.youtube.com/watch?v=qie5VITX6eQ',
+  },
+  {
     title: 'Rick Rubin',
     category: 'Entrevista · YouTube',
     description: 'Anderson Cooper entrevista al productor sobre escuchar, simplificar y confiar en el instinto creativo.',

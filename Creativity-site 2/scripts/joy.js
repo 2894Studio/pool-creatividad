@@ -184,6 +184,16 @@
      Las letras reaccionan al puntero con HoverText (scripts/hover-text.js).
      Aquí sólo va la entrada propia del sitio: las palabras suben y
      "CREA SIN BLOQUEOS" aparece tapado por bloques que se agrietan y caen. */
+  /* ---------------- botón "Dame un reto" del inicio ----------------
+     Mismo dado 3D que usan los botones de "tirar el dado" en las fases,
+     para que se lea como el mismo gesto desde la home. */
+  function initHeroRetoButton() {
+    const btn = document.querySelector('.hero__reto-btn');
+    if (!btn || !JOY.makeDice) return;
+    const dice = JOY.makeDice(20);
+    btn.prepend(dice);
+  }
+
   function initHeroHeadline() {
     const h1 = document.querySelector('[data-split="hero"]');
     if (!h1 || !window.HoverText) return null;
@@ -553,6 +563,7 @@
     initCursorLabel();
     initMagnetic();
     initHeroBlobs();
+    initHeroRetoButton();
     const playHero = initHeroHeadline();
     initSparkles();
     initEureka();
