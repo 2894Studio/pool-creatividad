@@ -85,6 +85,11 @@
   text-decoration: none;
 }
 .hero__cta:hover { box-shadow: var(--shadow-card-hover); }
+
+/* mismo alto y esquina que .hero__cta: el borde de 1px del pill-btn
+   descuenta 1px de padding a cada lado para que la caja coincida.
+   Doble clase para pesar más que .pill-btn, que se carga después. */
+.pill-btn.hero__reto-btn { padding: 15px 29px; border-radius: var(--radius-md); font-size: 1.05rem; }
 @media (max-width: 640px) {
   .hero__content { padding: 0; }
   .hero__headline { font-size: clamp(1.9rem, 8.6vw, 2.6rem); }
