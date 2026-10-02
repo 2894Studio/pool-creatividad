@@ -33,7 +33,6 @@
       '<span class="ref-card__category">' + ref.category + '</span>' +
       '<h3 class="ref-card__title">' + ref.title + '</h3>' +
       '<p class="ref-card__desc">' + ref.description + '</p>' +
-      '<p class="ref-card__credit">' + ref.credit + '</p>' +
       '</div>' +
       '<span class="ref-card__glare" aria-hidden="true"></span>';
     const open = () => { if (!dragging) window.open(ref.sourceUrl, '_blank', 'noopener,noreferrer'); };

@@ -113,25 +113,20 @@
 .ref-card__category { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-sky-blue); font-weight: var(--fw-medium); }
 .ref-card__title { font-size: 1.25rem; margin: 6px 0 0; color: #fff; }
 
-.ref-card__desc, .ref-card__credit {
+.ref-card__desc {
   color: rgba(255, 255, 255, 0.9);
   opacity: 0;
   max-height: 0;
   overflow: hidden;
   transition: opacity var(--motion-fast), max-height var(--motion-fast), margin var(--motion-fast);
+  font-size: 0.85rem;
+  margin: 0;
 }
-.ref-card__desc { font-size: 0.85rem; margin: 0; }
-.ref-card__credit { font-size: 0.68rem; color: rgba(255, 255, 255, 0.65); margin: 0; }
 
 .ref-card:hover .ref-card__desc, .ref-card:focus .ref-card__desc {
   opacity: 1;
   max-height: 100px;
   margin: 8px 0 4px;
-}
-.ref-card:hover .ref-card__credit, .ref-card:focus .ref-card__credit {
-  opacity: 1;
-  max-height: 40px;
-  margin-top: 6px;
 }
 
 .carousel__arrow {
