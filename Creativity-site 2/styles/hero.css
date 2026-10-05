@@ -251,31 +251,9 @@
   pointer-events: none;
   transition: opacity 0.5s ease;
 }
-/* defs del filtro SVG "goo": en 0x0, invisible, sólo referenciado por filter: url(#hero-loading-goo) */
-.hero-loading__goo-defs { position: absolute; width: 0; height: 0; }
-
-.hero-loading__orb {
-  position: relative;
-  width: clamp(96px, 14vw, 150px);
-  height: clamp(96px, 14vw, 150px);
-  filter: url(#hero-loading-goo);
-  /* flota todo el tiempo (leve rebote vertical); la "división" al cambiar de mensaje
-     mueve las dos gotas internas con su propia `translate`, independiente de ésta,
-     así nunca se cortan entre sí */
-  animation: hero-loading-bob 3.4s ease-in-out infinite;
-}
-.hero-loading__orb-blob {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 74%;
-  height: 74%;
-  border-radius: 50%;
-  background: linear-gradient(145deg, var(--color-sky-blue), var(--color-deep-cobalt));
-}
-.hero-loading__orb.is-splitting .hero-loading__orb-blob--a { animation: hero-loading-split-a 1s cubic-bezier(.45, 0, .2, 1); }
-.hero-loading__orb.is-splitting .hero-loading__orb-blob--b { animation: hero-loading-split-b 1s cubic-bezier(.45, 0, .2, 1); }
-
+.hero-loading__message { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.hero-loading__icon { width: 38px; height: 38px; color: var(--color-accent); }
+.hero-loading__icon svg { width: 100%; height: 100%; }
 .hero-loading__text {
   margin: 0;
   font-size: 1.05rem;
@@ -284,26 +262,14 @@
   min-height: 1.3em;
 }
 
-@keyframes hero-loading-bob {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -10px; }
-}
-/* cada gota se aleja del centro en una dirección y vuelve: el filtro goo hace que, al
-   separarse, el blob único se "estire y divida" orgánicamente antes de fundirse de nuevo */
-@keyframes hero-loading-split-a {
-  0%, 100% { translate: 0 0; }
-  40% { translate: -34% -20%; }
-  70% { translate: -10% -6%; }
-}
-@keyframes hero-loading-split-b {
-  0%, 100% { translate: 0 0; }
-  40% { translate: 34% 20%; }
-  70% { translate: 10% 6%; }
+/* ícono + texto entran juntos, con un leve rebote, cada vez que cambia el mensaje */
+.hero-loading__message.is-changing { animation: hero-loading-message-in 0.45s cubic-bezier(.33, 1.3, .5, 1); }
+@keyframes hero-loading-message-in {
+  0% { opacity: 0; translate: 0 8px; scale: 0.94; }
+  100% { opacity: 1; translate: 0 0; scale: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-loading__orb { animation: none; }
-  .hero-loading__orb.is-splitting .hero-loading__orb-blob--a,
-  .hero-loading__orb.is-splitting .hero-loading__orb-blob--b { animation: none; }
+  .hero-loading__message.is-changing { animation: none; }
 }
 
 /* al generar: el hero se retira y el chrome fijo se apaga, sin salir de #inicio */

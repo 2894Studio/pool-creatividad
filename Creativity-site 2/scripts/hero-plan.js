@@ -54,7 +54,17 @@
   const COPY_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 13V5.5C4.5 4.67157 5.17157 4 6 4H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
   const CHECK_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.5 10.5L8 14L15.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  const LOADING_MESSAGES = ['Leyendo tu idea…', 'Cruzando técnicas de ideación…', 'Buscando ángulos distintos…', 'Afinando las ideas…'];
+  const ICON_READ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const ICON_CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.8 7.6 10.2 16.4M17.2 7.6 13.8 16.4M7.2 6h9.6"/></svg>';
+  const ICON_COMPASS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5 10 10l-.5 4.5L14 14l.5-4.5Z"/></svg>';
+  const ICON_SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>';
+
+  const LOADING_MESSAGES = [
+    { text: 'Leyendo tu idea…', icon: ICON_READ },
+    { text: 'Cruzando técnicas de ideación…', icon: ICON_CROSS },
+    { text: 'Buscando ángulos distintos…', icon: ICON_COMPASS },
+    { text: 'Afinando las ideas…', icon: ICON_SPARK },
+  ];
 
   /* dictado por voz con microinteracción: mientras escucha, las barras del botón
      laten en vivo con el volumen real de la voz (AnalyserNode), como el modo
@@ -156,8 +166,9 @@
     const input = hero.querySelector('.hero-plan__input');
     const generateBtn = hero.querySelector('.hero-plan__generate');
     const loading = document.querySelector('.hero-loading');
+    const loadingMessage = loading && loading.querySelector('.hero-loading__message');
+    const loadingIcon = loading && loading.querySelector('.hero-loading__icon');
     const loadingText = loading && loading.querySelector('.hero-loading__text');
-    const loadingOrb = loading && loading.querySelector('.hero-loading__orb');
     const ideaLine = scene.querySelector('#hero-plan-idea');
     const tabs = scene.querySelector('.hero-plan__tabs');
     const steps = scene.querySelector('.hero-plan__steps');
@@ -195,23 +206,23 @@
 
     // ---------- loading de pantalla completa ----------
     let loadingTimer = null;
-    function pulseOrb() {
-      if (!loadingOrb) return;
-      loadingOrb.classList.remove('is-splitting');
-      void loadingOrb.offsetWidth; // reinicia la animación de "división" aunque la clase ya estuviera puesta
-      loadingOrb.classList.add('is-splitting');
+    function setLoadingMessage(i) {
+      if (!loadingMessage) return;
+      loadingIcon.innerHTML = LOADING_MESSAGES[i].icon;
+      loadingText.textContent = LOADING_MESSAGES[i].text;
+      loadingMessage.classList.remove('is-changing');
+      void loadingMessage.offsetWidth; // reinicia la animación de entrada aunque la clase ya estuviera puesta
+      loadingMessage.classList.add('is-changing');
     }
     function showLoading() {
       if (!loading) return;
       document.body.classList.add('is-generating-plan');
       let i = 0;
-      loadingText.textContent = LOADING_MESSAGES[0];
-      pulseOrb();
+      setLoadingMessage(0);
       clearInterval(loadingTimer);
       loadingTimer = setInterval(() => {
         i = (i + 1) % LOADING_MESSAGES.length;
-        loadingText.textContent = LOADING_MESSAGES[i];
-        pulseOrb();
+        setLoadingMessage(i);
       }, 2200);
     }
     function hideLoading() {
