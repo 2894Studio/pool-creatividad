@@ -45,25 +45,13 @@
         <p class="hero__eyebrow">Laboratorio de creatividad</p>
         <h1 id="inicio-title" class="hero__headline" data-split="hero" data-scene-title tabindex="-1">PIENSA DISTINTO. <span class="hero__headline-accent">CREA SIN BLOQUEOS.</span></h1>
         <p class="hero__subline">Qué es idear bien y un recorrido por las 4 fases del pensamiento creativo de Graham Wallas. En cada una, tira el dado, prueba una técnica y sigue avanzando.</p>
-        <!-- plan de ideación breve + prompt para LLM, armados con lógica local a partir de las técnicas del sitio (hero-plan.js). "Dame un reto" vive acá, junto a "Generar mi plan". -->
+        <!-- plan de ideación breve + prompt para LLM, armados con lógica local a partir de las técnicas del sitio (hero-plan.js). El resultado se muestra en la escena #plan: esta tarjeta no tiene alto fijo para hacer scroll, así que "Generar mi plan" navega a su propia escena. "Dame un reto" vive acá, junto a "Generar mi plan". -->
         <div class="hero-plan">
           <label class="hero-plan__label" for="hero-plan-input">Contame tu idea</label>
           <textarea id="hero-plan-input" class="hero-plan__input" placeholder="Tu reto o tu idea, en una frase…" rows="2"></textarea>
           <div class="hero-plan__row">
             <button type="button" class="pill-btn hero-plan__generate" disabled>Generar mi plan</button>
             <button class="pill-btn hero__reto-btn" type="button" data-journey-go="reto" data-magnetic data-cursor="¡Tira!">Dame un reto</button>
-          </div>
-          <div class="hero-plan__output" hidden>
-            <p class="hero-plan__intro">Un punto de partida rápido, una técnica por fase:</p>
-            <ol class="hero-plan__steps"></ol>
-            <div class="hero-plan__prompt">
-              <span class="hero-plan__prompt-label">Prompt para tu LLM</span>
-              <textarea class="hero-plan__result" readonly rows="7"></textarea>
-              <div class="hero-plan__row">
-                <button type="button" class="pill-btn hero-plan__copy">Copiar prompt</button>
-                <p class="hero-plan__hint" aria-live="polite" hidden>Copiado ✓</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -268,6 +256,31 @@
           <button class="link-btn" type="button" data-journey-go="inicio"><span aria-hidden="true">↺</span> Volver a empezar</button>
         </div>
         <p class="reto__credit">Hecho para inspirar al equipo. Intelligent tools. Human imagination.</p>
+      </div>
+    </section>
+
+    <!-- Resultado de "Generar mi plan" (hero-plan.js): escena propia para que el contenido pueda crecer y scrollear; el logo fijo siempre vuelve a #inicio. -->
+    <section id="plan" class="scene scene--plan" data-label="Tu plan" data-tone="light" aria-labelledby="plan-title">
+      <div class="phase-ambient" aria-hidden="true">
+        <span class="soft-circle soft-circle--sky" style="left: 88%; top: 14%; width: clamp(200px, 28vw, 380px); height: clamp(200px, 28vw, 380px);"></span>
+        <span class="soft-circle soft-circle--cobalt" style="left: 6%; top: 82%; width: clamp(160px, 20vw, 280px); height: clamp(160px, 20vw, 280px);"></span>
+      </div>
+      <div class="scene__inner hero-plan-scene">
+        <p class="scene-eyebrow">Tu plan</p>
+        <h2 id="plan-title" class="phase__title" data-split="section" data-scene-title tabindex="-1">Un punto de partida <span>para tu idea.</span></h2>
+        <p class="hero-plan-scene__idea" id="hero-plan-idea"></p>
+        <ol class="hero-plan__steps"></ol>
+        <div class="hero-plan__prompt">
+          <span class="hero-plan__prompt-label">Prompt para tu LLM</span>
+          <textarea class="hero-plan__result" readonly rows="8"></textarea>
+          <div class="hero-plan__row">
+            <button type="button" class="pill-btn hero-plan__copy">Copiar prompt</button>
+            <p class="hero-plan__hint" aria-live="polite" hidden>Copiado ✓</p>
+          </div>
+        </div>
+        <div class="scene-foot">
+          <button class="link-btn" type="button" data-journey-go="inicio"><span aria-hidden="true">↺</span> Volver al inicio</button>
+        </div>
       </div>
     </section>
   </main>

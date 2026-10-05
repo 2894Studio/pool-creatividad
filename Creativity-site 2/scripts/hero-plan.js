@@ -32,15 +32,16 @@
   }
 
   function init() {
-    const root = document.querySelector('.hero-plan');
-    if (!root || !window.PHASES) return;
-    const input = root.querySelector('.hero-plan__input');
-    const generateBtn = root.querySelector('.hero-plan__generate');
-    const output = root.querySelector('.hero-plan__output');
-    const steps = root.querySelector('.hero-plan__steps');
-    const result = root.querySelector('.hero-plan__result');
-    const copyBtn = root.querySelector('.hero-plan__copy');
-    const hint = root.querySelector('.hero-plan__hint');
+    const hero = document.querySelector('.hero-plan');
+    const scene = document.getElementById('plan');
+    if (!hero || !scene || !window.PHASES) return;
+    const input = hero.querySelector('.hero-plan__input');
+    const generateBtn = hero.querySelector('.hero-plan__generate');
+    const ideaLine = scene.querySelector('#hero-plan-idea');
+    const steps = scene.querySelector('.hero-plan__steps');
+    const result = scene.querySelector('.hero-plan__result');
+    const copyBtn = scene.querySelector('.hero-plan__copy');
+    const hint = scene.querySelector('.hero-plan__hint');
     if (!input || !generateBtn) return;
 
     const picks = window.PHASES.map((phase) => {
@@ -53,14 +54,16 @@
     generateBtn.addEventListener('click', () => {
       const idea = input.value.trim();
       if (!idea) return;
+      ideaLine.textContent = 'Tu idea: «' + idea + '»';
       steps.innerHTML = picks.map((p) =>
         '<li><span class="hero-plan__phase">' + p.phase.index + ' ' + esc(p.phase.name) + '</span>' +
         '<strong>' + esc(p.technique.name) + '</strong>' +
         '<span class="hero-plan__exercise">' + esc(p.technique.exercise) + '</span></li>'
       ).join('');
       result.value = buildPrompt(idea, picks);
-      output.hidden = false;
       hint.hidden = true;
+      if (window.JOURNEY && window.JOURNEY.goTo) window.JOURNEY.goTo('plan');
+      else scene.scrollIntoView({ behavior: 'smooth' });
     });
 
     let hintTimer = null;
