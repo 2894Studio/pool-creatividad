@@ -157,6 +157,7 @@
     const generateBtn = hero.querySelector('.hero-plan__generate');
     const loading = document.querySelector('.hero-loading');
     const loadingText = loading && loading.querySelector('.hero-loading__text');
+    const loadingOrb = loading && loading.querySelector('.hero-loading__orb');
     const ideaLine = scene.querySelector('#hero-plan-idea');
     const tabs = scene.querySelector('.hero-plan__tabs');
     const steps = scene.querySelector('.hero-plan__steps');
@@ -194,15 +195,23 @@
 
     // ---------- loading de pantalla completa ----------
     let loadingTimer = null;
+    function pulseOrb() {
+      if (!loadingOrb) return;
+      loadingOrb.classList.remove('is-pulsing');
+      void loadingOrb.offsetWidth; // reinicia la animación del "pop" aunque la clase ya estuviera puesta
+      loadingOrb.classList.add('is-pulsing');
+    }
     function showLoading() {
       if (!loading) return;
       document.body.classList.add('is-generating-plan');
       let i = 0;
       loadingText.textContent = LOADING_MESSAGES[0];
+      pulseOrb();
       clearInterval(loadingTimer);
       loadingTimer = setInterval(() => {
         i = (i + 1) % LOADING_MESSAGES.length;
         loadingText.textContent = LOADING_MESSAGES[i];
+        pulseOrb();
       }, 2200);
     }
     function hideLoading() {
