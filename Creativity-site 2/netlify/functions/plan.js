@@ -54,7 +54,7 @@ exports.handler = async (event) => {
   try {
     const response = await client.messages.parse({
       model: 'claude-opus-5-5',
-      max_tokens: 1536,
+      max_tokens: 3072,
       output_config: { effort: 'low', format: zodOutputFormat(PlanSchema) },
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: idea }],
