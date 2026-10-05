@@ -315,15 +315,15 @@
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='3' cy='8' r='1'/%3E%3Ccircle cx='6' cy='8' r='1'/%3E%3Ccircle cx='8' cy='8' r='1.7'/%3E%3Ccircle cx='10' cy='8' r='1'/%3E%3Ccircle cx='13' cy='8' r='1'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='3' cy='8' r='1'/%3E%3Ccircle cx='6' cy='8' r='1'/%3E%3Ccircle cx='8' cy='8' r='1.7'/%3E%3Ccircle cx='10' cy='8' r='1'/%3E%3Ccircle cx='13' cy='8' r='1'/%3E%3C/svg%3E");
 }
-.idea-list--avoid li:nth-child(1) button::before { /* enamorarte de tus propias ideas: corazón de puntos */
+.idea-rules > .idea-list--avoid:nth-child(3) li:nth-child(1) button::before { /* enamorarte de tus propias ideas: corazón de puntos */
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='5' cy='4' r='1'/%3E%3Ccircle cx='11' cy='4' r='1'/%3E%3Ccircle cx='3' cy='7' r='1'/%3E%3Ccircle cx='13' cy='7' r='1'/%3E%3Ccircle cx='5.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='10.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='8' cy='13' r='1.1'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='5' cy='4' r='1'/%3E%3Ccircle cx='11' cy='4' r='1'/%3E%3Ccircle cx='3' cy='7' r='1'/%3E%3Ccircle cx='13' cy='7' r='1'/%3E%3Ccircle cx='5.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='10.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='8' cy='13' r='1.1'/%3E%3C/svg%3E");
 }
-.idea-list--avoid li:nth-child(2) button::before { /* quedarte en la primera idea: un punto grande que se apaga rápido */
+.idea-rules > .idea-list--avoid:nth-child(3) li:nth-child(2) button::before { /* quedarte en la primera idea: un punto grande que se apaga rápido */
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='8' r='1.8'/%3E%3Ccircle cx='8.5' cy='8' r='1.1'/%3E%3Ccircle cx='11.5' cy='8' r='0.7'/%3E%3Ccircle cx='13.5' cy='8' r='0.4'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='8' r='1.8'/%3E%3Ccircle cx='8.5' cy='8' r='1.1'/%3E%3Ccircle cx='11.5' cy='8' r='0.7'/%3E%3Ccircle cx='13.5' cy='8' r='0.4'/%3E%3C/svg%3E");
 }
-.idea-list--avoid li:nth-child(3) button::before { /* criticar las aportaciones del resto: una fila de puntos cortada al medio */
+.idea-rules > .idea-list--avoid:nth-child(3) li:nth-child(3) button::before { /* criticar las aportaciones del resto: una fila de puntos cortada al medio */
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='2.5' cy='8' r='1'/%3E%3Ccircle cx='5.5' cy='8' r='1'/%3E%3Ccircle cx='10.5' cy='8' r='1'/%3E%3Ccircle cx='13.5' cy='8' r='1'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='2.5' cy='8' r='1'/%3E%3Ccircle cx='5.5' cy='8' r='1'/%3E%3Ccircle cx='10.5' cy='8' r='1'/%3E%3Ccircle cx='13.5' cy='8' r='1'/%3E%3C/svg%3E");
 }
