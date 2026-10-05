@@ -45,17 +45,13 @@
         <p class="hero__eyebrow">Laboratorio de creatividad</p>
         <h1 id="inicio-title" class="hero__headline" data-split="hero" data-scene-title tabindex="-1">PIENSA DISTINTO. <span class="hero__headline-accent">CREA SIN BLOQUEOS.</span></h1>
         <p class="hero__subline">Qué es idear bien y un recorrido por las 4 fases del pensamiento creativo de Graham Wallas. En cada una, tira el dado, prueba una técnica y sigue avanzando.</p>
-        <div class="hero__actions">
-          <button class="hero__cta" type="button" data-journey-next data-magnetic>Empezar el viaje <span aria-hidden="true">→</span></button>
-          <button class="pill-btn hero__reto-btn" type="button" data-journey-go="reto" data-magnetic data-cursor="¡Tira!">Dame un reto</button>
-        </div>
-
-        <!-- complemento opcional: plan de ideación breve + prompt para LLM, armados con lógica local a partir de las técnicas del sitio (hero-plan.js) -->
+        <!-- plan de ideación breve + prompt para LLM, armados con lógica local a partir de las técnicas del sitio (hero-plan.js). "Dame un reto" vive acá, junto a "Generar mi plan". -->
         <div class="hero-plan">
-          <label class="hero-plan__label" for="hero-plan-input">¿Ya tenés un reto en mente?</label>
-          <textarea id="hero-plan-input" class="hero-plan__input" placeholder="Contanos tu reto o tu idea en una frase…" rows="2"></textarea>
+          <label class="hero-plan__label" for="hero-plan-input">Contame tu idea</label>
+          <textarea id="hero-plan-input" class="hero-plan__input" placeholder="Tu reto o tu idea, en una frase…" rows="2"></textarea>
           <div class="hero-plan__row">
             <button type="button" class="pill-btn hero-plan__generate" disabled>Generar mi plan</button>
+            <button class="pill-btn hero__reto-btn" type="button" data-journey-go="reto" data-magnetic data-cursor="¡Tira!">Dame un reto</button>
           </div>
           <div class="hero-plan__output" hidden>
             <p class="hero-plan__intro">Un punto de partida rápido, una técnica por fase:</p>

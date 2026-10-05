@@ -72,26 +72,7 @@
 
 .hero__subline { font-size: 1.1rem; max-width: 52ch; margin-bottom: var(--space-lg); color: var(--color-text-muted); }
 
-.hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
-.hero__cta {
-  display: inline-block;
-  background: var(--color-accent);
-  color: #fff;
-  font-weight: var(--fw-bold);
-  font-size: 1.05rem;
-  padding: 16px 30px;
-  border: none;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-}
-.hero__cta:hover { box-shadow: var(--shadow-card-hover); }
-
-/* mismo alto y esquina que .hero__cta: el borde de 1px del pill-btn
-   descuenta 1px de padding a cada lado para que la caja coincida.
-   Doble clase para pesar más que .pill-btn, que se carga después. */
-.pill-btn.hero__reto-btn { padding: 15px 29px; border-radius: var(--radius-md); font-size: 1.05rem; }
-
-/* ---------- complemento: plan de ideación + prompt, a partir del reto escrito ---------- */
+/* ---------- plan de ideación + prompt, a partir de la idea escrita ---------- */
 .hero-plan {
   margin-top: var(--space-lg);
   padding: 18px 20px 20px;
@@ -115,7 +96,7 @@
   resize: vertical;
 }
 .hero-plan__input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.hero-plan__row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.hero-plan__row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 10px; }
 .hero-plan__generate, .hero-plan__copy { padding: 9px 18px; font-size: 0.9rem; }
 .hero-plan__generate[disabled] { opacity: 0.45; cursor: default; }
 .hero-plan__generate[disabled]:hover { background: var(--color-surface); color: var(--color-ink-black); }
