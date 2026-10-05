@@ -103,13 +103,20 @@ html.journey-live, html.journey-live body { height: 100%; overflow: hidden; over
 .sound-toggle svg { width: 18px; height: 18px; }
 .sound-toggle[aria-pressed="true"] { background: var(--color-accent); color: #fff; }
 
-/* ---------- camino de fases (navegación inferior) ---------- */
-.journey-nav {
+/* ---------- dock inferior: camino de fases + "Dame un reto", como elementos
+   separados pero agrupados, centrados juntos abajo ---------- */
+.journey-dock {
   position: fixed;
   left: 50%;
   bottom: 18px;
   transform: translateX(-50%);
   z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 24px);
+}
+.journey-nav {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -121,9 +128,20 @@ html.journey-live, html.journey-live body { height: 100%; overflow: hidden; over
   border: 1px solid rgba(11, 11, 13, 0.08);
   box-shadow: 0 10px 30px rgba(11, 11, 13, 0.12);
   color: var(--color-ink-black);
-  max-width: calc(100vw - 24px);
+  min-width: 0;
 }
 .journey-nav[hidden] { display: none; }
+
+/* "Dame un reto": mismo alto que el pill de navegación (6px padding + 36px flecha + 1px de borde arriba/abajo = 50px) */
+.journey-dock__reto {
+  height: 50px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex: none;
+}
 .journey-nav__path {
   list-style: none;
   margin: 0;
@@ -209,8 +227,10 @@ html.journey-live, html.journey-live body { height: 100%; overflow: hidden; over
 
 @media (max-width: 640px) {
   .scene { padding: 84px var(--space-sm) 108px; }
-  .journey-nav { bottom: 12px; padding: 4px; }
+  .journey-dock { bottom: 12px; gap: 6px; }
+  .journey-nav { padding: 4px; }
   .journey-nav__arrow { width: 32px; height: 32px; }
+  .journey-dock__reto { height: 42px; padding: 0 14px; font-size: 0.85rem; }
   .journey-dot { min-width: 20px; height: 32px; }
   .journey-dot.is-current { padding: 0 10px; }
   .sound-toggle { top: 14px; right: 12px; width: 38px; height: 38px; }

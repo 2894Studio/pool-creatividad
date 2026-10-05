@@ -31,7 +31,10 @@
   <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Activar sonido" hidden>
     <span class="sound-toggle__icon" aria-hidden="true"></span>
   </button>
-  <nav class="journey-nav" aria-label="Recorrido por las fases" hidden></nav>
+  <div class="journey-dock">
+    <nav class="journey-nav" aria-label="Recorrido por las fases" hidden></nav>
+    <button class="pill-btn journey-dock__reto" type="button" data-journey-go="reto" data-magnetic data-cursor="¡Tira!">Dame un reto</button>
+  </div>
   <p id="journey-announce" class="visually-hidden" aria-live="polite"></p>
 
   <main id="journey" class="journey">
@@ -50,23 +53,20 @@
         <div class="hero-plan">
           <div class="hero-plan__field">
             <textarea id="hero-plan-input" class="hero-plan__input" placeholder="Tu reto o tu idea, en una frase…" rows="2" aria-label="Cuéntame tu idea"></textarea>
-            <button type="button" class="hero-plan__mic" aria-label="Dictar por voz" data-cursor="Hablar" hidden>
-              <svg class="hero-plan__mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="2" width="6" height="12" rx="3"/>
-                <path d="M5 11a7 7 0 0 0 14 0"/>
-                <path d="M12 18v4M9 22h6"/>
-              </svg>
-              <span class="hero-plan__mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-            </button>
             <button type="button" class="hero-plan__send" aria-label="Generar mi plan" data-cursor="Generar" disabled>
               <svg class="hero-plan__send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 19V5M5 12l7-7 7 7"/>
               </svg>
             </button>
           </div>
-          <div class="hero-plan__row">
-            <button class="pill-btn hero__reto-btn" type="button" data-journey-go="reto" data-magnetic data-cursor="¡Tira!">Dame un reto</button>
-          </div>
+          <button type="button" class="hero-plan__mic" aria-label="Dictar por voz" data-cursor="Hablar" hidden>
+            <svg class="hero-plan__mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="2" width="6" height="12" rx="3"/>
+              <path d="M5 11a7 7 0 0 0 14 0"/>
+              <path d="M12 18v4M9 22h6"/>
+            </svg>
+            <span class="hero-plan__mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </button>
         </div>
       </div>
       <!-- loading de pantalla completa mientras se piden las ideas rápidas a la IA (hero-plan.js); vive dentro de #inicio para que los blobs de .hero__motif sigan flotando detrás, visibles de punta a punta (sin ningún blob central tapando, fondo transparente). Icono + texto cambian juntos con cada mensaje (hero-plan.js arma el SVG del ícono). -->
