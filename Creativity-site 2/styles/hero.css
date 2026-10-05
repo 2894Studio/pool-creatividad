@@ -337,10 +337,13 @@ body.is-generating-plan .sound-toggle {
 }
 /* el logo se queda visible (arriba a la izquierda, .companies-badge ya tiene
    transform-origin: top left) y crece un 50% en el mismo tiempo que se retira
-   el hero, para que encaje con esa transición */
+   el hero, para que encaje con esa transición; se separa un poco más del
+   borde para que no quede pegado al crecer */
 body.is-generating-plan .companies-badge {
+  top: var(--space-lg);
+  left: var(--space-lg);
   transform: scale(1.5);
-  transition: transform 0.6s ease;
+  transition: transform 0.6s ease, top 0.6s ease, left 0.6s ease;
 }
 
 @media (max-width: 640px) {
