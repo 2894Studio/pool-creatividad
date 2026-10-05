@@ -25,7 +25,7 @@ window.PHASES = [
         exercise: 'Elige un problema que quieras resolver y pregúntate "¿por qué?" cinco veces, anotando cada respuesta.',
         llmPrompt: 'Actúa como facilitador de la técnica de los 5 Porqués. Mi problema es: {{idea}}. Pregúntame "¿por qué?" y, a partir de mi primera respuesta, sigue encadenando hasta 5 niveles de "por qué", proponiendo en cada paso una respuesta plausible, hasta llegar a una posible causa raíz.',
         duration: '10 min',
-        link: 'https://en.wikipedia.org/wiki/Five_whys'
+        link: 'https://asq.org/quality-resources/five-whys'
       },
       {
         name: '"¿Cómo podríamos...?"',
@@ -99,7 +99,8 @@ window.PHASES = [
         exercise: 'Pega 4 carteles con el reto en distintos puntos de la sala. Recorredlos en silencio y dejad al menos una nota en cada uno, sumando a lo que ya hay.',
         llmPrompt: 'Actúa como facilitador de Brainwalking. El reto es: {{idea}}. Genera 4 focos o ángulos distintos de este reto sobre los que un grupo podría ir dejando notas, y para cada uno dame una idea de ejemplo para arrancar.',
         insight: 'El movimiento aumenta el flujo sanguíneo y la oxigenación del cerebro: rompe el letargo de las reuniones largas alrededor de una mesa y activa nuevas vías para resolver el problema.',
-        duration: '20 min'
+        duration: '20 min',
+        link: 'https://ixdf.org/literature/topics/brainwalking'
       },
       {
         name: 'Regla de la distancia',
@@ -109,7 +110,7 @@ window.PHASES = [
         description: 'Aléjate del problema al menos un día antes de evaluarlo o decidir; la distancia mejora el juicio.',
         exercise: 'Guarda tu boceto o idea y no lo mires hasta mañana. Anota qué cambia tu percepción al volver a verlo.',
         duration: '1 día',
-        link: 'https://en.wikipedia.org/wiki/Incubation_(psychology)'
+        link: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3990058/'
       },
       {
         name: 'Morning pages',
@@ -139,7 +140,7 @@ window.PHASES = [
         description: 'El sueño consolida conexiones y suele producir asociaciones nuevas al despertar.',
         exercise: 'Anota tu problema antes de dormir y, al despertar, escribe lo primero que se te ocurra al respecto.',
         duration: '1 noche',
-        link: 'https://en.wikipedia.org/wiki/Sleep_and_creativity'
+        link: 'https://www.sciencenews.org/article/sleep-creativity-neuroscience-brain'
       },
     ],
   },
@@ -171,7 +172,7 @@ window.PHASES = [
         llmPrompt: 'Actúa como facilitador de la Técnica de Grupo Nominal. El reto es: {{idea}}. Genera 8 ideas distintas como si fueran propuestas anónimas de distintas personas, agrúpalas por similitud y dime cuáles 3 recomendarías votar para desarrollar, con el motivo.',
         insight: 'Separar la generación silenciosa de la discusión elimina el sesgo de autoridad y la presión social: las ideas se defienden por su propio peso, no por el carisma de quien las propone. Además, los perfiles introvertidos participan igual.',
         duration: '30 min',
-        link: 'https://en.wikipedia.org/wiki/Nominal_group_technique'
+        link: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4909789/'
       },
       {
         name: 'Brainwriting 6-3-5',
@@ -183,7 +184,7 @@ window.PHASES = [
         exercise: 'Escribe 3 ideas en 5 minutos, luego toma las ideas de otra persona y suma una variación a cada una.',
         llmPrompt: 'Actúa como facilitador de Brainwriting 6-3-5. Mi reto es: {{idea}}. Genera 3 ideas iniciales, y luego, como si pasaras la hoja a otra persona, genera una variación o evolución de cada una de esas 3 ideas.',
         duration: '30 min',
-        link: 'https://en.wikipedia.org/wiki/6-3-5_Brainwriting'
+        link: 'https://www.si-labs.com/en/articles/brainwriting/'
       },
       {
         name: 'Seis Sombreros para Pensar',
@@ -219,7 +220,7 @@ window.PHASES = [
         llmPrompt: 'Actúa como facilitador de pensamiento lateral (Edward de Bono). Mi reto es: {{idea}}. Elige 3 objetos o palabras totalmente aleatorios y, para cada uno, fuerza una conexión que dé una idea nueva y poco obvia para mi reto.',
         insight: 'Es pensamiento lateral en estado puro: el cerebro está programado para buscar patrones conocidos, y un estímulo ajeno al sector rompe esos patrones y fuerza conexiones nuevas.',
         duration: '15 min',
-        link: 'https://en.wikipedia.org/wiki/Lateral_thinking'
+        link: 'https://www.debonogroup.com/services/core-programs/lateral-thinking/'
       },
       {
         name: 'BrainSwarming',
@@ -230,7 +231,8 @@ window.PHASES = [
         exercise: 'Escribe el objetivo arriba de una pizarra y 6 recursos que ya tenéis abajo (personas, herramientas, datos, APIs). En silencio, conectad recursos y sub-objetivos hasta que aparezca un camino completo.',
         llmPrompt: 'Actúa como facilitador de BrainSwarming. El objetivo es: {{idea}}. Dame 6 recursos plausibles (personas, herramientas, datos, aliados) que podrían ayudar a lograrlo, y luego traza 2-3 caminos distintos que conecten esos recursos con el objetivo.',
         insight: 'McCaffrey se inspiró en cómo resuelven problemas las hormigas. Sin palabra hablada no hay persuasión verbal: quienes piensan desde los objetivos (top-down) y quienes piensan desde los recursos (bottom-up) se encuentran en el mismo mapa.',
-        duration: '20 min'
+        duration: '20 min',
+        link: 'https://www.modernanalyst.com/Careers/InterviewQuestions/tabid/128/ID/3483/What-is-Brainswarming-and-how-does-it-compare-to-Brainstorming.aspx'
       },
       {
         name: 'Crazy 8s',
