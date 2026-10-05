@@ -289,10 +289,10 @@
 }
 .tech-prompt__mic svg { width: 17px; height: 17px; }
 .tech-prompt__mic:hover { background: rgba(11, 11, 13, 0.06); color: var(--color-accent); }
-.tech-prompt__mic.is-listening { background: #D82A2A; color: #fff; animation: tech-prompt-pulse 1.4s ease-out infinite; }
+.tech-prompt__mic.is-listening { background: var(--color-accent); color: #fff; animation: tech-prompt-pulse 1.4s ease-out infinite; }
 @keyframes tech-prompt-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(216, 42, 42, 0.45); }
-  100% { box-shadow: 0 0 0 10px rgba(216, 42, 42, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(10, 70, 255, 0.45); }
+  100% { box-shadow: 0 0 0 10px rgba(10, 70, 255, 0); }
 }
 .tech-prompt__row { display: flex; align-items: center; gap: 12px; }
 .tech-prompt__generate, .tech-prompt__copy { padding: 9px 18px; font-size: 0.9rem; }

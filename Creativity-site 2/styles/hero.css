@@ -117,7 +117,7 @@
 .hero-plan__mic-wave { display: none; align-items: center; justify-content: center; gap: 2.5px; height: 16px; }
 .hero-plan__mic-wave i { width: 3px; height: 100%; border-radius: 2px; background: currentColor; transform: scaleY(0.25); transition: transform 70ms linear; }
 .hero-plan__mic:hover { background: rgba(11, 11, 13, 0.06); color: var(--color-accent); }
-.hero-plan__mic.is-listening { background: #D82A2A; color: #fff; }
+.hero-plan__mic.is-listening { background: var(--color-accent); color: #fff; }
 .hero-plan__mic.is-listening .hero-plan__mic-icon { display: none; }
 .hero-plan__mic.is-listening .hero-plan__mic-wave { display: flex; }
 
