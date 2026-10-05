@@ -166,9 +166,14 @@
   JOURNEY.isLive = () => scenes.length > 0;
 
   /* ---------------- entradas: rueda, gestos, teclado, botones ---------------- */
-  const canScroll = (el, d) => (d > 0
-    ? el.scrollTop + el.clientHeight < el.scrollHeight - 2
-    : el.scrollTop > 2);
+  // escenas con overflow:hidden (p. ej. #inicio) nunca scrollean de verdad, aunque su
+  // contenido mida unos px más que el viewport — si no, ese sobrante bloquea el cambio de escena
+  const canScroll = (el, d) => {
+    if (getComputedStyle(el).overflowY === 'hidden') return false;
+    return d > 0
+      ? el.scrollTop + el.clientHeight < el.scrollHeight - 2
+      : el.scrollTop > 2;
+  };
 
   const inIgnored = (t) => !!(t && t.closest && t.closest('[data-journey-ignore]'));
 
