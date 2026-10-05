@@ -1,9 +1,11 @@
 /* hero-plan.js — complemento del inicio: a partir del reto o idea que escribe
-   el usuario arma dos cosas, en dos pestañas en la escena #plan:
-   - "Plan": con lógica 100% local (sin red), un plan de ideación muy breve
-     (una técnica por fase, de data/techniques.js) y un prompt para LLM.
-   - "Ideas rápidas": pide de verdad a Claude (vía netlify/functions/ideas.js)
-     una lista de variaciones concretas de la idea.
+   el usuario pide de verdad a Claude (netlify/functions/generate.js), en una
+   sola llamada, lo que se muestra en dos pestañas en la escena #plan:
+   - "Plan": un plan de ideación de 4 fases (técnica + ejercicio por fase) y
+     un prompt para LLM. Si la IA falla, cae a un plan armado con lógica
+     local (data/techniques.js) para que esta pestaña nunca quede vacía.
+   - "Ideas rápidas": una lista de variaciones concretas de la idea. Sin red
+     de seguridad local: si falla, muestra un estado de error con reintentar.
    No reemplaza a "Empezar el viaje" ni a "Dame un reto": es un complemento
    que vive solo en el inicio. */
 (function () {
@@ -141,25 +143,26 @@
     });
   }
 
-  // plan local (plantilla, sin red): el mismo que se usaba antes de tener la función de Netlify
+  // plan local (plantilla, sin red): red de seguridad si la IA no responde
   function localPlan(idea, picks) {
     const byPhaseId = {};
     picks.forEach((p) => { byPhaseId[p.phase.id] = { technique: p.technique.name, exercise: p.technique.exercise }; });
     return Object.assign(byPhaseId, { llmPrompt: buildPrompt(idea, picks) });
   }
 
-  // ideas rápidas reales, pedidas a Claude vía la Netlify Function (netlify/functions/ideas.js);
-  // la API key vive solo en el servidor, nunca acá
-  async function fetchQuickIdeas(idea) {
-    const res = await fetch('/.netlify/functions/ideas', {
+  // plan + ideas rápidas reales, pedidos a Claude en una sola llamada vía la
+  // Netlify Function (netlify/functions/generate.js); la API key vive solo
+  // en el servidor, nunca acá
+  async function fetchGenerated(idea) {
+    const res = await fetch('/.netlify/functions/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea }),
     });
-    if (!res.ok) throw new Error('ideas function respondió ' + res.status);
+    if (!res.ok) throw new Error('generate function respondió ' + res.status);
     const data = await res.json();
-    if (!data || !Array.isArray(data.ideas) || !data.ideas.length) throw new Error('respuesta con forma inesperada');
-    return data.ideas;
+    if (!data || !data.plan || !Array.isArray(data.ideas) || !data.ideas.length) throw new Error('respuesta con forma inesperada');
+    return data;
   }
 
   function init() {
@@ -299,8 +302,8 @@
       if (retryBtn) {
         retryBtn.disabled = true;
         retryBtn.textContent = 'Generando…';
-        fetchQuickIdeas(currentIdea).then(
-          (ideas) => renderIdeas(currentIdea, ideas),
+        fetchGenerated(currentIdea).then(
+          (data) => renderIdeas(currentIdea, data.ideas), // reintento acotado a esta pestaña: no toca el plan ya mostrado
           () => renderIdeasError()
         );
         return;
@@ -316,7 +319,7 @@
       }, () => {});
     });
 
-    // ---------- generar: plan local al instante + ideas rápidas por IA ----------
+    // ---------- generar: plan + ideas rápidas por IA, con fallback local sólo para el plan ----------
     generateBtn.addEventListener('click', async () => {
       const idea = input.value.trim();
       if (!idea) return;
@@ -324,14 +327,18 @@
       input.disabled = true;
       showLoading();
 
-      renderPlan(idea, localPlan(idea, picks));
+      let plan = null;
       let ideas = null;
       try {
-        ideas = await fetchQuickIdeas(idea);
+        const data = await fetchGenerated(idea);
+        plan = data.plan;
+        ideas = data.ideas;
       } catch (e) {
-        ideas = null; // sin red, límite alcanzado, o la función no está desplegada: la pestaña Ideas rápidas muestra el estado de error
+        plan = null; // sin red, límite alcanzado, o la función no está desplegada
+        ideas = null;
       }
-      renderIdeas(idea, ideas);
+      renderPlan(idea, plan || localPlan(idea, picks)); // el plan siempre se ve: si la IA falla, cae al local
+      renderIdeas(idea, ideas); // sin red de seguridad: si falla, la pestaña Ideas rápidas muestra el estado de error
 
       hideLoading();
       generateBtn.disabled = false;
