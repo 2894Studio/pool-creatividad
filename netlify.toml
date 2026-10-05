@@ -1,0 +1,4 @@
+[build]
+  base = "Creativity-site 2"
+  publish = "."
+  functions = "netlify/functions"

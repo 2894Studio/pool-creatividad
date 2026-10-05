@@ -103,6 +103,27 @@
     });
   }
 
+  // plan local (plantilla, sin red): el mismo que se usaba antes de tener la función de Netlify
+  function localPlan(idea, picks) {
+    const byPhaseId = {};
+    picks.forEach((p) => { byPhaseId[p.phase.id] = { technique: p.technique.name, exercise: p.technique.exercise }; });
+    return Object.assign(byPhaseId, { llmPrompt: buildPrompt(idea, picks) });
+  }
+
+  // plan real, pedido a Claude vía la Netlify Function (netlify/functions/plan.js);
+  // la API key vive solo en el servidor, nunca acá
+  async function fetchAiPlan(idea) {
+    const res = await fetch('/.netlify/functions/plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idea }),
+    });
+    if (!res.ok) throw new Error('plan function respondió ' + res.status);
+    const data = await res.json();
+    if (!data || typeof data.llmPrompt !== 'string') throw new Error('respuesta con forma inesperada');
+    return data;
+  }
+
   function init() {
     const hero = document.querySelector('.hero-plan');
     const scene = document.getElementById('plan');
@@ -125,17 +146,34 @@
 
     initVoiceInput(hero, input);
 
-    generateBtn.addEventListener('click', () => {
+    function renderPlan(idea, plan) {
+      ideaLine.textContent = 'Tu idea: «' + idea + '»';
+      steps.innerHTML = window.PHASES.map((phase) => {
+        const s = plan[phase.id];
+        if (!s) return '';
+        return '<li><span class="hero-plan__phase">' + phase.index + ' ' + esc(phase.name) + '</span>' +
+          '<strong>' + esc(s.technique) + '</strong>' +
+          '<span class="hero-plan__exercise">' + esc(s.exercise) + '</span></li>';
+      }).join('');
+      result.value = plan.llmPrompt;
+      hint.hidden = true;
+    }
+
+    const generateLabel = generateBtn.textContent;
+    generateBtn.addEventListener('click', async () => {
       const idea = input.value.trim();
       if (!idea) return;
-      ideaLine.textContent = 'Tu idea: «' + idea + '»';
-      steps.innerHTML = picks.map((p) =>
-        '<li><span class="hero-plan__phase">' + p.phase.index + ' ' + esc(p.phase.name) + '</span>' +
-        '<strong>' + esc(p.technique.name) + '</strong>' +
-        '<span class="hero-plan__exercise">' + esc(p.technique.exercise) + '</span></li>'
-      ).join('');
-      result.value = buildPrompt(idea, picks);
-      hint.hidden = true;
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Generando…';
+      let plan;
+      try {
+        plan = await fetchAiPlan(idea);
+      } catch (e) {
+        plan = localPlan(idea, picks); // sin red, límite alcanzado, o la función no está desplegada: seguimos sin cortar la experiencia
+      }
+      renderPlan(idea, plan);
+      generateBtn.disabled = false;
+      generateBtn.textContent = generateLabel;
       if (window.JOURNEY && window.JOURNEY.goTo) window.JOURNEY.goTo('plan');
       else scene.scrollIntoView({ behavior: 'smooth' });
     });

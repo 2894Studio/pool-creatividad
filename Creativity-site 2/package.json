@@ -1,0 +1,9 @@
+{
+  "name": "laboratorio-creatividad-functions",
+  "private": true,
+  "description": "Dependencias de las Netlify Functions del sitio (netlify/functions/). El sitio en sí sigue siendo estático, sin build.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "zod": "^3.23.8"
+  }
+}
