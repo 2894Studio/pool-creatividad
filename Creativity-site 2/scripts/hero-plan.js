@@ -31,6 +31,78 @@
       '\n\nAl cerrar cada fase, resúmeme en una frase la idea o decisión a la que llegamos.';
   }
 
+  /* dictado por voz con microinteracción: mientras escucha, las barras del botón
+     laten en vivo con el volumen real de la voz (AnalyserNode), como el modo
+     de voz de Claude — no es solo un pulso fijo, reacciona a lo que decís. */
+  function initVoiceInput(hero, input) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const micBtn = hero.querySelector('.hero-plan__mic');
+    if (!SpeechRecognition || !micBtn) return;
+    micBtn.hidden = false;
+
+    const bars = Array.from(micBtn.querySelectorAll('.hero-plan__mic-wave i'));
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    let audioCtx = null;
+    let analyser = null;
+    let micStream = null;
+    let rafId = null;
+
+    function stopWave() {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+      bars.forEach((b) => { b.style.transform = 'scaleY(0.25)'; });
+      if (micStream) { micStream.getTracks().forEach((t) => t.stop()); micStream = null; }
+      if (audioCtx) { audioCtx.close().catch(() => {}); audioCtx = null; }
+      analyser = null;
+    }
+
+    function tickWave() {
+      if (!analyser) return;
+      const data = new Uint8Array(analyser.fftSize);
+      analyser.getByteTimeDomainData(data);
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) { const v = (data[i] - 128) / 128; sum += v * v; }
+      const level = Math.min(1, Math.sqrt(sum / data.length) * 4); // RMS, amplificado para que se note
+      bars.forEach((b, i) => {
+        const jitter = 0.75 + 0.25 * Math.sin(Date.now() / 90 + i * 1.7); // cada barra respira distinto
+        const scale = 0.25 + level * jitter * 1.6;
+        b.style.transform = 'scaleY(' + Math.max(0.25, Math.min(1, scale)) + ')';
+      });
+      rafId = requestAnimationFrame(tickWave);
+    }
+
+    async function startWave() {
+      try {
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        audioCtx.createMediaStreamSource(micStream).connect(analyser);
+        tickWave();
+      } catch (e) {
+        // sin permiso de micrófono para el analizador: el dictado sigue andando, solo sin la animación
+      }
+    }
+
+    recognition.addEventListener('result', (e) => {
+      const said = Array.from(e.results).map((r) => r[0].transcript).join(' ').trim();
+      if (said) input.value = (input.value.trim() ? input.value.trim() + ' ' : '') + said;
+      input.dispatchEvent(new Event('input'));
+    });
+    recognition.addEventListener('end', () => { micBtn.classList.remove('is-listening'); stopWave(); });
+    recognition.addEventListener('error', () => { micBtn.classList.remove('is-listening'); stopWave(); });
+    micBtn.addEventListener('click', () => {
+      if (micBtn.classList.contains('is-listening')) { recognition.stop(); return; }
+      micBtn.classList.add('is-listening');
+      recognition.start();
+      startWave();
+    });
+  }
+
   function init() {
     const hero = document.querySelector('.hero-plan');
     const scene = document.getElementById('plan');
@@ -50,6 +122,8 @@
     }).filter(Boolean);
 
     input.addEventListener('input', () => { generateBtn.disabled = !input.value.trim(); });
+
+    initVoiceInput(hero, input);
 
     generateBtn.addEventListener('click', () => {
       const idea = input.value.trim();
