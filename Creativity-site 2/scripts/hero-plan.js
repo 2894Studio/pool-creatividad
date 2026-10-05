@@ -54,10 +54,13 @@
   const COPY_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 13V5.5C4.5 4.67157 5.17157 4 6 4H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
   const CHECK_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.5 10.5L8 14L15.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  const ICON_READ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
-  const ICON_CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.8 7.6 10.2 16.4M17.2 7.6 13.8 16.4M7.2 6h9.6"/></svg>';
-  const ICON_COMPASS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5 10 10l-.5 4.5L14 14l.5-4.5Z"/></svg>';
-  const ICON_SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>';
+  // cada trazo lleva pathLength="100" + .hli-stroke: así el CSS puede animar
+  // stroke-dasharray/dashoffset con los mismos números sin importar la forma,
+  // simulando el trazo "dibujándose" en bucle (como el pensamiento de Claude)
+  const ICON_READ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="hli-stroke" pathLength="100" d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle class="hli-stroke" pathLength="100" cx="12" cy="12" r="3"/></svg>';
+  const ICON_CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="hli-stroke" pathLength="100" cx="5" cy="6" r="2.2"/><circle class="hli-stroke" pathLength="100" cx="19" cy="6" r="2.2"/><circle class="hli-stroke" pathLength="100" cx="12" cy="18" r="2.2"/><path class="hli-stroke" pathLength="100" d="M6.8 7.6 10.2 16.4M17.2 7.6 13.8 16.4M7.2 6h9.6"/></svg>';
+  const ICON_COMPASS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="hli-stroke" pathLength="100" cx="12" cy="12" r="9"/><path class="hli-stroke" pathLength="100" d="M14.5 9.5 10 10l-.5 4.5L14 14l.5-4.5Z"/></svg>';
+  const ICON_SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="hli-stroke" pathLength="100" d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle class="hli-stroke" pathLength="100" cx="12" cy="12" r="3"/></svg>';
 
   const LOADING_MESSAGES = [
     { text: 'Leyendo tu idea…', icon: ICON_READ },
