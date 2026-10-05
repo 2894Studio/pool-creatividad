@@ -140,6 +140,23 @@
 
 .hero-plan__row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 10px; }
 .hero-plan__copy { padding: 9px 18px; font-size: 0.9rem; }
+
+/* "Dame un reto": chip fantasma, sin relleno ni borde, como las opciones del
+   compositor de Claude (p. ej. "Proyecto o carpeta") */
+.hero__reto-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: var(--fw-medium);
+  color: var(--color-text-muted);
+}
+.hero__reto-btn:hover { color: var(--color-ink-black); }
+.hero__reto-icon { width: 16px; height: 16px; flex: none; }
 .hero-plan__hint { margin: 0; font-size: 0.85rem; font-weight: var(--fw-medium); color: var(--color-accent); }
 
 .hero-plan__steps { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
