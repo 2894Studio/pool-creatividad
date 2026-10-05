@@ -31,6 +31,19 @@
       '\n\nAl cerrar cada fase, resúmeme en una frase la idea o decisión a la que llegamos.';
   }
 
+  // prompt para una sola fase (botón de copiar por tarjeta): mismo tono que buildPrompt, pero acotado a esa fase
+  function buildPhasePrompt(idea, phase, step) {
+    return 'Actúa como facilitador de la fase de ' + phase.name + ' dentro de un proceso de ideación en 4 fases ' +
+      '(Preparación, Incubación, Iluminación, Implementación), basado en el modelo de Graham Wallas. ' +
+      'Mi reto o idea es: ' + idea + '.\n\n' +
+      'Para esta fase, parte de esta técnica: "' + step.technique + '": ' + step.exercise + '\n\n' +
+      'Guíame paso a paso solo en esta fase, haciéndome preguntas antes de darme conclusiones, y al cerrarla ' +
+      'resúmeme en una frase la idea o decisión a la que llegamos.';
+  }
+
+  const COPY_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 13V5.5C4.5 4.67157 5.17157 4 6 4H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  const CHECK_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.5 10.5L8 14L15.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
   /* dictado por voz con microinteracción: mientras escucha, las barras del botón
      laten en vivo con el volumen real de la voz (AnalyserNode), como el modo
      de voz de Claude — no es solo un pulso fijo, reacciona a lo que decís. */
@@ -146,18 +159,39 @@
 
     initVoiceInput(hero, input);
 
+    let currentIdea = '';
+    let currentPlan = null;
+
     function renderPlan(idea, plan) {
+      currentIdea = idea;
+      currentPlan = plan;
       ideaLine.textContent = 'Tu idea: «' + idea + '»';
       steps.innerHTML = window.PHASES.map((phase) => {
         const s = plan[phase.id];
         if (!s) return '';
-        return '<li><span class="hero-plan__phase">' + phase.index + ' ' + esc(phase.name) + '</span>' +
+        return '<li><div class="hero-plan__step-head"><span class="hero-plan__phase">' + phase.index + ' ' + esc(phase.name) + '</span>' +
+          '<button type="button" class="hero-plan__step-copy" data-phase="' + esc(phase.id) + '" aria-label="Copiar prompt de esta fase" title="Copiar prompt de esta fase">' +
+          '<span class="hero-plan__step-copy-icon">' + COPY_ICON + '</span><span class="hero-plan__step-check">' + CHECK_ICON + '</span></button></div>' +
           '<strong>' + esc(s.technique) + '</strong>' +
           '<span class="hero-plan__exercise">' + esc(s.exercise) + '</span></li>';
       }).join('');
       result.value = plan.llmPrompt;
       hint.hidden = true;
     }
+
+    let stepCopyTimer = null;
+    steps.addEventListener('click', (e) => {
+      const btn = e.target.closest('.hero-plan__step-copy');
+      if (!btn || !currentPlan || !navigator.clipboard || !navigator.clipboard.writeText) return;
+      const phase = window.PHASES.find((p) => p.id === btn.dataset.phase);
+      const step = currentPlan[btn.dataset.phase];
+      if (!phase || !step) return;
+      navigator.clipboard.writeText(buildPhasePrompt(currentIdea, phase, step)).then(() => {
+        btn.classList.add('is-copied');
+        clearTimeout(stepCopyTimer);
+        stepCopyTimer = setTimeout(() => { btn.classList.remove('is-copied'); }, 1500);
+      }, () => {});
+    });
 
     const generateLabel = generateBtn.textContent;
     generateBtn.addEventListener('click', async () => {

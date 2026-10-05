@@ -137,9 +137,31 @@
   background: var(--color-surface);
   border: 1px solid rgba(11, 11, 13, 0.08);
 }
+.hero-plan__step-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .hero-plan__phase { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent); font-weight: var(--fw-medium); }
 .hero-plan__steps strong { font-size: 0.95rem; font-weight: var(--fw-medium); }
 .hero-plan__exercise { font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.4; }
+
+.hero-plan__step-copy {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 7px;
+  border: 1px solid rgba(11, 11, 13, 0.14);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.hero-plan__step-copy:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.hero-plan__step-copy svg { width: 13px; height: 13px; }
+.hero-plan__step-copy .hero-plan__step-check { display: none; }
+.hero-plan__step-copy.is-copied { border-color: var(--color-accent); color: var(--color-accent); }
+.hero-plan__step-copy.is-copied .hero-plan__step-copy-icon { display: none; }
+.hero-plan__step-copy.is-copied .hero-plan__step-check { display: inline-flex; }
 
 .hero-plan__prompt-label { display: block; font-size: 0.8rem; color: var(--color-accent); font-weight: var(--fw-medium); margin-bottom: 8px; }
 .hero-plan__result {
