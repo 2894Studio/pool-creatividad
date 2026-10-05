@@ -24,6 +24,22 @@
     return name && phase.techniques.find((t) => t.name === name);
   }
 
+  // matchea el nombre de técnica que aparece en el plan (local, siempre exacto;
+  // o de la IA, texto libre que puede ser "una variación tuya") contra el
+  // catálogo de esa fase, para poder enlazarla a su ficha real
+  const normalizeTech = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  function matchTechnique(phase, techniqueText) {
+    const target = normalizeTech(techniqueText);
+    if (!target) return null;
+    let found = phase.techniques.find((t) => normalizeTech(t.name) === target);
+    if (found) return found;
+    found = phase.techniques.find((t) => {
+      const n = normalizeTech(t.name);
+      return n.length > 3 && (target.includes(n) || n.includes(target));
+    });
+    return found || null;
+  }
+
   function buildPrompt(idea, picks) {
     const steps = picks.map((p, i) =>
       (i + 1) + '. ' + p.phase.name + ' — "' + p.technique.name + '": ' + p.technique.exercise
@@ -248,10 +264,14 @@
       steps.innerHTML = window.PHASES.map((phase) => {
         const s = plan[phase.id];
         if (!s) return '';
+        const match = matchTechnique(phase, s.technique);
+        const techniqueHtml = match
+          ? '<button type="button" class="hero-plan__tech-link" data-open-technique-modal="' + phase.id + ':' + esc(match.art) + '">' + esc(s.technique) + '</button>'
+          : esc(s.technique);
         return '<li><div class="hero-plan__step-head"><span class="hero-plan__phase">' + phase.index + ' ' + esc(phase.name) + '</span>' +
           '<button type="button" class="hero-plan__step-copy" data-phase="' + esc(phase.id) + '" aria-label="Copiar prompt de esta fase" title="Copiar prompt de esta fase">' +
           '<span class="hero-plan__step-copy-icon">' + COPY_ICON + '</span><span class="hero-plan__step-check">' + CHECK_ICON + '</span></button></div>' +
-          '<strong>' + esc(s.technique) + '</strong>' +
+          '<strong>' + techniqueHtml + '</strong>' +
           '<span class="hero-plan__exercise">' + esc(s.exercise) + '</span></li>';
       }).join('');
       result.value = plan.llmPrompt;

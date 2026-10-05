@@ -319,6 +319,23 @@
     </section>
   </main>
 
+  <!-- modal de lectura para una técnica del plan generado (scripts/technique-modal.js);
+       no navega de escena, se abre encima de donde esté el usuario -->
+  <div class="tech-modal" hidden>
+    <div class="tech-modal__backdrop" data-tech-modal-close></div>
+    <div class="tech-modal__panel" role="dialog" aria-modal="true" aria-labelledby="tech-modal-name">
+      <button type="button" class="tech-modal__close" data-tech-modal-close aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+      <div class="tech-detail tech-modal__detail"></div>
+      <div class="tech-modal__foot">
+        <button type="button" class="link-btn" data-tech-modal-close><span aria-hidden="true">↺</span> Volver al plan</button>
+      </div>
+    </div>
+  </div>
+
   <!-- librerías de motion (GSAP y todos sus plugins son gratuitos desde 3.13) -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
@@ -338,6 +355,7 @@
   <script src="scripts/picker.js?v=r12"></script>
   <script src="scripts/dot-art.js?v=r30"></script>
   <script src="scripts/phases.js?v=r29"></script>
+  <script src="scripts/technique-modal.js"></script>
   <script src="scripts/ideacion.js?v=r1"></script>
   <script src="scripts/carousel.js?v=r13"></script>
   <script src="scripts/reto.js?v=r12"></script>

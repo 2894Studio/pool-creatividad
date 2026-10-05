@@ -158,6 +158,21 @@
 .hero-plan__steps strong { font-size: 0.95rem; font-weight: var(--fw-medium); }
 .hero-plan__exercise { font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.4; }
 
+/* nombre de técnica clicable cuando matchea el catálogo (abre technique-modal.js) */
+.hero-plan__tech-link {
+  font: inherit;
+  font-weight: var(--fw-medium);
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-ink-black);
+  text-decoration: underline;
+  text-decoration-color: rgba(11, 11, 13, 0.25);
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.hero-plan__tech-link:hover { color: var(--color-accent); text-decoration-color: currentColor; }
+
 .hero-plan__step-copy {
   flex: none;
   display: inline-flex;

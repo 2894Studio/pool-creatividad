@@ -453,3 +453,65 @@
   .phase__foot { flex-direction: column; align-items: stretch; text-align: center; }
   .pill-btn { justify-content: center; }
 }
+
+/* ---------- modal de técnica (desde los links del plan generado) ----------
+   reusa .tech-detail__* / .tech-stat* tal cual (tipografía, color, padding de
+   tarjeta), pero con su propio grid en vez del subgrid que .tech-detail usa
+   normalmente dentro de .phase */
+.tech-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: var(--space-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.tech-modal.is-open { opacity: 1; pointer-events: auto; }
+.tech-modal[hidden] { display: none; }
+.tech-modal__backdrop { position: absolute; inset: 0; background: rgba(11, 11, 13, 0.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.tech-modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  scale: 0.96;
+  transition: scale 0.25s ease;
+}
+.tech-modal.is-open .tech-modal__panel { scale: 1; }
+.tech-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(11, 11, 13, 0.14);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  display: grid;
+  place-items: center;
+}
+.tech-modal__close:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.tech-modal__close svg { width: 15px; height: 15px; }
+.tech-modal__detail.tech-detail {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--space-md);
+  margin-top: 0;
+}
+.tech-modal__detail .tech-detail__art { grid-column: 1; margin-bottom: 0; }
+.tech-modal__detail .tech-detail__body { grid-column: 2; padding: 8px 0 0; }
+.tech-modal__foot { margin-top: var(--space-md); text-align: center; }
+
+@media (max-width: 640px) {
+  .tech-modal__panel { padding: var(--space-md); }
+  .tech-modal__detail.tech-detail { grid-template-columns: 1fr; }
+  .tech-modal__detail .tech-detail__art { grid-column: 1; }
+  .tech-modal__detail .tech-detail__body { grid-column: 1; }
+}
