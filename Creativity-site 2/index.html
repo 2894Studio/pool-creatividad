@@ -65,9 +65,19 @@
           </div>
         </div>
       </div>
-      <!-- loading de pantalla completa mientras se piden las ideas rápidas a la IA (hero-plan.js); vive dentro de #inicio para que los blobs de .hero__motif sigan flotando detrás, visibles alrededor de este overlay (fondo transparente, sin bloque opaco). -->
+      <!-- loading de pantalla completa mientras se piden las ideas rápidas a la IA (hero-plan.js); vive dentro de #inicio para que los blobs de .hero__motif sigan flotando detrás, visibles alrededor de este overlay (fondo transparente, sin bloque opaco). El orb son 2 gotas superpuestas + un filtro "goo" (SVG) que las funde en una sola forma; al cambiar de mensaje se separan y se vuelven a fundir, como si se dividiera de manera orgánica. -->
+      <svg class="hero-loading__goo-defs" aria-hidden="true" focusable="false">
+        <filter id="hero-loading-goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+        </filter>
+      </svg>
       <div class="hero-loading" aria-hidden="true">
-        <div class="hero-loading__orb" aria-hidden="true"></div>
+        <div class="hero-loading__orb" aria-hidden="true">
+          <span class="hero-loading__orb-blob hero-loading__orb-blob--a"></span>
+          <span class="hero-loading__orb-blob hero-loading__orb-blob--b"></span>
+        </div>
         <p class="hero-loading__text" aria-live="polite"></p>
       </div>
     </section>

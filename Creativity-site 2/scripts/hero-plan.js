@@ -197,9 +197,9 @@
     let loadingTimer = null;
     function pulseOrb() {
       if (!loadingOrb) return;
-      loadingOrb.classList.remove('is-pulsing');
-      void loadingOrb.offsetWidth; // reinicia la animación del "pop" aunque la clase ya estuviera puesta
-      loadingOrb.classList.add('is-pulsing');
+      loadingOrb.classList.remove('is-splitting');
+      void loadingOrb.offsetWidth; // reinicia la animación de "división" aunque la clase ya estuviera puesta
+      loadingOrb.classList.add('is-splitting');
     }
     function showLoading() {
       if (!loading) return;
