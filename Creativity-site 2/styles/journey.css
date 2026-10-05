@@ -16,8 +16,11 @@
 }
 /* margin:auto centra verticalmente sin cortar el contenido cuando es más alto que la pantalla */
 .scene__inner { position: relative; z-index: 2; width: 100%; margin: auto; }
-.scene [data-scene-title]:focus { outline: none; }
-.scene [data-scene-title]:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 6px; border-radius: 4px; }
+/* el foco acá es programático (journey.js lo usa sólo para que el lector de
+   pantalla anuncie el título al cambiar de escena); tabindex="-1" hace que
+   nunca se alcance con Tab, así que el anillo de foco nunca debería verse */
+.scene [data-scene-title]:focus,
+.scene [data-scene-title]:focus-visible { outline: none; }
 
 .scene-eyebrow {
   text-transform: uppercase;
