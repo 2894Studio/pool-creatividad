@@ -164,7 +164,7 @@
     const scene = document.getElementById('plan');
     if (!hero || !scene || !window.PHASES) return;
     const input = hero.querySelector('.hero-plan__input');
-    const generateBtn = hero.querySelector('.hero-plan__generate');
+    const generateBtn = hero.querySelector('.hero-plan__send');
     const loading = document.querySelector('.hero-loading');
     const loadingMessage = loading && loading.querySelector('.hero-loading__message');
     const loadingIcon = loading && loading.querySelector('.hero-loading__icon');
