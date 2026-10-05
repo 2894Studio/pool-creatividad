@@ -287,6 +287,47 @@
   transition: background-color 200ms ease, scale 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .idea-list button:hover::before { background-color: var(--color-accent); scale: 1.12; }
+
+/* cada ítem tiene su propia constelación de puntos, con una forma que remite
+   a lo que dice (espiral = iterar, rejilla = plantilla, bullseye = criterios,
+   etc.), no la misma figura repetida */
+.idea-list--do li:nth-child(1) button::before { /* trabaja de forma iterativa: espiral */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='13' cy='8' r='1.3'/%3E%3Ccircle cx='11.5' cy='11.8' r='1.15'/%3E%3Ccircle cx='8' cy='13' r='1'/%3E%3Ccircle cx='4.5' cy='11.3' r='0.9'/%3E%3Ccircle cx='3.3' cy='7.5' r='0.8'/%3E%3Ccircle cx='5.3' cy='4.5' r='0.7'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='13' cy='8' r='1.3'/%3E%3Ccircle cx='11.5' cy='11.8' r='1.15'/%3E%3Ccircle cx='8' cy='13' r='1'/%3E%3Ccircle cx='4.5' cy='11.3' r='0.9'/%3E%3Ccircle cx='3.3' cy='7.5' r='0.8'/%3E%3Ccircle cx='5.3' cy='4.5' r='0.7'/%3E%3C/svg%3E");
+}
+.idea-list--do li:nth-child(2) button::before { /* diseña plantillas visuales: rejilla */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='5' r='1'/%3E%3Ccircle cx='8' cy='5' r='1'/%3E%3Ccircle cx='12' cy='5' r='1'/%3E%3Ccircle cx='4' cy='11' r='1'/%3E%3Ccircle cx='8' cy='11' r='1'/%3E%3Ccircle cx='12' cy='11' r='1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='5' r='1'/%3E%3Ccircle cx='8' cy='5' r='1'/%3E%3Ccircle cx='12' cy='5' r='1'/%3E%3Ccircle cx='4' cy='11' r='1'/%3E%3Ccircle cx='8' cy='11' r='1'/%3E%3Ccircle cx='12' cy='11' r='1'/%3E%3C/svg%3E");
+}
+.idea-list--do li:nth-child(3) button::before { /* calidad por encima de volumen: un punto grande entre varios chicos */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='2.4'/%3E%3Ccircle cx='3' cy='3' r='0.6'/%3E%3Ccircle cx='13' cy='4' r='0.6'/%3E%3Ccircle cx='4' cy='13' r='0.6'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='2.4'/%3E%3Ccircle cx='3' cy='3' r='0.6'/%3E%3Ccircle cx='13' cy='4' r='0.6'/%3E%3Ccircle cx='4' cy='13' r='0.6'/%3E%3C/svg%3E");
+}
+.idea-list--do li:nth-child(4) button::before { /* criterios de evaluación desde el inicio: bullseye */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='1.8'/%3E%3Ccircle cx='8' cy='2.6' r='0.9'/%3E%3Ccircle cx='13.4' cy='8' r='0.9'/%3E%3Ccircle cx='8' cy='13.4' r='0.9'/%3E%3Ccircle cx='2.6' cy='8' r='0.9'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='1.8'/%3E%3Ccircle cx='8' cy='2.6' r='0.9'/%3E%3Ccircle cx='13.4' cy='8' r='0.9'/%3E%3Ccircle cx='8' cy='13.4' r='0.9'/%3E%3Ccircle cx='2.6' cy='8' r='0.9'/%3E%3C/svg%3E");
+}
+.idea-list--do li:nth-child(5) button::before { /* estímulos con fundamento: datos dispersos + un insight destacado */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='3' cy='4' r='0.7'/%3E%3Ccircle cx='6.5' cy='2.8' r='0.7'/%3E%3Ccircle cx='12' cy='3.5' r='0.7'/%3E%3Ccircle cx='13.2' cy='7.5' r='0.7'/%3E%3Ccircle cx='9' cy='9' r='1.7'/%3E%3Ccircle cx='4' cy='10' r='0.7'/%3E%3Ccircle cx='11' cy='12.3' r='0.7'/%3E%3Ccircle cx='6.2' cy='13' r='0.7'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='3' cy='4' r='0.7'/%3E%3Ccircle cx='6.5' cy='2.8' r='0.7'/%3E%3Ccircle cx='12' cy='3.5' r='0.7'/%3E%3Ccircle cx='13.2' cy='7.5' r='0.7'/%3E%3Ccircle cx='9' cy='9' r='1.7'/%3E%3Ccircle cx='4' cy='10' r='0.7'/%3E%3Ccircle cx='11' cy='12.3' r='0.7'/%3E%3Ccircle cx='6.2' cy='13' r='0.7'/%3E%3C/svg%3E");
+}
+.idea-list--do li:nth-child(6) button::before { /* vocabulario común: puntos que convergen en uno compartido */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='3' cy='8' r='1'/%3E%3Ccircle cx='6' cy='8' r='1'/%3E%3Ccircle cx='8' cy='8' r='1.7'/%3E%3Ccircle cx='10' cy='8' r='1'/%3E%3Ccircle cx='13' cy='8' r='1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='3' cy='8' r='1'/%3E%3Ccircle cx='6' cy='8' r='1'/%3E%3Ccircle cx='8' cy='8' r='1.7'/%3E%3Ccircle cx='10' cy='8' r='1'/%3E%3Ccircle cx='13' cy='8' r='1'/%3E%3C/svg%3E");
+}
+.idea-list--avoid li:nth-child(1) button::before { /* enamorarte de tus propias ideas: corazón de puntos */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='5' cy='4' r='1'/%3E%3Ccircle cx='11' cy='4' r='1'/%3E%3Ccircle cx='3' cy='7' r='1'/%3E%3Ccircle cx='13' cy='7' r='1'/%3E%3Ccircle cx='5.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='10.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='8' cy='13' r='1.1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='5' cy='4' r='1'/%3E%3Ccircle cx='11' cy='4' r='1'/%3E%3Ccircle cx='3' cy='7' r='1'/%3E%3Ccircle cx='13' cy='7' r='1'/%3E%3Ccircle cx='5.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='10.5' cy='9.5' r='0.9'/%3E%3Ccircle cx='8' cy='13' r='1.1'/%3E%3C/svg%3E");
+}
+.idea-list--avoid li:nth-child(2) button::before { /* quedarte en la primera idea: un punto grande que se apaga rápido */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='8' r='1.8'/%3E%3Ccircle cx='8.5' cy='8' r='1.1'/%3E%3Ccircle cx='11.5' cy='8' r='0.7'/%3E%3Ccircle cx='13.5' cy='8' r='0.4'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='8' r='1.8'/%3E%3Ccircle cx='8.5' cy='8' r='1.1'/%3E%3Ccircle cx='11.5' cy='8' r='0.7'/%3E%3Ccircle cx='13.5' cy='8' r='0.4'/%3E%3C/svg%3E");
+}
+.idea-list--avoid li:nth-child(3) button::before { /* criticar las aportaciones del resto: una fila de puntos cortada al medio */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='2.5' cy='8' r='1'/%3E%3Ccircle cx='5.5' cy='8' r='1'/%3E%3Ccircle cx='10.5' cy='8' r='1'/%3E%3Ccircle cx='13.5' cy='8' r='1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='2.5' cy='8' r='1'/%3E%3Ccircle cx='5.5' cy='8' r='1'/%3E%3Ccircle cx='10.5' cy='8' r='1'/%3E%3Ccircle cx='13.5' cy='8' r='1'/%3E%3C/svg%3E");
+}
+
 .idea-list--do button[aria-pressed="true"]::before {
   -webkit-mask-image: none;
   mask-image: none;
