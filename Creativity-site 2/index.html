@@ -47,9 +47,8 @@
         <p class="hero__subline">Qué es idear bien y un recorrido por las 4 fases del pensamiento creativo de Graham Wallas. En cada una, tira el dado, prueba una técnica y sigue avanzando.</p>
         <!-- plan de ideación breve + prompt para LLM, armados con lógica local a partir de las técnicas del sitio (hero-plan.js). El resultado se muestra en la escena #plan: esta tarjeta no tiene alto fijo para hacer scroll, así que "Generar mi plan" navega a su propia escena. "Dame un reto" vive acá, junto a "Generar mi plan". -->
         <div class="hero-plan">
-          <label class="hero-plan__label" for="hero-plan-input">Cuéntame tu idea</label>
           <div class="hero-plan__field">
-            <textarea id="hero-plan-input" class="hero-plan__input" placeholder="Tu reto o tu idea, en una frase…" rows="2"></textarea>
+            <textarea id="hero-plan-input" class="hero-plan__input" placeholder="Tu reto o tu idea, en una frase…" rows="2" aria-label="Cuéntame tu idea"></textarea>
             <button type="button" class="hero-plan__mic" aria-label="Dictar por voz" data-cursor="Hablar" hidden>
               <svg class="hero-plan__mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="9" y="2" width="6" height="12" rx="3"/>

@@ -75,13 +75,8 @@
 /* ---------- plan de ideación + prompt, a partir de la idea escrita ---------- */
 .hero-plan {
   margin-top: var(--space-lg);
-  padding: 18px 20px 20px;
   max-width: 480px;
-  border-radius: 16px;
-  background: rgba(125, 183, 255, 0.14);
-  border: 1px solid rgba(10, 70, 255, 0.12);
 }
-.hero-plan__label { display: block; font-size: 0.92rem; font-weight: var(--fw-medium); margin-bottom: 10px; }
 .hero-plan__field { position: relative; }
 .hero-plan__input {
   width: 100%;
