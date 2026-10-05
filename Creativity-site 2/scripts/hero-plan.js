@@ -51,6 +51,16 @@
       '\n\nAl cerrar cada fase, resúmeme en una frase la idea o decisión a la que llegamos.';
   }
 
+  // texto plano del plan completo (idea + las 4 fases), para el botón "Copiar plan"
+  function buildPlanText(idea, plan) {
+    const steps = window.PHASES.map((phase) => {
+      const s = plan[phase.id];
+      if (!s) return '';
+      return phase.index + ' ' + phase.name + ' — ' + s.technique + '\n' + s.exercise;
+    }).filter(Boolean).join('\n\n');
+    return 'Tu idea: «' + idea + '»\n\n' + steps;
+  }
+
   // prompt para una sola fase (botón de copiar por tarjeta): mismo tono que buildPrompt, pero acotado a esa fase
   function buildPhasePrompt(idea, phase, step) {
     return 'Actúa como facilitador de la fase de ' + phase.name + ' dentro de un proceso de ideación en 4 fases ' +
@@ -196,6 +206,7 @@
     const steps = scene.querySelector('.hero-plan__steps');
     const result = scene.querySelector('.hero-plan__result');
     const copyBtn = scene.querySelector('.hero-plan__copy');
+    const copyAllBtn = scene.querySelector('.hero-plan__copy-all');
     const hint = scene.querySelector('.hero-plan__hint');
     const ideasList = scene.querySelector('.hero-plan__ideas');
     if (!input || !generateBtn) return;
@@ -374,6 +385,16 @@
         hint.hidden = false;
         clearTimeout(hintTimer);
         hintTimer = setTimeout(() => { hint.hidden = true; }, 1500);
+      }, () => {});
+    });
+
+    let copyAllTimer = null;
+    copyAllBtn.addEventListener('click', () => {
+      if (!currentPlan || !navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard.writeText(buildPlanText(currentIdea, currentPlan)).then(() => {
+        copyAllBtn.classList.add('is-copied');
+        clearTimeout(copyAllTimer);
+        copyAllTimer = setTimeout(() => { copyAllBtn.classList.remove('is-copied'); }, 1500);
       }, () => {});
     });
   }

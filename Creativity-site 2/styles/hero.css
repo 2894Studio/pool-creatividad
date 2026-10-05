@@ -143,6 +143,28 @@
 .hero-plan__copy { padding: 9px 18px; font-size: 0.9rem; }
 .hero-plan__hint { margin: 0; font-size: 0.85rem; font-weight: var(--fw-medium); color: var(--color-accent); }
 
+.hero-plan__plan-actions { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.hero-plan__copy-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(11, 11, 13, 0.14);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+.hero-plan__copy-all:hover { border-color: var(--color-accent); color: var(--color-accent); }
+.hero-plan__copy-all svg { width: 14px; height: 14px; }
+.hero-plan__copy-all .hero-plan__step-check { display: none; }
+.hero-plan__copy-all.is-copied { border-color: var(--color-accent); color: var(--color-accent); }
+.hero-plan__copy-all.is-copied .hero-plan__step-copy-icon { display: none; }
+.hero-plan__copy-all.is-copied .hero-plan__step-check { display: inline-flex; }
+
 .hero-plan__steps { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .hero-plan__steps li {
   display: flex;
