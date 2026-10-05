@@ -330,11 +330,17 @@ body.is-generating-plan #inicio .hero__content {
 }
 body.is-generating-plan .hero-loading { opacity: 1; pointer-events: auto; }
 body.is-generating-plan .journey-nav,
-body.is-generating-plan .sound-toggle,
-body.is-generating-plan .companies-badge-link {
+body.is-generating-plan .sound-toggle {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s ease;
+}
+/* el logo se queda visible (arriba a la izquierda, .companies-badge ya tiene
+   transform-origin: top left) y crece un 50% en el mismo tiempo que se retira
+   el hero, para que encaje con esa transición */
+body.is-generating-plan .companies-badge {
+  transform: scale(1.5);
+  transition: transform 0.6s ease;
 }
 
 @media (max-width: 640px) {
