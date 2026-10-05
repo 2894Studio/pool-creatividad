@@ -26,9 +26,9 @@
     ).join('\n');
     return 'Actúa como facilitador de un proceso de ideación en 4 fases (Preparación, Incubación, ' +
       'Iluminación, Implementación), basado en el modelo de Graham Wallas. Mi reto o idea es: ' + idea + '.\n\n' +
-      'Guiame fase por fase, una a la vez, empezando por Preparación. En cada fase, partí de esta técnica ' +
-      'y después profundizá conmigo con preguntas antes de pasar a la siguiente:\n\n' + steps +
-      '\n\nAl cerrar cada fase, resumime en una frase la idea o decisión a la que llegamos.';
+      'Guíame fase por fase, una a la vez, empezando por Preparación. En cada fase, parte de esta técnica ' +
+      'y después profundiza conmigo con preguntas antes de pasar a la siguiente:\n\n' + steps +
+      '\n\nAl cerrar cada fase, resúmeme en una frase la idea o decisión a la que llegamos.';
   }
 
   function init() {
