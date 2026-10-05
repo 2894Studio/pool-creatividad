@@ -65,6 +65,11 @@
           </div>
         </div>
       </div>
+      <!-- loading de pantalla completa mientras se piden las ideas rápidas a la IA (hero-plan.js); vive dentro de #inicio para que los blobs de .hero__motif sigan flotando detrás, visibles alrededor de este overlay (fondo transparente, sin bloque opaco). -->
+      <div class="hero-loading" aria-hidden="true">
+        <div class="hero-loading__orb" aria-hidden="true"></div>
+        <p class="hero-loading__text" aria-live="polite"></p>
+      </div>
     </section>
 
     <!-- Antes de las fases · Fundamentos de la ideación (interacciones en ideacion.js) -->
@@ -279,15 +284,28 @@
         <p class="scene-eyebrow">Tu plan</p>
         <h2 id="plan-title" class="phase__title" data-split="section" data-scene-title tabindex="-1">Un punto de partida <span>para tu idea.</span></h2>
         <p class="hero-plan-scene__idea" id="hero-plan-idea"></p>
-        <ol class="hero-plan__steps"></ol>
-        <div class="hero-plan__prompt">
-          <span class="hero-plan__prompt-label">Prompt para tu LLM</span>
-          <textarea class="hero-plan__result" readonly rows="8"></textarea>
-          <div class="hero-plan__row">
-            <button type="button" class="pill-btn hero-plan__copy">Copiar prompt</button>
-            <p class="hero-plan__hint" aria-live="polite" hidden>Copiado ✓</p>
+
+        <div class="hero-plan__tabs" role="tablist" aria-label="Resultado">
+          <button type="button" class="hero-plan__tab is-active" data-tab="plan" role="tab" aria-selected="true" id="tab-plan" aria-controls="tabpanel-plan">Plan</button>
+          <button type="button" class="hero-plan__tab" data-tab="ideas" role="tab" aria-selected="false" tabindex="-1" id="tab-ideas" aria-controls="tabpanel-ideas">Ideas rápidas</button>
+        </div>
+
+        <div class="hero-plan__tabpanel" data-tabpanel="plan" id="tabpanel-plan" role="tabpanel" aria-labelledby="tab-plan">
+          <ol class="hero-plan__steps"></ol>
+          <div class="hero-plan__prompt">
+            <span class="hero-plan__prompt-label">Prompt para tu LLM</span>
+            <textarea class="hero-plan__result" readonly rows="8"></textarea>
+            <div class="hero-plan__row">
+              <button type="button" class="pill-btn hero-plan__copy">Copiar prompt</button>
+              <p class="hero-plan__hint" aria-live="polite" hidden>Copiado ✓</p>
+            </div>
           </div>
         </div>
+
+        <div class="hero-plan__tabpanel" data-tabpanel="ideas" id="tabpanel-ideas" role="tabpanel" aria-labelledby="tab-ideas" hidden>
+          <ul class="hero-plan__ideas"></ul>
+        </div>
+
         <div class="scene-foot">
           <button class="link-btn" type="button" data-journey-go="inicio"><span aria-hidden="true">↺</span> Volver al inicio</button>
         </div>

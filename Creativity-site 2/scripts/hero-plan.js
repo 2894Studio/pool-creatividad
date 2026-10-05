@@ -1,7 +1,9 @@
 /* hero-plan.js — complemento del inicio: a partir del reto o idea que escribe
-   el usuario, arma con lógica local (sin backend ni llamada a ningún LLM) un
-   plan de ideación muy breve (una técnica por fase, ya definidas en
-   data/techniques.js) y un prompt listo para pegar en una herramienta de LLM.
+   el usuario arma dos cosas, en dos pestañas en la escena #plan:
+   - "Plan": con lógica 100% local (sin red), un plan de ideación muy breve
+     (una técnica por fase, de data/techniques.js) y un prompt para LLM.
+   - "Ideas rápidas": pide de verdad a Claude (vía netlify/functions/ideas.js)
+     una lista de variaciones concretas de la idea.
    No reemplaza a "Empezar el viaje" ni a "Dame un reto": es un complemento
    que vive solo en el inicio. */
 (function () {
@@ -41,8 +43,18 @@
       'resúmeme en una frase la idea o decisión a la que llegamos.';
   }
 
+  // prompt para profundizar una idea rápida concreta con un LLM (botón de copiar por tarjeta)
+  function buildQuickIdeaPrompt(idea, quickIdea) {
+    return 'Quiero explorar esta idea concreta: "' + quickIdea.title + '" — ' + quickIdea.pitch + '\n\n' +
+      'Mi reto o idea de partida era: ' + idea + '.\n\n' +
+      'Ayúdame a desarrollarla: hazme preguntas para afinarla, dime cómo la probaría rápido (en un día o ' +
+      'una semana) y qué la haría diferente a lo obvio.';
+  }
+
   const COPY_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 13V5.5C4.5 4.67157 5.17157 4 6 4H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
   const CHECK_ICON = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.5 10.5L8 14L15.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  const LOADING_MESSAGES = ['Leyendo tu idea…', 'Cruzando técnicas de ideación…', 'Buscando ángulos distintos…', 'Afinando las ideas…'];
 
   /* dictado por voz con microinteracción: mientras escucha, las barras del botón
      laten en vivo con el volumen real de la voz (AnalyserNode), como el modo
@@ -123,18 +135,18 @@
     return Object.assign(byPhaseId, { llmPrompt: buildPrompt(idea, picks) });
   }
 
-  // plan real, pedido a Claude vía la Netlify Function (netlify/functions/plan.js);
+  // ideas rápidas reales, pedidas a Claude vía la Netlify Function (netlify/functions/ideas.js);
   // la API key vive solo en el servidor, nunca acá
-  async function fetchAiPlan(idea) {
-    const res = await fetch('/.netlify/functions/plan', {
+  async function fetchQuickIdeas(idea) {
+    const res = await fetch('/.netlify/functions/ideas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idea }),
     });
-    if (!res.ok) throw new Error('plan function respondió ' + res.status);
+    if (!res.ok) throw new Error('ideas function respondió ' + res.status);
     const data = await res.json();
-    if (!data || typeof data.llmPrompt !== 'string') throw new Error('respuesta con forma inesperada');
-    return data;
+    if (!data || !Array.isArray(data.ideas) || !data.ideas.length) throw new Error('respuesta con forma inesperada');
+    return data.ideas;
   }
 
   function init() {
@@ -143,11 +155,15 @@
     if (!hero || !scene || !window.PHASES) return;
     const input = hero.querySelector('.hero-plan__input');
     const generateBtn = hero.querySelector('.hero-plan__generate');
+    const loading = document.querySelector('.hero-loading');
+    const loadingText = loading && loading.querySelector('.hero-loading__text');
     const ideaLine = scene.querySelector('#hero-plan-idea');
+    const tabs = scene.querySelector('.hero-plan__tabs');
     const steps = scene.querySelector('.hero-plan__steps');
     const result = scene.querySelector('.hero-plan__result');
     const copyBtn = scene.querySelector('.hero-plan__copy');
     const hint = scene.querySelector('.hero-plan__hint');
+    const ideasList = scene.querySelector('.hero-plan__ideas');
     if (!input || !generateBtn) return;
 
     const picks = window.PHASES.map((phase) => {
@@ -159,6 +175,43 @@
 
     initVoiceInput(hero, input);
 
+    // ---------- pestañas Plan / Ideas rápidas ----------
+    if (tabs) {
+      tabs.addEventListener('click', (e) => {
+        const btn = e.target.closest('.hero-plan__tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.hero-plan__tab').forEach((t) => {
+          const active = t === btn;
+          t.classList.toggle('is-active', active);
+          t.setAttribute('aria-selected', active ? 'true' : 'false');
+          t.tabIndex = active ? 0 : -1;
+        });
+        scene.querySelectorAll('.hero-plan__tabpanel').forEach((panel) => {
+          panel.hidden = panel.dataset.tabpanel !== btn.dataset.tab;
+        });
+      });
+    }
+
+    // ---------- loading de pantalla completa ----------
+    let loadingTimer = null;
+    function showLoading() {
+      if (!loading) return;
+      document.body.classList.add('is-generating-plan');
+      let i = 0;
+      loadingText.textContent = LOADING_MESSAGES[0];
+      clearInterval(loadingTimer);
+      loadingTimer = setInterval(() => {
+        i = (i + 1) % LOADING_MESSAGES.length;
+        loadingText.textContent = LOADING_MESSAGES[i];
+      }, 2200);
+    }
+    function hideLoading() {
+      document.body.classList.remove('is-generating-plan');
+      clearInterval(loadingTimer);
+      loadingTimer = null;
+    }
+
+    // ---------- pestaña Plan (local, sin red) ----------
     let currentIdea = '';
     let currentPlan = null;
 
@@ -193,21 +246,73 @@
       }, () => {});
     });
 
-    const generateLabel = generateBtn.textContent;
+    // ---------- pestaña Ideas rápidas (IA real) ----------
+    let currentIdeas = null;
+
+    function renderIdeasError() {
+      currentIdeas = null;
+      ideasList.innerHTML = '';
+      const wrap = document.createElement('li');
+      wrap.className = 'hero-plan__ideas-error';
+      wrap.innerHTML = '<p>No pudimos generar ideas rápidas ahora mismo.</p>' +
+        '<button type="button" class="pill-btn hero-plan__ideas-retry">Reintentar</button>';
+      ideasList.appendChild(wrap);
+    }
+
+    function renderIdeas(idea, ideas) {
+      if (!ideas || !ideas.length) { renderIdeasError(); return; }
+      currentIdeas = ideas;
+      ideasList.innerHTML = ideas.map((quickIdea, i) =>
+        '<li><div class="hero-plan__idea-head"><strong>' + esc(quickIdea.title) + '</strong>' +
+        '<button type="button" class="hero-plan__idea-copy" data-idea-index="' + i + '" aria-label="Copiar prompt de esta idea" title="Copiar prompt de esta idea">' +
+        '<span class="hero-plan__step-copy-icon">' + COPY_ICON + '</span><span class="hero-plan__step-check">' + CHECK_ICON + '</span></button></div>' +
+        '<span class="hero-plan__idea-pitch">' + esc(quickIdea.pitch) + '</span></li>'
+      ).join('');
+    }
+
+    let ideaCopyTimer = null;
+    ideasList.addEventListener('click', (e) => {
+      const retryBtn = e.target.closest('.hero-plan__ideas-retry');
+      if (retryBtn) {
+        retryBtn.disabled = true;
+        retryBtn.textContent = 'Generando…';
+        fetchQuickIdeas(currentIdea).then(
+          (ideas) => renderIdeas(currentIdea, ideas),
+          () => renderIdeasError()
+        );
+        return;
+      }
+      const btn = e.target.closest('.hero-plan__idea-copy');
+      if (!btn || !currentIdeas || !navigator.clipboard || !navigator.clipboard.writeText) return;
+      const quickIdea = currentIdeas[Number(btn.dataset.ideaIndex)];
+      if (!quickIdea) return;
+      navigator.clipboard.writeText(buildQuickIdeaPrompt(currentIdea, quickIdea)).then(() => {
+        btn.classList.add('is-copied');
+        clearTimeout(ideaCopyTimer);
+        ideaCopyTimer = setTimeout(() => { btn.classList.remove('is-copied'); }, 1500);
+      }, () => {});
+    });
+
+    // ---------- generar: plan local al instante + ideas rápidas por IA ----------
     generateBtn.addEventListener('click', async () => {
       const idea = input.value.trim();
       if (!idea) return;
       generateBtn.disabled = true;
-      generateBtn.textContent = 'Generando…';
-      let plan;
+      input.disabled = true;
+      showLoading();
+
+      renderPlan(idea, localPlan(idea, picks));
+      let ideas = null;
       try {
-        plan = await fetchAiPlan(idea);
+        ideas = await fetchQuickIdeas(idea);
       } catch (e) {
-        plan = localPlan(idea, picks); // sin red, límite alcanzado, o la función no está desplegada: seguimos sin cortar la experiencia
+        ideas = null; // sin red, límite alcanzado, o la función no está desplegada: la pestaña Ideas rápidas muestra el estado de error
       }
-      renderPlan(idea, plan);
+      renderIdeas(idea, ideas);
+
+      hideLoading();
       generateBtn.disabled = false;
-      generateBtn.textContent = generateLabel;
+      input.disabled = false;
       if (window.JOURNEY && window.JOURNEY.goTo) window.JOURNEY.goTo('plan');
       else scene.scrollIntoView({ behavior: 'smooth' });
     });
