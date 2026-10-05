@@ -277,9 +277,11 @@
 
     /* ---------- ficha de detalle ---------- */
     let detailArt = null;
+    let activeRecognition = null;
     function renderDetail(idx, fromDice) {
       const t = phase.techniques[idx];
       if (detailArt) { detailArt.destroy(); detailArt = null; }
+      if (activeRecognition) { activeRecognition.abort(); activeRecognition = null; }
       const source = t.link
         ? '<a class="tech-stat__value tech-stat__link" href="' + t.link + '" target="_blank" rel="noreferrer noopener">' + esc(t.source) + ' <span aria-hidden="true">↗</span></a>'
         : '<span class="tech-stat__value">' + esc(t.source) + '</span>';
@@ -302,7 +304,16 @@
         (t.llmPrompt ?
           '<div class="tech-prompt">' +
           '<span class="tech-prompt__label">Prompt para tu LLM</span>' +
-          '<textarea class="tech-prompt__input" placeholder="Escribe aquí tu idea o problema..." rows="2"></textarea>' +
+          '<div class="tech-prompt__field">' +
+          '<textarea class="tech-prompt__input" placeholder="Escribe o dicta tu idea o problema..." rows="2"></textarea>' +
+          '<button type="button" class="tech-prompt__mic" aria-label="Dictar por voz" data-cursor="Hablar" hidden>' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+          '<rect x="9" y="2" width="6" height="12" rx="3"/>' +
+          '<path d="M5 11a7 7 0 0 0 14 0"/>' +
+          '<path d="M12 18v4M9 22h6"/>' +
+          '</svg>' +
+          '</button>' +
+          '</div>' +
           '<div class="tech-prompt__row">' +
           '<button type="button" class="pill-btn tech-prompt__generate">Generar prompt</button>' +
           '</div>' +
@@ -318,12 +329,39 @@
         '</div>';
       if (t.llmPrompt) {
         const input = detail.querySelector('.tech-prompt__input');
+        const micBtn = detail.querySelector('.tech-prompt__mic');
         const generateBtn = detail.querySelector('.tech-prompt__generate');
         const output = detail.querySelector('.tech-prompt__output');
         const result = detail.querySelector('.tech-prompt__result');
         const copyBtn = detail.querySelector('.tech-prompt__copy');
         const hint = detail.querySelector('.tech-prompt__hint');
         let hintTimer = null;
+
+        /* dictar la idea por voz, si el navegador lo soporta (Chrome, Edge, Safari) */
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+          micBtn.hidden = false;
+          const recognition = new SpeechRecognition();
+          recognition.lang = 'es-ES';
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 1;
+          recognition.addEventListener('result', (e) => {
+            const said = Array.from(e.results).map((r) => r[0].transcript).join(' ').trim();
+            if (said) input.value = (input.value.trim() ? input.value.trim() + ' ' : '') + said;
+          });
+          recognition.addEventListener('end', () => {
+            micBtn.classList.remove('is-listening');
+            if (activeRecognition === recognition) activeRecognition = null;
+          });
+          recognition.addEventListener('error', () => micBtn.classList.remove('is-listening'));
+          micBtn.addEventListener('click', () => {
+            if (micBtn.classList.contains('is-listening')) { recognition.stop(); return; }
+            activeRecognition = recognition;
+            micBtn.classList.add('is-listening');
+            recognition.start();
+          });
+        }
+
         generateBtn.addEventListener('click', () => {
           const idea = input.value.trim() || '[tu idea]';
           result.value = t.llmPrompt.replace('{{idea}}', idea);
