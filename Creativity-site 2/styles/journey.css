@@ -116,10 +116,9 @@ html.journey-live, html.journey-live body { height: 100%; overflow: hidden; over
   width: 42px;
   height: 42px;
   display: block;
-  color: var(--color-accent);
   transition: scale 150ms ease;
 }
-.linkedin-link svg { width: 100%; height: 100%; display: block; }
+.linkedin-link img { width: 100%; height: 100%; display: block; }
 .linkedin-link:hover { scale: 1.08; }
 
 /* ---------- dock inferior: camino de fases + "Dame un reto", como elementos
