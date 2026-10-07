@@ -106,6 +106,27 @@ html.journey-live, html.journey-live body { height: 100%; overflow: hidden; over
 .sound-toggle svg { width: 18px; height: 18px; }
 .sound-toggle[aria-pressed="true"] { background: var(--color-accent); color: #fff; }
 
+/* ---------- link a LinkedIn, al lado del botón de sonido ---------- */
+.linkedin-link {
+  position: fixed;
+  top: 26px;
+  right: 74px; /* 22px del borde + 42px del botón de sonido + 10px de separación */
+  z-index: 95;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(11, 11, 13, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 14px rgba(11, 11, 13, 0.08);
+  color: var(--color-accent);
+}
+.linkedin-link svg { width: 20px; height: 20px; }
+.linkedin-link:hover { background: var(--color-accent); color: #fff; }
+
 /* ---------- dock inferior: camino de fases + "Dame un reto", como elementos
    separados pero agrupados, centrados juntos abajo ---------- */
 .journey-dock {
@@ -237,6 +258,7 @@ html.journey-live, html.journey-live body { height: 100%; overflow: hidden; over
   .journey-dot { min-width: 20px; height: 32px; }
   .journey-dot.is-current { padding: 0 10px; }
   .sound-toggle { top: 14px; right: 12px; width: 38px; height: 38px; }
+  .linkedin-link { top: 14px; right: 58px; width: 38px; height: 38px; }
   .scene-foot { justify-content: stretch; }
   .scene-foot .next-btn { width: 100%; }
 }
